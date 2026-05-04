@@ -7,10 +7,11 @@ This document maps the PoC directly to the final presentation scoring areas.
 Evidence:
 
 - `streamlit run app.py` launches a working consultant cockpit.
-- Survey input is editable and supports uploaded `.txt` / `.md` guides.
-- The Question Parser tab shows parsed question type and construct.
+- Survey input is editable and supports uploaded `.txt`, `.md`, `.pdf`, `.docx`, `.csv`, and `.xlsx` guides.
+- The Question Parser tab shows parsed question type, construct and input-source audit.
 - The app runs a weighted Swiss micro-population and returns persona-level responses.
-- Consultant Summary, Segment Explorer, Validation and Export tabs are all live.
+- Consultant Summary, Segment Explorer, Persona Responses, Validation, Scorecard and Architecture tabs are all live.
+- CSV, Markdown report and full JSON downloads make the result testable from the partner side.
 - Sidebar demo scenarios support live fee/protection sensitivity reruns.
 
 ## Architecture - 3 Points
@@ -19,6 +20,7 @@ Evidence:
 
 - `docs/architecture.md` documents the flow.
 - `synthetic_researcher/orchestrator.py` owns the end-to-end workflow.
+- `synthetic_researcher/ingestion.py` normalizes survey files into text before agent parsing.
 - `synthetic_researcher/llm.py` isolates model provider choice behind `BaseLLM`.
 - `synthetic_researcher/validation.py` separates benchmark, consistency, coverage and realism validation.
 - `synthetic_researcher/reporting.py` exports consultant-readable Markdown.

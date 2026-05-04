@@ -46,6 +46,7 @@ class SyntheticResearchOrchestrator:
         concepts: list[Concept] | None = None,
         micro_population_n: int = 48,
         consistency_runs: int = 2,
+        input_source: dict[str, object] | None = None,
     ) -> SurveyRun:
         start = perf_counter()
         run_id = str(uuid.uuid4())[:8]
@@ -73,6 +74,12 @@ class SyntheticResearchOrchestrator:
         primary_responses = all_runs[0]
         aggregate = aggregate_responses(primary_responses)
         elapsed_seconds = perf_counter() - start
+        aggregate["input_source"] = input_source or {
+            "source": "direct_text" if raw_survey else "yaml_file",
+            "file_name": str(survey_path) if survey_path else None,
+            "file_type": "text" if raw_survey else "yaml",
+            "char_count": len(raw_survey or ""),
+        }
         aggregate["runtime"] = {
             "elapsed_seconds": round(elapsed_seconds, 2),
             "questions_parsed": len(questions),

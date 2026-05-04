@@ -8,6 +8,7 @@ Visa Synthetic Research Copilot helps VCA consultants pressure-test early card, 
 
 ```text
 Consultant UI
+  -> Survey File/Text Ingestion
   -> Survey Parser Agent
   -> Persona Builder / Selector
   -> Weighted Swiss Micro-Population
@@ -20,7 +21,10 @@ Consultant UI
 ## Components
 
 `app.py`
-: Streamlit cockpit for editing survey questions, card concepts, respondent count, provider, and validation repetitions.
+: Streamlit cockpit for uploading or pasting survey questions, editing card concepts, selecting respondent count, choosing provider, and setting validation repetitions.
+
+`ingestion.py`
+: Converts pasted text plus TXT, MD, PDF, DOCX, CSV, and XLSX uploads into normalized survey text with extraction metadata. This lets Visa or IBM test the prototype with a real marketing research survey file instead of retyping every question.
 
 `SyntheticResearchOrchestrator`
 : Coordinates survey parsing, persona expansion, repeated synthetic survey runs, aggregation, and validation.
@@ -65,10 +69,12 @@ Question coverage checks whether the input survey includes the consultant constr
 
 The realism rubric checks for concise survey-style answers, model identity leakage, numeric range validity, rough persona/price alignment and obvious adoption-versus-price contradictions. It is intentionally transparent so a future watsonx judge or human reviewer can use the same rubric.
 
+The app also records an input-source audit in every run: source type, uploaded file name, extracted character count, extraction notes, and whether the extracted text was edited before execution. This makes partner-side testing repeatable and reviewable.
+
 ## Extension Points
 
 - Replace deterministic analyst with a watsonx.ai analyst prompt.
 - Add LangGraph or watsonx Orchestrate ADK for durable multi-agent orchestration.
 - Add calibrated weights from more granular FSO tables.
-- Add export to PowerPoint/PDF for final consultant deliverables.
+- Add PowerPoint/PDF report export for final consultant deliverables.
 - Add human review loop for Visa benchmark calibration.

@@ -9,7 +9,8 @@ The app accepts flexible survey, interview, or card value proposition test quest
 - segment-level fit by Swiss persona archetype
 - benchmark alignment, internal consistency, and coverage checks
 - judge-style realism rubric and overall validation confidence
-- downloadable CSV responses and Markdown consultant report
+- file ingestion audit for pasted text, TXT, MD, PDF, DOCX, CSV, and XLSX survey inputs
+- downloadable CSV responses, Markdown consultant report, and full run JSON
 
 This is an early-stage hypothesis and survey-design tool. It does **not** claim to replace real customer research or Visa's final validation.
 
@@ -60,14 +61,15 @@ Keep `MODEL_PROVIDER=mock` available as the fallback for rehearsal and live demo
 
 ## Demo Flow
 
-1. Paste or edit a survey/interview guide.
+1. Paste a survey/interview guide or upload a TXT, MD, PDF, DOCX, CSV, or XLSX research file.
 2. Tune the two default card concepts and fees.
 3. Run 48 or 96 synthetic respondents.
 4. Review adoption index, acceptable fee, feature and barrier signals.
-5. Open the Question Parser tab to prove the survey is not hardcoded.
+5. Open the Question Parser tab to prove the survey is not hardcoded and inspect the input extraction audit.
 6. Open segment and persona-level tables for traceability.
 7. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
-8. Change a fee or feature live, rerun, and compare the directional movement.
+8. Download CSV, Markdown, or JSON outputs for partner review.
+9. Change a fee or feature live, rerun, and compare the directional movement.
 
 Suggested live stress test:
 
@@ -91,6 +93,7 @@ data/
 synthetic_researcher/
   agents.py                    Survey parser, persona respondent, analyst
   analytics.py                 Aggregation and scoring
+  ingestion.py                 TXT/MD/PDF/DOCX/CSV/XLSX survey extraction
   llm.py                       Mock + IBM watsonx providers
   orchestrator.py              End-to-end multi-agent run
   reporting.py                 Markdown consultant report
@@ -111,6 +114,7 @@ docs/
 ## Full-Mark Scorecard Targets
 
 - Running demo: paste survey -> parse -> simulate -> aggregate -> validate -> export.
+- Flexible input demo: uploaded marketing research survey files can be converted to survey text before parsing.
 - Architecture: UI, parser, persona store, orchestrator, respondent agents, validator, analytics/export.
 - KPIs: time to insight, response count, JSON parse success, consistency, benchmark MAE, realism score.
 - Business value: early-stage concept screening and better real survey design, not final market research replacement.

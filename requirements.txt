@@ -2,6 +2,9 @@
 PyYAML>=6.0
 pandas>=2.0
 numpy>=1.24
+pypdf>=5.0
+python-docx>=1.1
+openpyxl>=3.1
 
 # Demo UI
 streamlit>=1.35

@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import json
 from dataclasses import replace
 from pathlib import Path
 
 import pandas as pd
 import streamlit as st
 
+from synthetic_researcher.ingestion import SurveyExtractionError, extract_survey_text, supported_upload_types
 from synthetic_researcher.llm import LLMError, get_llm
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator, load_concepts
 from synthetic_researcher.reporting import build_markdown_report
@@ -203,19 +205,53 @@ def main() -> None:
         left, right = st.columns([1.05, 0.95], gap="large")
         with left:
             st.markdown("#### Survey / Interview Input")
-            uploaded_survey = st.file_uploader("Upload a survey or interview guide", type=["txt", "md"])
+            uploaded_survey = st.file_uploader(
+                "Upload a survey or interview guide",
+                type=supported_upload_types(),
+                help="Supports txt, md, pdf, docx, csv and xlsx survey/interview files.",
+            )
             default_survey = """1. How likely would you be to adopt this card if it were offered by your bank?
 2. What annual fee in CHF would feel acceptable for this card?
 3. Which benefit or feature feels most valuable to you, and why?
 4. What is the main barrier that would prevent you from using this card?"""
+            input_metadata: dict[str, object] = {
+                "source": "direct_text",
+                "file_name": None,
+                "file_type": "text",
+                "char_count": len(default_survey),
+                "extraction_notes": ["Using pasted or default text from the app input."],
+            }
+            extracted_text: str | None = None
             if uploaded_survey is not None:
-                default_survey = uploaded_survey.getvalue().decode("utf-8", errors="replace")
+                try:
+                    extracted = extract_survey_text(uploaded_survey.name, uploaded_survey.getvalue())
+                    default_survey = extracted.text
+                    extracted_text = extracted.text
+                    input_metadata = extracted.metadata()
+                    st.success(
+                        f"Loaded {uploaded_survey.name} ({extracted.file_type}, {extracted.char_count:,} characters)."
+                    )
+                    with st.expander("Input extraction audit", expanded=False):
+                        st.write("\n".join(f"- {note}" for note in extracted.extraction_notes))
+                        st.code(extracted.text[:1800], language="text")
+                except SurveyExtractionError as exc:
+                    st.error(str(exc))
+                    input_metadata = {
+                        "source": "direct_text_after_failed_upload",
+                        "file_name": uploaded_survey.name,
+                        "file_type": uploaded_survey.name.rsplit(".", 1)[-1].lower(),
+                        "char_count": len(default_survey),
+                        "extraction_notes": [f"Upload extraction failed: {exc}"],
+                    }
             raw_survey = st.text_area(
                 "Paste survey questions",
                 value=default_survey,
                 height=224,
                 label_visibility="collapsed",
             )
+            input_metadata = {**input_metadata, "char_count": len(raw_survey)}
+            if extracted_text is not None:
+                input_metadata["edited_after_extraction"] = raw_survey.strip() != extracted_text.strip()
             st.markdown("#### Target Market")
             target_context = st.text_input(
                 "Target market",
@@ -226,10 +262,10 @@ def main() -> None:
             st.markdown("#### Product Concepts")
             concepts = concept_editor(defaults, target_context)
 
-        submitted = st.form_submit_button("Run synthetic survey", type="primary", use_container_width=True)
+        submitted = st.form_submit_button("Run synthetic survey", type="primary", width="stretch")
 
     if submitted:
-        run_synthetic_survey(provider, raw_survey, concepts, micro_n, consistency_runs)
+        run_synthetic_survey(provider, raw_survey, concepts, micro_n, consistency_runs, input_metadata)
 
     run = st.session_state.get("last_run")
     if run:
@@ -295,6 +331,7 @@ def run_synthetic_survey(
     concepts: list[Concept],
     micro_n: int,
     consistency_runs: int,
+    input_metadata: dict[str, object],
 ) -> None:
     try:
         with st.status("Running parser, persona agents, analytics and validation...", expanded=False):
@@ -312,6 +349,7 @@ def run_synthetic_survey(
                 concepts=concepts,
                 micro_population_n=micro_n,
                 consistency_runs=consistency_runs,
+                input_source=input_metadata,
             )
     except LLMError as exc:
         st.error(str(exc))
@@ -392,7 +430,7 @@ def render_summary(run: SurveyRun) -> None:
     ])
     if not summary_df.empty:
         st.bar_chart(summary_df.set_index("concept")["adoption_index"], color="#1434cb")
-        st.dataframe(summary_df, use_container_width=True, hide_index=True)
+        st.dataframe(summary_df, width="stretch", hide_index=True)
 
     p1, p2 = st.columns(2)
     with p1:
@@ -409,7 +447,7 @@ def render_summary(run: SurveyRun) -> None:
         if price_df.empty:
             st.info("No price question detected.")
         else:
-            st.dataframe(price_df, use_container_width=True, hide_index=True)
+            st.dataframe(price_df, width="stretch", hide_index=True)
     with p2:
         st.markdown("#### Feature / Barrier Signals")
         labels = aggregate.get("top_answer_labels", [])
@@ -417,7 +455,7 @@ def render_summary(run: SurveyRun) -> None:
         if label_df.empty:
             st.info("No labeled open-ended signal detected.")
         else:
-            st.dataframe(label_df, use_container_width=True, hide_index=True)
+            st.dataframe(label_df, width="stretch", hide_index=True)
 
     st.markdown("#### Consultant Next Test")
     for item in analyst.get("next_test", []):
@@ -437,9 +475,26 @@ def render_summary(run: SurveyRun) -> None:
         file_name=f"visa_synthetic_report_{run.run_id}.md",
         mime="text/markdown",
     )
+    st.download_button(
+        "Download full run JSON",
+        data=json.dumps(run.asdict(), indent=2).encode("utf-8"),
+        file_name=f"visa_synthetic_run_{run.run_id}.json",
+        mime="application/json",
+    )
 
 
 def render_question_parser(run: SurveyRun) -> None:
+    input_source = run.aggregate.get("input_source", {})
+    with st.expander("Input Source Audit", expanded=True):
+        s1, s2, s3, s4 = st.columns(4)
+        s1.metric("Source", input_source.get("source", "unknown"))
+        s2.metric("File type", input_source.get("file_type", "text"))
+        s3.metric("Characters", input_source.get("char_count", 0))
+        s4.metric("Edited after extraction", str(input_source.get("edited_after_extraction", False)))
+        notes = input_source.get("extraction_notes", [])
+        if notes:
+            st.write("Extraction notes: " + " ".join(str(note) for note in notes))
+
     st.markdown("#### Parsed Survey Structure")
     st.caption("This is the live proof that the system is not limited to a fixed question set.")
     questions_df = pd.DataFrame([
@@ -452,7 +507,7 @@ def render_question_parser(run: SurveyRun) -> None:
         }
         for question in run.questions
     ])
-    st.dataframe(questions_df, use_container_width=True, hide_index=True)
+    st.dataframe(questions_df, width="stretch", hide_index=True)
 
     st.markdown("#### Construct Coverage")
     coverage = run.validation.get("question_coverage", {})
@@ -476,7 +531,7 @@ def render_segment_explorer(run: SurveyRun) -> None:
         st.info("No Likert adoption question detected.")
         return
     pivot = segment_df.pivot(index="segment", columns="concept", values="mean_likert").sort_index()
-    st.dataframe(pivot.style.background_gradient(cmap="Blues", axis=None), use_container_width=True)
+    st.dataframe(pivot, width="stretch")
     st.bar_chart(segment_df, x="segment", y="mean_likert", color="concept")
 
     st.markdown("#### Sample Persona Quotes")
@@ -523,7 +578,7 @@ def render_persona_responses(run: SurveyRun) -> None:
                 "confidence",
             ]
         ],
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
     st.download_button(
@@ -559,7 +614,7 @@ def render_validation(run: SurveyRun) -> None:
             "context": profile.get("context"),
             "source": profile.get("source"),
         })
-    st.dataframe(pd.DataFrame(profile_rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(profile_rows), width="stretch", hide_index=True)
 
     mix = benchmark.get("synthetic_mix", {})
     if mix:
@@ -571,7 +626,7 @@ def render_validation(run: SurveyRun) -> None:
     r1.metric("Realism score", realism.get("score"), f"{realism.get('sampled_items')} responses checked")
     r2.write("Rubric checks: " + "; ".join(realism.get("rubric", [])))
     if realism.get("sample_flags"):
-        st.dataframe(pd.DataFrame(realism["sample_flags"]), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(realism["sample_flags"]), width="stretch", hide_index=True)
     else:
         st.success("No realism flags found in the primary synthetic run.")
 
@@ -615,7 +670,7 @@ def render_scorecard(run: SurveyRun) -> None:
             "status": "Ready",
         },
     ]
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
     st.markdown("#### Talk Track Anchor")
     st.info(

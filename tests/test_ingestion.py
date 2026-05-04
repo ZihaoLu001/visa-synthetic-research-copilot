@@ -1,0 +1,57 @@
+from __future__ import annotations
+
+from io import BytesIO
+
+import pandas as pd
+from docx import Document
+
+from synthetic_researcher.ingestion import extract_survey_text, supported_upload_types
+
+
+def test_supported_upload_types_cover_visa_testing_formats():
+    assert {"txt", "md", "pdf", "docx", "csv", "xlsx"}.issubset(set(supported_upload_types()))
+
+
+def test_extract_text_file():
+    extracted = extract_survey_text(
+        "survey.txt",
+        b"1. How likely are you to adopt this card?\n2. What annual fee would be acceptable?",
+    )
+    assert extracted.file_type == "txt"
+    assert "annual fee" in extracted.text
+    assert extracted.char_count == len(extracted.text)
+
+
+def test_extract_docx_file():
+    document = Document()
+    document.add_paragraph("1. Which benefit feels most valuable?")
+    document.add_paragraph("2. What barrier would stop you?")
+    payload = BytesIO()
+    document.save(payload)
+
+    extracted = extract_survey_text("interview_guide.docx", payload.getvalue())
+
+    assert extracted.file_type == "docx"
+    assert "benefit" in extracted.text
+    assert "barrier" in extracted.text
+
+
+def test_extract_xlsx_file():
+    payload = BytesIO()
+    dataframe = pd.DataFrame(
+        {
+            "question": [
+                "How likely would you be to adopt this card?",
+                "What annual fee in CHF would feel acceptable?",
+            ],
+            "construct": ["adoption", "price"],
+        }
+    )
+    with pd.ExcelWriter(payload, engine="openpyxl") as writer:
+        dataframe.to_excel(writer, index=False, sheet_name="Survey")
+
+    extracted = extract_survey_text("marketing_research_survey.xlsx", payload.getvalue())
+
+    assert extracted.file_type == "xlsx"
+    assert "[Sheet: Survey]" in extracted.text
+    assert "annual fee" in extracted.text

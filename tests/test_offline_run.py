@@ -30,6 +30,7 @@ def test_offline_run_completes():
     assert run.aggregate["runtime"]["json_parse_success_rate"] == 100.0
     report = build_markdown_report(run)
     assert report.startswith("# Visa Synthetic Research Copilot Report")
+    assert "## Input Source" in report
     assert "## KPI Evidence" in report
 
 

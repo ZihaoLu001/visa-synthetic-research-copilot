@@ -6,7 +6,7 @@ Target length: 6-7 minutes.
 
 VCA consultants need fast early-stage customer input for value proposition design. Traditional surveys and interviews are useful but slower and more expensive, so many assumptions around pricing, benefits, needs, and messaging remain untested until late.
 
-## 2. Input A Flexible Survey
+## 2. Input A Flexible Survey Or File
 
 Paste a short survey:
 
@@ -17,7 +17,9 @@ Paste a short survey:
 4. What is the main barrier that would prevent you from using this card?
 ```
 
-Explain that the system is not limited to predefined questions. It parses survey/interview text at runtime.
+Then say the stronger version can also accept a real research artifact from Visa: TXT, MD, PDF, DOCX, CSV, or XLSX. Open the Question Parser tab after a run and show the input-source audit: file name, type, extracted character count, extraction notes, and whether the text was edited before execution.
+
+Explain that the system is not limited to predefined questions. It ingests survey files or pasted survey/interview text, parses the content at runtime, and then routes the parsed questions to persona agents.
 
 ## 3. Show Concepts
 
@@ -35,11 +37,12 @@ Run 48 or 96 respondents in mock mode. Point out that the respondents are expand
 Cover these tabs:
 
 - Consultant Summary: adoption index, acceptable fee, top signals, recommendation.
-- Question Parser: parsed question types and measured constructs.
+- Question Parser: parsed question types, measured constructs and input-source audit.
 - Segment Explorer: which Swiss archetypes fit each concept.
 - Persona Responses: individual responses with rationale and confidence.
 - Validation: benchmark alignment, consistency, coverage, construct coverage and realism rubric.
 - Scorecard: direct mapping to the final grading criteria and KPI evidence.
+- Downloads: CSV persona responses, Markdown consultant report and full run JSON for partner-side testing.
 
 ## 6. Live Sensitivity Test
 
