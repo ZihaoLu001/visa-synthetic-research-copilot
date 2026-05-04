@@ -24,6 +24,9 @@ We have prepared three delivery paths:
 Current Code Engine demo URL:
 https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 
+Current API / OpenAPI tool URL:
+https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
+
 Could you confirm:
 1. For the final demo, is a Code Engine deployment plus watsonx.ai model provider sufficient, or do you expect the main workflow itself to run inside watsonx Orchestrate?
 2. Given the recent ADK/custom Python tool deployment issues mentioned in Slack, is it acceptable to present Orchestrate as an integration layer/production extension rather than the critical-path runtime?
@@ -36,7 +39,7 @@ Thank you!
 ## Short Q&A Form Version
 
 ```text
-Team 1 / Group 28, Visa use case. We built and deployed a Streamlit Synthetic Research Copilot that accepts flexible survey/interview input, runs Swiss synthetic persona agents, and returns persona-level responses, aggregate insights, and validation checks. Current Code Engine URL: https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud. We also prepared Docker/GitHub source-build assets and an API/OpenAPI asset for watsonx Orchestrate integration.
+Team 1 / Group 28, Visa use case. We built and deployed a Streamlit Synthetic Research Copilot that accepts flexible survey/interview input, runs Swiss synthetic persona agents, and returns persona-level responses, aggregate insights, and validation checks. Current demo URL: https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud. Current API/OpenAPI URL: https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud. We also prepared Docker/GitHub source-build assets and a watsonx Orchestrate import contract.
 
 Questions:
 1. Is Code Engine + watsonx.ai sufficient for the final live demo, or should the core workflow run inside watsonx Orchestrate?
@@ -58,6 +61,9 @@ Updated after deployment attempt:
 ```text
 Hi IBM team, Group 28 / Visa now has the Streamlit app running on Code Engine here:
 https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
+
+We also have the API endpoint for OpenAPI/Orchestrate integration running here:
+https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 
 The regular GitHub source-build path is still blocked for us by a Container Registry/service ID policy assignment error:
 Trace ID: codeengine-cli-di8dq00g89

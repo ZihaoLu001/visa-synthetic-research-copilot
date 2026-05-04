@@ -6,7 +6,7 @@ info:
     API surface for triggering flexible synthetic survey research runs from
     IBM Code Engine or watsonx Orchestrate.
 servers:
-  - url: https://replace-with-code-engine-url
+  - url: https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 paths:
   /health:
     get:

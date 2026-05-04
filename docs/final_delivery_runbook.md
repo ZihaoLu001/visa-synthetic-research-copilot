@@ -30,6 +30,14 @@ https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.
 
 Verified on 2026-05-04 with HTTP 200 and a browser-run 96-persona synthetic survey producing 768 persona-question responses.
 
+Verified API / Orchestrate tool URL:
+
+```text
+https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
+```
+
+Verified on 2026-05-04 with `/health` HTTP 200 and `POST /run` HTTP 200 returning synthetic research JSON.
+
 ## Do Before The Next Q&A
 
 1. Ask the questions in `docs/partner_questions.md`.
@@ -77,6 +85,8 @@ Current status:
 - Code Engine project: `group28`
 - App name: `visa-synthetic-research-copilot`
 - URL: `https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud`
+- API app name: `visa-synthetic-research-api`
+- API URL: `https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud`
 - Runtime mode: `MODEL_PROVIDER=mock`, `APP_MODE=streamlit`
 - Source-build blocker: Container Registry/service ID policy assignment permission, trace ID `codeengine-cli-di8dq00g89`
 
@@ -116,7 +126,7 @@ For Orchestrate/API integration:
 .\scripts\deploy_code_engine.ps1 -ProjectName <group-28-visa-project-name> -Mode api
 ```
 
-Then replace the `servers[0].url` value in `orchestrate/openapi/visa_synthetic_research_api.yaml` with the Code Engine application URL before importing the OpenAPI tool into watsonx Orchestrate.
+The OpenAPI contract in `orchestrate/openapi/visa_synthetic_research_api.yaml` already points at the deployed API Code Engine URL. Import that file into watsonx Orchestrate or Agent Builder if the team wants a live HTTP-tool proof.
 
 ## Risk Controls
 

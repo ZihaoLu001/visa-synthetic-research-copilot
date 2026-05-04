@@ -42,16 +42,16 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | Lab | Relevant guidance | Project response |
 | --- | --- | --- |
 | Cloud & Course Setup | Use IBM Cloud account and Python development environment. | Python/Streamlit app with reproducible `requirements.txt` and CI tests. |
-| Code Engine | Stakeholder demos can be deployed as a managed Code Engine application. | The Streamlit cockpit is deployed at `https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud`; `Dockerfile`, `.dockerignore`, `api.py`, `scripts/deploy_code_engine.ps1`, and `docs/code_engine_deployment.md` provide repeatable Streamlit and API deployment paths. |
+| Code Engine | Stakeholder demos can be deployed as a managed Code Engine application. | The Streamlit cockpit is deployed at `https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud`; the API app is deployed at `https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud`; `Dockerfile`, `.dockerignore`, `api.py`, `scripts/deploy_code_engine.ps1`, and `docs/code_engine_deployment.md` provide repeatable deployment paths. |
 | Design Thinking | Design around real users and pain points, not just technology. | VCA consultant cockpit and output tabs follow the consultant workflow. |
-| watsonx Orchestrate | Agents should have roles, tools, orchestration, and deployment story. | Parser, persona, analyst, validator, and orchestrator are separated; `orchestrate/` contains a minimal ADK agent spec and OpenAPI tool contract for the API. |
+| watsonx Orchestrate | Agents should have roles, tools, orchestration, and deployment story. | Parser, persona, analyst, validator, and orchestrator are separated; `orchestrate/` contains a minimal ADK agent spec and an OpenAPI contract pointing to the deployed API endpoint. |
 | Prompt Engineering | Structured outputs, model parameters, and prompt discipline matter. | Prompts require strict JSON, persona context, benchmark context, and consistency with prior answers. |
 | RAG / Tools / Parameters | Grounding and evaluation improve reliability. | Public benchmark grounding and validation dashboard are implemented; future RAG could ingest partner research docs. |
 | Open Source Technology | Consider Docling, BeeAI, LangChain/LangFlow for extraction, tools, and orchestration. | Current ingestion uses lightweight open-source parsers; future extension can replace PDF/DOCX parsing with Docling and orchestration with LangGraph/BeeAI. |
 
 ## Remaining Optional Enhancements
 
-- Import the OpenAPI contract into watsonx Orchestrate after Code Engine API deployment is available.
+- Import the deployed API OpenAPI contract into watsonx Orchestrate if the team wants a live IBM-platform tool proof.
 - Add Docling-based document extraction for richer table/form parsing.
 - Add PowerPoint/PDF report export for a consultant-grade deliverable.
 - Add a calibration workflow where Visa can compare synthetic outputs against internal survey results.

@@ -16,6 +16,14 @@ Mode: MODEL_PROVIDER=mock, APP_MODE=streamlit
 Verification: HTTP 200 and an in-browser 96-respondent run completed successfully.
 ```
 
+The FastAPI integration endpoint is also deployed for watsonx Orchestrate/OpenAPI import:
+
+```text
+Application: visa-synthetic-research-api
+Public URL: https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
+Verification: /health returned HTTP 200 and POST /run returned HTTP 200 with synthetic research JSON.
+```
+
 The deployment uses a temporary runtime-clone fallback from the public GitHub repository because the official Code Engine source-build path is currently blocked by IBM Container Registry policy assignment permissions in the course account. This is good enough for stakeholder demo access, but the cleaner final path is still a normal GitHub source build or a prebuilt image once IBM enables the required permissions.
 
 ## Recommended Path: IBM Cloud Console
@@ -164,12 +172,36 @@ Trace ID: codeengine-cli-di8dq00g89
 
 Ask IBM to grant the Group 28 Code Engine project the needed Container Registry/service ID policy assignment permission, or to provide a preconfigured build output / registry secret for `group28`.
 
+For a separate API app, use the same fallback pattern but start `uvicorn` instead of Streamlit:
+
+```bash
+APP_SCRIPT="python -c \"import urllib.request,zipfile,os,shutil; urllib.request.urlretrieve('https://github.com/ZihaoLu001/visa-synthetic-research-copilot/archive/refs/heads/main.zip','/tmp/app.zip'); zipfile.ZipFile('/tmp/app.zip').extractall('/tmp'); shutil.rmtree('/app', ignore_errors=True); os.rename('/tmp/visa-synthetic-research-copilot-main','/app')\" && cd /app && pip install --no-cache-dir -r requirements.txt && uvicorn api:app --host 0.0.0.0 --port 8080"
+
+ibmcloud ce app create \
+  --name visa-synthetic-research-api \
+  --image python:3.12-slim \
+  --port 8080 \
+  --command /bin/sh \
+  --argument=-c \
+  --argument "$APP_SCRIPT" \
+  --env MODEL_PROVIDER=mock \
+  --env APP_MODE=api \
+  --cpu 1 \
+  --memory 4G \
+  --ephemeral-storage 2G \
+  --min-scale 0 \
+  --max-scale 1 \
+  --visibility public \
+  --wait \
+  --wait-timeout 900
+```
+
 ## watsonx Orchestrate Integration Asset
 
 This repo includes two lightweight assets for the IBM platform story:
 
 - `orchestrate/agents/visa_synthetic_research_copilot.yaml`: minimal ADK agent specification for explaining the coordinator-agent role.
-- `orchestrate/openapi/visa_synthetic_research_api.yaml`: OpenAPI contract for calling the `/run` API from Orchestrate or Agent Builder.
+- `orchestrate/openapi/visa_synthetic_research_api.yaml`: OpenAPI contract for calling the deployed `/run` API from Orchestrate or Agent Builder.
 
 Recommended final-demo stance:
 
@@ -181,5 +213,5 @@ Recommended final-demo stance:
 
 - The verified Code Engine URL is the primary stakeholder-sharing path.
 - Local Streamlit remains the fallback if the course account hits quota or network issues.
-- API mode is the Orchestrate-tool path.
+- The verified API Code Engine URL is the Orchestrate-tool path.
 - Keep `MODEL_PROVIDER=mock` available for rehearsal and fallback.

@@ -65,6 +65,12 @@ https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.
 
 The verified deployment runs the Streamlit cockpit in `MODEL_PROVIDER=mock` mode and successfully completed a 96-persona synthetic survey run in the browser. The preferred long-term deployment path remains GitHub source build with the included `Dockerfile`, port `8080`, and `APP_MODE=streamlit`; the current IBM account still needs Container Registry/source-build permissions enabled for Group 28. See `docs/code_engine_deployment.md`.
 
+The API integration endpoint for watsonx Orchestrate/OpenAPI tool import is also deployed:
+
+```text
+https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
+```
+
 ## Optional IBM watsonx.ai Setup
 
 Copy `.env.example` to `.env` and set:

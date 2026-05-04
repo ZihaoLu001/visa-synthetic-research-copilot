@@ -45,8 +45,8 @@ Explain that the orchestration is model-provider independent. The demo can run w
 IBM platform positioning:
 
 - Primary final demo: Streamlit consultant cockpit, because the rubric rewards a working solution.
-- IBM deployment proof: Code Engine can run the same container in Streamlit mode.
-- Integration proof: FastAPI `/run` endpoint plus OpenAPI contract can be imported as a watsonx Orchestrate tool.
+- IBM deployment proof: Code Engine is already running the Streamlit cockpit for Group 28.
+- Integration proof: a second Code Engine app exposes FastAPI `/health` and `/run`; the OpenAPI contract points to that deployed API and can be imported as a watsonx Orchestrate tool.
 - Orchestrate narrative: Orchestrate is the production coordinator for intake, tool calls, analyst review, and follow-up workflows, while the current repo remains the reliable demo runtime.
 
 ## 5:00-11:00 Live Demo
@@ -115,8 +115,8 @@ The strength of the PoC is not pretending to be perfect. The strength is showing
 ## 18:00-20:00 Next Steps
 
 1. Connect selected agents to watsonx.ai / watsonx Orchestrate ADK.
-2. Deploy the Streamlit cockpit on IBM Code Engine and keep local mock mode as backup.
-3. Import the OpenAPI tool into watsonx Orchestrate if the team wants an IBM-platform proof during Q&A.
+2. Ask IBM to enable normal GitHub source-build / Container Registry permissions so the current runtime-clone Code Engine deployment can be replaced with a cleaner source-build deployment.
+3. Import the deployed API OpenAPI tool into watsonx Orchestrate if the team wants a live IBM-platform proof during Q&A.
 4. Calibrate persona weights with more FSO and payment benchmark slices.
 5. Add export to PowerPoint/PDF.
 6. Compare synthetic results to Visa internal studies when available.
