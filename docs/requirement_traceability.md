@@ -9,6 +9,7 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | `Agentic AI Challenge Next Steps`, 18 Feb 2026 | Check Slack regularly; form groups and choose use cases. | Communication is external to the app; repo includes a clear README and demo script for partner discussion. |
 | `Kickoff IBM watsonx Agentic AI Challenge: UC VISA`, 12 Mar 2026 | Kickoff on 16 Mar; questions sent via Slack or email before the kickoff. | Project scope follows the clarified Visa questions: persona structure, output format, data sources, and validation. |
 | `Agentic AI Challenge Mid-Term: Visa`, 24 Mar 2026 | Midterm/final criteria are in `Midterm and Final Presentation.pdf`. | `docs/evaluation_scorecard.md` and the app Scorecard tab map evidence to the grading criteria. |
+| Slack course updates, Apr-May 2026 | Final presentations are onsite on 26 May 2026; additional Q&A sessions are available before finals; groups have reported quota/deployment issues. | The repo includes a runnable local mock mode, a Docker/Code Engine deployment path, explicit `.env` handling, and docs for partner Q&A preparation. |
 
 ## Final Presentation Rubric
 
