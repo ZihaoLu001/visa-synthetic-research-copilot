@@ -8,6 +8,7 @@ The app accepts flexible survey, interview, or card value proposition test quest
 - aggregated adoption, pricing, feature, and barrier signals
 - segment-level fit by Swiss persona archetype
 - benchmark alignment, internal consistency, and coverage checks
+- judge-style realism rubric and overall validation confidence
 - downloadable CSV responses and Markdown consultant report
 
 This is an early-stage hypothesis and survey-design tool. It does **not** claim to replace real customer research or Visa's final validation.
@@ -63,8 +64,10 @@ Keep `MODEL_PROVIDER=mock` available as the fallback for rehearsal and live demo
 2. Tune the two default card concepts and fees.
 3. Run 48 or 96 synthetic respondents.
 4. Review adoption index, acceptable fee, feature and barrier signals.
-5. Open segment and persona-level tables for traceability.
-6. Change a fee or feature live, rerun, and compare the directional movement.
+5. Open the Question Parser tab to prove the survey is not hardcoded.
+6. Open segment and persona-level tables for traceability.
+7. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
+8. Change a fee or feature live, rerun, and compare the directional movement.
 
 Suggested live stress test:
 
@@ -99,8 +102,19 @@ tests/
 docs/
   architecture.md              System design and extension notes
   demo_script.md               6-7 minute demo script
+  evaluation_scorecard.md      Mapping to final presentation grading criteria
+  final_presentation_plan.md   20-minute presentation structure
+  research_notes.md            Framework and synthetic survey research notes
   sources.md                   Public data sources
 ```
+
+## Full-Mark Scorecard Targets
+
+- Running demo: paste survey -> parse -> simulate -> aggregate -> validate -> export.
+- Architecture: UI, parser, persona store, orchestrator, respondent agents, validator, analytics/export.
+- KPIs: time to insight, response count, JSON parse success, consistency, benchmark MAE, realism score.
+- Business value: early-stage concept screening and better real survey design, not final market research replacement.
+- Next steps: watsonx Orchestrate ADK, calibration, human/LLM judge, PPT/PDF export, Visa internal validation.
 
 ## Public Data Anchors
 

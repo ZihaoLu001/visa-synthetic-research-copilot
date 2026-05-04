@@ -13,7 +13,7 @@ Consultant UI
   -> Weighted Swiss Micro-Population
   -> Persona Respondent Agents
   -> Analytics Aggregator
-  -> Benchmark / Consistency / Coverage Validator
+  -> Benchmark / Consistency / Coverage / Realism Validator
   -> Consultant Report Export
 ```
 
@@ -35,7 +35,7 @@ Consultant UI
 : Converts aggregate metrics into consultant-facing recommendation, watchouts, and next test suggestions.
 
 `validation.py`
-: Runs benchmark alignment, internal consistency, and persona coverage checks.
+: Runs benchmark alignment, internal consistency, persona coverage, survey construct coverage, judge-style realism checks and an overall validation confidence score.
 
 ## Model Strategy
 
@@ -60,6 +60,10 @@ Benchmark alignment compares the synthetic panel's weighted payment-method mix t
 Internal consistency repeats the same run and measures Likert standard deviation per persona, concept, and question.
 
 Coverage checks whether the synthetic panel spans the core Visa-requested dimensions: age, income, household, language region, and persona archetype count.
+
+Question coverage checks whether the input survey includes the consultant constructs most relevant for card proposition testing: adoption, price sensitivity, feature preference and barriers.
+
+The realism rubric checks for concise survey-style answers, model identity leakage, numeric range validity, rough persona/price alignment and obvious adoption-versus-price contradictions. It is intentionally transparent so a future watsonx judge or human reviewer can use the same rubric.
 
 ## Extension Points
 

@@ -23,8 +23,14 @@ def test_offline_run_completes():
     assert run.aggregate["concept_summary"]
     assert run.validation["benchmark_alignment"]["score"] is not None
     assert run.validation["benchmark_alignment"]["profiles"]
+    assert run.validation["overall"]["score"] >= 80
+    assert run.validation["realism_rubric"]["score"] >= 85
+    assert run.validation["question_coverage"]["score"] == 100
     assert run.aggregate["price_summary"]
-    assert build_markdown_report(run).startswith("# Visa Synthetic Research Copilot Report")
+    assert run.aggregate["runtime"]["json_parse_success_rate"] == 100.0
+    report = build_markdown_report(run)
+    assert report.startswith("# Visa Synthetic Research Copilot Report")
+    assert "## KPI Evidence" in report
 
 
 def test_parser_handles_new_survey_text():

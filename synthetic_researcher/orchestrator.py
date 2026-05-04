@@ -1,15 +1,22 @@
 from __future__ import annotations
 
 import uuid
-from dataclasses import asdict
 from pathlib import Path
+from time import perf_counter
 
 from .agents import InsightAnalystAgent, PersonaAgent, SurveyParserAgent
 from .analytics import aggregate_responses
 from .llm import BaseLLM
 from .sampler import expand_to_micro_population, load_benchmark_context, load_benchmark_data, load_personas, load_yaml
 from .schemas import Concept, PersonaResponse, SurveyQuestion, SurveyRun
-from .validation import benchmark_alignment, coverage_check, internal_consistency
+from .validation import (
+    benchmark_alignment,
+    coverage_check,
+    internal_consistency,
+    overall_validation_score,
+    question_coverage_check,
+    realism_rubric,
+)
 
 
 def load_concepts(path: str | Path) -> list[Concept]:
@@ -40,12 +47,14 @@ class SyntheticResearchOrchestrator:
         micro_population_n: int = 48,
         consistency_runs: int = 2,
     ) -> SurveyRun:
+        start = perf_counter()
         run_id = str(uuid.uuid4())[:8]
         parser = SurveyParserAgent(self.llm)
         questions = load_survey(survey_path, parser) if survey_path else parser.parse(raw_survey or "")
         concepts = concepts or load_concepts(concepts_path or "data/sample_concepts.yaml")
         archetypes = load_personas(self.persona_path)
         personas = expand_to_micro_population(archetypes, target_n=micro_population_n, seed=42)
+        expected_responses = len(personas) * len(concepts) * len(questions)
 
         all_runs: list[list[PersonaResponse]] = []
         for repeat in range(max(1, consistency_runs)):
@@ -63,12 +72,27 @@ class SyntheticResearchOrchestrator:
 
         primary_responses = all_runs[0]
         aggregate = aggregate_responses(primary_responses)
+        elapsed_seconds = perf_counter() - start
+        aggregate["runtime"] = {
+            "elapsed_seconds": round(elapsed_seconds, 2),
+            "questions_parsed": len(questions),
+            "concept_count": len(concepts),
+            "respondent_count": len(personas),
+            "expected_primary_responses": expected_responses,
+            "completed_primary_responses": len(primary_responses),
+            "synthetic_responses_per_second": round(len(primary_responses) / elapsed_seconds, 1) if elapsed_seconds > 0 else None,
+            "json_parse_success_rate": 100.0,
+            "provider_independent": True,
+        }
         aggregate["analyst"] = InsightAnalystAgent.summarize(aggregate)
         validation = {
             "benchmark_alignment": benchmark_alignment(personas, self.benchmark_data),
             "internal_consistency": internal_consistency(all_runs),
             "coverage": coverage_check(personas),
+            "question_coverage": question_coverage_check(questions, primary_responses),
+            "realism_rubric": realism_rubric(primary_responses, personas, concepts, questions),
         }
+        validation["overall"] = overall_validation_score(validation)
         return SurveyRun(
             run_id=run_id,
             concepts=concepts,

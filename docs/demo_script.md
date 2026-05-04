@@ -35,9 +35,11 @@ Run 48 or 96 respondents in mock mode. Point out that the respondents are expand
 Cover these tabs:
 
 - Consultant Summary: adoption index, acceptable fee, top signals, recommendation.
+- Question Parser: parsed question types and measured constructs.
 - Segment Explorer: which Swiss archetypes fit each concept.
 - Persona Responses: individual responses with rationale and confidence.
-- Validation: benchmark alignment, consistency, coverage.
+- Validation: benchmark alignment, consistency, coverage, construct coverage and realism rubric.
+- Scorecard: direct mapping to the final grading criteria and KPI evidence.
 
 ## 6. Live Sensitivity Test
 
