@@ -45,5 +45,5 @@ Questions:
 Ask this in the general channel:
 
 ```text
-Hi IBM team, for Group 28 we want to deploy a Streamlit/FastAPI container to Code Engine. The app can run in Streamlit mode for the demo or API mode for an OpenAPI tool imported into watsonx Orchestrate. Could you confirm the Code Engine project name we should use for Group 28 / Visa and whether our account has Container Registry namespace/build permissions?
+Hi IBM team, for Group 28 we want to deploy our GitHub repo directly through the IBM Cloud Code Engine console, without relying on a local Docker or CLI setup. The app can run in Streamlit mode for the demo or API mode for an OpenAPI tool imported into watsonx Orchestrate. Could you confirm the Code Engine project name we should use for Group 28 / Visa and whether the project has the required source-build / Container Registry permissions?
 ```

@@ -18,7 +18,7 @@ This is the practical checklist for Team 1 / Group 28.
 | Streamlit cockpit | Primary demo | Best for the 5-point working demo rubric: paste/upload survey, run agents, inspect insights, validation, and exports. |
 | Mock provider | Required fallback | Protects the live demo from quota, network, or platform issues. |
 | watsonx.ai provider | IBM model proof | Shows IBM ecosystem use when credentials and quota are available. |
-| Docker / Code Engine | Deployment proof | Matches the Code Engine lab and lets stakeholders open the app without local setup. |
+| GitHub source / Code Engine | Deployment proof | Matches the Code Engine lab and lets stakeholders open the app without local setup. |
 | FastAPI `/run` | Integration proof | Lets Orchestrate or another IBM workflow trigger a synthetic research run. |
 | watsonx Orchestrate ADK | Extension proof | Useful for architecture and Q&A, but should not replace the reliable Streamlit demo unless deployment is confirmed. |
 
@@ -62,7 +62,28 @@ This is the practical checklist for Team 1 / Group 28.
 
 ## Code Engine Execution
 
-If the IBM Cloud CLI and Code Engine access are available:
+Preferred browser path:
+
+1. Open IBM Cloud in the browser.
+2. Go to Code Engine in region `eu-de`.
+3. Select the Visa / Group 28 Code Engine project.
+4. Create an application from GitHub source:
+
+   ```text
+   https://github.com/ZihaoLu001/visa-synthetic-research-copilot
+   ```
+
+5. Use branch `main`, port `8080`, and the included `Dockerfile`.
+6. Set:
+
+   ```text
+   MODEL_PROVIDER=mock
+   APP_MODE=streamlit
+   ```
+
+7. Open the generated application URL and run the demo.
+
+CLI path, only if the IBM Cloud CLI is installed:
 
 ```powershell
 ibmcloud login --sso

@@ -2,7 +2,45 @@
 
 The course labs describe IBM Code Engine as the easiest way to expose a working PoC to stakeholders as a managed application. This repo includes a minimal Dockerfile so the Streamlit cockpit can be deployed without changing the product code.
 
-## Local Container Smoke Test
+## Recommended Path: IBM Cloud Console
+
+The Cloud setup lab marks the IBM Cloud CLI as optional. You do **not** need to run Docker locally to deploy this project if the IBM Cloud Console has access to the GitHub repository and the assigned Code Engine project.
+
+Use this path first:
+
+1. Open IBM Cloud in the browser.
+2. Select region `Frankfurt (eu-de)`.
+3. Open Code Engine.
+4. Select the Code Engine project assigned to the Visa use case or Group 28.
+5. Create an **Application**.
+6. Choose **Source code** or GitHub source.
+7. Use repository `https://github.com/ZihaoLu001/visa-synthetic-research-copilot`.
+8. Use branch `main`.
+9. Keep the repo root as the build context; the included `Dockerfile` provides the runtime.
+10. Set listening port `8080`.
+11. Set environment variables:
+
+```text
+MODEL_PROVIDER=mock
+APP_MODE=streamlit
+```
+
+After deployment, open the generated Code Engine application URL. This should load the Streamlit consultant cockpit.
+
+For API/Orchestrate integration mode, create or update the application with:
+
+```text
+MODEL_PROVIDER=mock
+APP_MODE=api
+```
+
+Then test:
+
+```text
+https://<code-engine-url>/health
+```
+
+## Optional Local Container Smoke Test
 
 ```bash
 docker build -t visa-synthetic-research-copilot .
@@ -29,7 +67,7 @@ http://localhost:8080/health
 
 or run a synthetic research call against `POST /run`.
 
-## IBM Cloud Code Engine Sketch
+## Optional IBM Cloud CLI Sketch
 
 Use the Frankfurt region (`eu-de`) as recommended in the Code Engine lab.
 
@@ -54,6 +92,8 @@ For the Group 28 deployment helper:
 ```
 
 Use `-Mode api` if the deployment is meant to be imported into watsonx Orchestrate as an OpenAPI tool.
+
+This helper is optional. It exists for repeatable deployment once the IBM Cloud CLI is installed, but the browser console path above is enough for the course workflow.
 
 For watsonx.ai-backed runs, configure the same environment variables used locally:
 

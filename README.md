@@ -57,7 +57,7 @@ streamlit run app.py
 
 ## Optional IBM Code Engine Deployment
 
-The course labs highlight Code Engine as a lightweight stakeholder demo path. This repo includes a `Dockerfile`, a Streamlit mode, an API mode, and `scripts/deploy_code_engine.ps1`; see `docs/code_engine_deployment.md` for local container and IBM Code Engine commands.
+The course labs highlight Code Engine as a lightweight stakeholder demo path. The recommended deployment path is browser-first: create a Code Engine application from the GitHub repository, use the included `Dockerfile`, set port `8080`, and set `APP_MODE=streamlit`. Local Docker and IBM Cloud CLI commands are optional; see `docs/code_engine_deployment.md`.
 
 ## Optional IBM watsonx.ai Setup
 
