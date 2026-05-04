@@ -45,6 +45,10 @@ python run_cli.py
 streamlit run app.py
 ```
 
+## Optional IBM Code Engine Deployment
+
+The course labs highlight Code Engine as a lightweight stakeholder demo path. This repo includes a `Dockerfile`; see `docs/code_engine_deployment.md` for local container and IBM Code Engine commands.
+
 ## Optional IBM watsonx.ai Setup
 
 Copy `.env.example` to `.env` and set:
@@ -105,8 +109,10 @@ tests/
 docs/
   architecture.md              System design and extension notes
   demo_script.md               6-7 minute demo script
+  code_engine_deployment.md     Optional IBM Code Engine deployment path
   evaluation_scorecard.md      Mapping to final presentation grading criteria
   final_presentation_plan.md   20-minute presentation structure
+  requirement_traceability.md  Email/lab/rubric/Visa requirement checklist
   research_notes.md            Framework and synthetic survey research notes
   sources.md                   Public data sources
 ```
