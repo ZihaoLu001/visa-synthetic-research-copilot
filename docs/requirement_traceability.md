@@ -9,7 +9,7 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | `Agentic AI Challenge Next Steps`, 18 Feb 2026 | Check Slack regularly; form groups and choose use cases. | Communication is external to the app; repo includes a clear README and demo script for partner discussion. |
 | `Kickoff IBM watsonx Agentic AI Challenge: UC VISA`, 12 Mar 2026 | Kickoff on 16 Mar; questions sent via Slack or email before the kickoff. | Project scope follows the clarified Visa questions: persona structure, output format, data sources, and validation. |
 | `Agentic AI Challenge Mid-Term: Visa`, 24 Mar 2026 | Midterm/final criteria are in `Midterm and Final Presentation.pdf`. | `docs/evaluation_scorecard.md` and the app Scorecard tab map evidence to the grading criteria. |
-| Slack course updates, Apr-May 2026 | Final presentations are onsite on 26 May 2026; Group 28 presents the Visa use case at 19:15-19:40 in Room 04404; additional Q&A sessions are available before finals; groups have reported quota/deployment issues. | The repo includes a runnable local mock mode, a Docker/Code Engine deployment path, an API mode for Orchestrate integration, explicit `.env` handling, and docs for partner Q&A preparation. |
+| Slack course updates, Apr-May 2026 | Final presentations are onsite on 26 May 2026; Group 28 presents the Visa use case at 19:15-19:40 in Room 04404; additional Q&A sessions are available before finals; groups have reported quota/deployment issues. | The repo includes a runnable local mock mode, a verified Code Engine deployment URL, a Docker/GitHub source-build path, an API mode for Orchestrate integration, explicit `.env` handling, and docs for partner Q&A preparation. |
 
 ## Final Presentation Rubric
 
@@ -42,7 +42,7 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | Lab | Relevant guidance | Project response |
 | --- | --- | --- |
 | Cloud & Course Setup | Use IBM Cloud account and Python development environment. | Python/Streamlit app with reproducible `requirements.txt` and CI tests. |
-| Code Engine | Stakeholder demos can be deployed as a managed Code Engine application. | `Dockerfile`, `.dockerignore`, `api.py`, `scripts/deploy_code_engine.ps1`, and `docs/code_engine_deployment.md` provide Streamlit and API deployment paths. |
+| Code Engine | Stakeholder demos can be deployed as a managed Code Engine application. | The Streamlit cockpit is deployed at `https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud`; `Dockerfile`, `.dockerignore`, `api.py`, `scripts/deploy_code_engine.ps1`, and `docs/code_engine_deployment.md` provide repeatable Streamlit and API deployment paths. |
 | Design Thinking | Design around real users and pain points, not just technology. | VCA consultant cockpit and output tabs follow the consultant workflow. |
 | watsonx Orchestrate | Agents should have roles, tools, orchestration, and deployment story. | Parser, persona, analyst, validator, and orchestrator are separated; `orchestrate/` contains a minimal ADK agent spec and OpenAPI tool contract for the API. |
 | Prompt Engineering | Structured outputs, model parameters, and prompt discipline matter. | Prompts require strict JSON, persona context, benchmark context, and consistency with prior answers. |

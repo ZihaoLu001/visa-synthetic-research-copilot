@@ -18,14 +18,22 @@ This is the practical checklist for Team 1 / Group 28.
 | Streamlit cockpit | Primary demo | Best for the 5-point working demo rubric: paste/upload survey, run agents, inspect insights, validation, and exports. |
 | Mock provider | Required fallback | Protects the live demo from quota, network, or platform issues. |
 | watsonx.ai provider | IBM model proof | Shows IBM ecosystem use when credentials and quota are available. |
-| GitHub source / Code Engine | Deployment proof | Matches the Code Engine lab and lets stakeholders open the app without local setup. |
+| Code Engine URL | Verified deployment proof | Matches the Code Engine lab and lets stakeholders open the app without local setup. |
 | FastAPI `/run` | Integration proof | Lets Orchestrate or another IBM workflow trigger a synthetic research run. |
 | watsonx Orchestrate ADK | Extension proof | Useful for architecture and Q&A, but should not replace the reliable Streamlit demo unless deployment is confirmed. |
+
+Verified cloud demo URL:
+
+```text
+https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
+```
+
+Verified on 2026-05-04 with HTTP 200 and a browser-run 96-persona synthetic survey producing 768 persona-question responses.
 
 ## Do Before The Next Q&A
 
 1. Ask the questions in `docs/partner_questions.md`.
-2. Confirm the exact Code Engine project name and whether Group 28 has Container Registry/build permissions.
+2. Ask IBM to enable normal GitHub source-build / Container Registry permissions for Group 28, or confirm that the current runtime-clone Code Engine deployment is acceptable for the final demo.
 3. Confirm whether Visa can provide one representative survey/interview guide.
 4. Confirm whether they expect Orchestrate to be part of the live runtime or just the architecture story.
 
@@ -62,6 +70,16 @@ This is the practical checklist for Team 1 / Group 28.
 
 ## Code Engine Execution
 
+Current status:
+
+- Region: `eu-de`
+- Resource group: `group28`
+- Code Engine project: `group28`
+- App name: `visa-synthetic-research-copilot`
+- URL: `https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud`
+- Runtime mode: `MODEL_PROVIDER=mock`, `APP_MODE=streamlit`
+- Source-build blocker: Container Registry/service ID policy assignment permission, trace ID `codeengine-cli-di8dq00g89`
+
 Preferred browser path:
 
 1. Open IBM Cloud in the browser.
@@ -83,6 +101,8 @@ Preferred browser path:
 
 7. Open the generated application URL and run the demo.
 
+Important: do not manually set an environment variable named `PORT`; Code Engine reserves it. Use the application listening port setting `8080` instead.
+
 CLI path, only if the IBM Cloud CLI is installed:
 
 ```powershell
@@ -100,7 +120,7 @@ Then replace the `servers[0].url` value in `orchestrate/openapi/visa_synthetic_r
 
 ## Risk Controls
 
-- Keep local Streamlit ready even if Code Engine fails.
+- Keep local Streamlit ready even though Code Engine is already deployed, in case the public app cold-starts slowly or the course account hits quota.
 - Keep `MODEL_PROVIDER=mock` ready even if watsonx.ai quota is exhausted.
 - Do not commit `.env`, API keys, Slack codes, meeting passwords, or private Visa data.
 - Treat synthetic output as directional and validation-ready, not as real customer evidence.

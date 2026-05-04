@@ -57,7 +57,13 @@ streamlit run app.py
 
 ## Optional IBM Code Engine Deployment
 
-The course labs highlight Code Engine as a lightweight stakeholder demo path. The recommended deployment path is browser-first: create a Code Engine application from the GitHub repository, use the included `Dockerfile`, set port `8080`, and set `APP_MODE=streamlit`. Local Docker and IBM Cloud CLI commands are optional; see `docs/code_engine_deployment.md`.
+The course labs highlight Code Engine as a lightweight stakeholder demo path. A Group 28 cloud deployment was verified on 2026-05-04:
+
+```text
+https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
+```
+
+The verified deployment runs the Streamlit cockpit in `MODEL_PROVIDER=mock` mode and successfully completed a 96-persona synthetic survey run in the browser. The preferred long-term deployment path remains GitHub source build with the included `Dockerfile`, port `8080`, and `APP_MODE=streamlit`; the current IBM account still needs Container Registry/source-build permissions enabled for Group 28. See `docs/code_engine_deployment.md`.
 
 ## Optional IBM watsonx.ai Setup
 

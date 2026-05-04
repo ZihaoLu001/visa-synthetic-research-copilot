@@ -2,6 +2,22 @@
 
 The course labs describe IBM Code Engine as the easiest way to expose a working PoC to stakeholders as a managed application. This repo includes a minimal Dockerfile so the Streamlit cockpit can be deployed without changing the product code.
 
+## Current Verified Deployment
+
+As of 2026-05-04, the Streamlit cockpit is deployed in the assigned Group 28 Code Engine project:
+
+```text
+Application: visa-synthetic-research-copilot
+Region: eu-de
+Resource group: group28
+Code Engine project: group28
+Public URL: https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
+Mode: MODEL_PROVIDER=mock, APP_MODE=streamlit
+Verification: HTTP 200 and an in-browser 96-respondent run completed successfully.
+```
+
+The deployment uses a temporary runtime-clone fallback from the public GitHub repository because the official Code Engine source-build path is currently blocked by IBM Container Registry policy assignment permissions in the course account. This is good enough for stakeholder demo access, but the cleaner final path is still a normal GitHub source build or a prebuilt image once IBM enables the required permissions.
+
 ## Recommended Path: IBM Cloud Console
 
 The Cloud setup lab marks the IBM Cloud CLI as optional. You do **not** need to run Docker locally to deploy this project if the IBM Cloud Console has access to the GitHub repository and the assigned Code Engine project.
@@ -108,6 +124,46 @@ ibmcloud ce application update \
 
 Store `WATSONX_APIKEY` as a Code Engine secret rather than committing it to the repository.
 
+## Verified Runtime-Clone Fallback
+
+If GitHub source build fails because Code Engine cannot assign the required Container Registry policies, the following fallback can still expose the Streamlit demo from the cloud. It starts from the public `python:3.12-slim` image, downloads the public GitHub repo at container start, installs dependencies, and launches Streamlit.
+
+Do not set an environment variable named `PORT`; Code Engine reserves it.
+
+```bash
+ibmcloud target -r eu-de -g group28
+ibmcloud ce project select --name group28
+
+APP_SCRIPT="python -c \"import urllib.request,zipfile,os,shutil; urllib.request.urlretrieve('https://github.com/ZihaoLu001/visa-synthetic-research-copilot/archive/refs/heads/main.zip','/tmp/app.zip'); zipfile.ZipFile('/tmp/app.zip').extractall('/tmp'); shutil.rmtree('/app', ignore_errors=True); os.rename('/tmp/visa-synthetic-research-copilot-main','/app')\" && cd /app && pip install --no-cache-dir -r requirements.txt && streamlit run app.py --server.port=8080 --server.address=0.0.0.0 --server.headless=true"
+
+ibmcloud ce app create \
+  --name visa-synthetic-research-copilot \
+  --image python:3.12-slim \
+  --port 8080 \
+  --command /bin/sh \
+  --argument=-c \
+  --argument "$APP_SCRIPT" \
+  --env MODEL_PROVIDER=mock \
+  --env APP_MODE=streamlit \
+  --cpu 1 \
+  --memory 4G \
+  --ephemeral-storage 2G \
+  --min-scale 0 \
+  --max-scale 1 \
+  --visibility public \
+  --wait \
+  --wait-timeout 900
+```
+
+Known source-build blocker observed on 2026-05-04:
+
+```text
+FAILED The permission to assign required policies to the service ID, which is used to access the requested IBM Container Registry location, is insufficient.
+Trace ID: codeengine-cli-di8dq00g89
+```
+
+Ask IBM to grant the Group 28 Code Engine project the needed Container Registry/service ID policy assignment permission, or to provide a preconfigured build output / registry secret for `group28`.
+
 ## watsonx Orchestrate Integration Asset
 
 This repo includes two lightweight assets for the IBM platform story:
@@ -123,7 +179,7 @@ Recommended final-demo stance:
 
 ## Demo Positioning
 
-- Local Streamlit is the reliable live-demo path.
-- Code Engine is the stakeholder-sharing path if the team wants a public or partner-facing URL.
+- The verified Code Engine URL is the primary stakeholder-sharing path.
+- Local Streamlit remains the fallback if the course account hits quota or network issues.
 - API mode is the Orchestrate-tool path.
 - Keep `MODEL_PROVIDER=mock` available for rehearsal and fallback.
