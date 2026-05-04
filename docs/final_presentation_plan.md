@@ -2,6 +2,13 @@
 
 Target: 20 minutes presentation + 5 minutes partner feedback.
 
+Logistics for Team 1 / Group 28:
+
+- Date: 26 May 2026
+- Time: 19:15-19:40
+- Location: IBM Schweiz AG, Vulkanstrasse 106, 8048 Zurich, Room 04404
+- Arrival block: Block B starts at 18:00; official apero starts after the presentation block.
+
 ## 0:00-1:30 Problem and User
 
 VCA consultants and product teams need early customer input when designing card and payment value propositions. Real surveys and interviews are still needed, but they are slower and more expensive than the early ideation cycle. This leaves assumptions about price sensitivity, benefits, needs and messaging under-tested.
@@ -35,6 +42,13 @@ Survey / concept input
 
 Explain that the orchestration is model-provider independent. The demo can run with `MockLLM` for reliability, or with watsonx.ai via `WatsonxLLM` when credentials are available.
 
+IBM platform positioning:
+
+- Primary final demo: Streamlit consultant cockpit, because the rubric rewards a working solution.
+- IBM deployment proof: Code Engine can run the same container in Streamlit mode.
+- Integration proof: FastAPI `/run` endpoint plus OpenAPI contract can be imported as a watsonx Orchestrate tool.
+- Orchestrate narrative: Orchestrate is the production coordinator for intake, tool calls, analyst review, and follow-up workflows, while the current repo remains the reliable demo runtime.
+
 ## 5:00-11:00 Live Demo
 
 1. Paste the default four-question card survey.
@@ -57,6 +71,8 @@ Cover:
 - orchestrator loop across personas, concepts and questions
 - validation layer
 - CSV and Markdown export
+- FastAPI integration endpoint for Code Engine / watsonx Orchestrate
+- OpenAPI and ADK assets under `orchestrate/`
 
 Call out extension points:
 
@@ -99,7 +115,8 @@ The strength of the PoC is not pretending to be perfect. The strength is showing
 ## 18:00-20:00 Next Steps
 
 1. Connect selected agents to watsonx.ai / watsonx Orchestrate ADK.
-2. Calibrate persona weights with more FSO and payment benchmark slices.
-3. Add LLM-as-judge or human review validation in the same rubric framework.
-4. Add export to PowerPoint/PDF.
-5. Compare synthetic results to Visa internal studies when available.
+2. Deploy the Streamlit cockpit on IBM Code Engine and keep local mock mode as backup.
+3. Import the OpenAPI tool into watsonx Orchestrate if the team wants an IBM-platform proof during Q&A.
+4. Calibrate persona weights with more FSO and payment benchmark slices.
+5. Add export to PowerPoint/PDF.
+6. Compare synthetic results to Visa internal studies when available.

@@ -1,0 +1,101 @@
+openapi: 3.0.3
+info:
+  title: Visa Synthetic Research Copilot API
+  version: 0.1.0
+  description: >
+    API surface for triggering flexible synthetic survey research runs from
+    IBM Code Engine or watsonx Orchestrate.
+servers:
+  - url: https://replace-with-code-engine-url
+paths:
+  /health:
+    get:
+      operationId: healthCheck
+      summary: Check whether the synthetic research service is alive.
+      responses:
+        "200":
+          description: Service status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  service:
+                    type: string
+  /run:
+    post:
+      operationId: runSyntheticResearch
+      summary: Run a Swiss synthetic survey research study.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - survey_text
+              properties:
+                survey_text:
+                  type: string
+                  description: Flexible survey, interview guide, or proposition-test text.
+                concepts:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - id
+                      - name
+                      - description
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      annual_fee_chf:
+                        type: number
+                      features:
+                        type: array
+                        items:
+                          type: string
+                      target_context:
+                        type: string
+                micro_population_n:
+                  type: integer
+                  minimum: 6
+                  maximum: 96
+                  default: 12
+                consistency_runs:
+                  type: integer
+                  minimum: 1
+                  maximum: 3
+                  default: 1
+                response_mode:
+                  type: string
+                  enum:
+                    - summary
+                    - full
+                  default: summary
+      responses:
+        "200":
+          description: Synthetic research run output with aggregate insights and validation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  run_id:
+                    type: string
+                  aggregate:
+                    type: object
+                  validation:
+                    type: object
+                  sample_responses:
+                    type: array
+                    items:
+                      type: object
+                  response_count:
+                    type: integer

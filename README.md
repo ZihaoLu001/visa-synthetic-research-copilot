@@ -24,6 +24,10 @@ The kickoff deck asks for three layers:
 
 This repo implements that flow in a small, demo-friendly Streamlit application with a deterministic mock provider and optional watsonx.ai provider.
 
+## Final Presentation Slot
+
+Team 1 / Group 28 presents the Visa use case on **26 May 2026, 19:15-19:40** in **IBM Zurich Room 04404**. The final talk is 20 minutes plus 5 minutes partner feedback.
+
 ## Quick Start
 
 ```powershell
@@ -33,6 +37,12 @@ python -m venv .venv
 pip install -r requirements.txt
 python run_cli.py
 streamlit run app.py
+```
+
+Optional API mode for IBM Code Engine or watsonx Orchestrate tool integration:
+
+```powershell
+uvicorn api:app --host 0.0.0.0 --port 8080
 ```
 
 For macOS/Linux:
@@ -47,7 +57,7 @@ streamlit run app.py
 
 ## Optional IBM Code Engine Deployment
 
-The course labs highlight Code Engine as a lightweight stakeholder demo path. This repo includes a `Dockerfile`; see `docs/code_engine_deployment.md` for local container and IBM Code Engine commands.
+The course labs highlight Code Engine as a lightweight stakeholder demo path. This repo includes a `Dockerfile`, a Streamlit mode, an API mode, and `scripts/deploy_code_engine.ps1`; see `docs/code_engine_deployment.md` for local container and IBM Code Engine commands.
 
 ## Optional IBM watsonx.ai Setup
 
@@ -88,6 +98,7 @@ What is the main barrier that would stop you?
 
 ```text
 app.py                         Streamlit consultant cockpit
+api.py                         FastAPI integration endpoint for Code Engine / Orchestrate
 run_cli.py                     Offline CLI smoke demo
 data/
   swiss_archetypes.yaml        Swiss synthetic persona archetypes
@@ -106,12 +117,19 @@ synthetic_researcher/
   validation.py                Benchmark, consistency, coverage checks
 tests/
   test_offline_run.py          Mock-mode regression tests
+orchestrate/
+  agents/                      Minimal watsonx Orchestrate ADK agent specification
+  openapi/                     OpenAPI contract for importing the API as a tool
+scripts/
+  deploy_code_engine.ps1       IBM Code Engine deployment helper
 docs/
   architecture.md              System design and extension notes
   demo_script.md               6-7 minute demo script
   code_engine_deployment.md     Optional IBM Code Engine deployment path
   evaluation_scorecard.md      Mapping to final presentation grading criteria
+  final_delivery_runbook.md     Group 28 final delivery checklist
   final_presentation_plan.md   20-minute presentation structure
+  partner_questions.md          Slack/Q&A messages for IBM and Visa alignment
   requirement_traceability.md  Email/lab/rubric/Visa requirement checklist
   research_notes.md            Framework and synthetic survey research notes
   sources.md                   Public data sources
