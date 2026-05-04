@@ -1,0 +1,39 @@
+from pathlib import Path
+
+from synthetic_researcher.llm import MockLLM
+from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
+from synthetic_researcher.reporting import build_markdown_report
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_offline_run_completes():
+    orch = SyntheticResearchOrchestrator(
+        llm=MockLLM(),
+        persona_path=ROOT / "data" / "swiss_archetypes.yaml",
+        benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
+    )
+    run = orch.run(
+        survey_path=ROOT / "data" / "sample_survey_card.yaml",
+        concepts_path=ROOT / "data" / "sample_concepts.yaml",
+        micro_population_n=12,
+        consistency_runs=2,
+    )
+    assert run.responses
+    assert run.aggregate["concept_summary"]
+    assert run.validation["benchmark_alignment"]["score"] is not None
+    assert run.validation["benchmark_alignment"]["profiles"]
+    assert run.aggregate["price_summary"]
+    assert build_markdown_report(run).startswith("# Visa Synthetic Research Copilot Report")
+
+
+def test_parser_handles_new_survey_text():
+    llm = MockLLM()
+    questions = llm.generate_json(
+        "Parse the raw survey into JSON.\nRAW_SURVEY:\n"
+        "1. Would you trust a card that suggests the cheapest payment method at checkout?\n"
+        "2. What annual fee in CHF would you pay?\n"
+        "3. What concern would stop you from using it?"
+    )
+    assert [q["type"] for q in questions] == ["likert", "price", "open"]
+    assert questions[2]["measures"] == "barriers"

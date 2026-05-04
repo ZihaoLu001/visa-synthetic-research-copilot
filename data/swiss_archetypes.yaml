@@ -1,0 +1,170 @@
+personas:
+  - id: A1
+    name: Zurich Digital Student
+    weight: 13
+    age_band: "18-29"
+    region: "Zurich urban"
+    language_region: "German-speaking Switzerland"
+    income_band: "low"
+    household: "one-person / shared flat"
+    education: "university / vocational training"
+    lifestyle: "mobile-first, budget-conscious, frequent online shopping, limited travel budget"
+    payment_profile:
+      cash: 0.14
+      debit_card: 0.31
+      credit_card: 0.08
+      mobile_payment_apps: 0.47
+    attitudes:
+      price_sensitivity: 0.88
+      digital_openness: 0.92
+      privacy_concern: 0.45
+      travel_orientation: 0.35
+      reward_orientation: 0.70
+    source_notes:
+      - "Younger Swiss consumers use less cash and more mobile/digital methods than older groups."
+      - "Use FSO demographics plus SNB/SPM payment-method benchmarks."
+
+  - id: A2
+    name: Basel Young Professional Traveler
+    weight: 17
+    age_band: "25-39"
+    region: "Basel / Zurich commuter"
+    language_region: "German-speaking Switzerland"
+    income_band: "middle"
+    household: "one-person"
+    education: "tertiary"
+    lifestyle: "career-oriented, travels several times per year, compares card benefits"
+    payment_profile:
+      cash: 0.10
+      debit_card: 0.25
+      credit_card: 0.28
+      mobile_payment_apps: 0.37
+    attitudes:
+      price_sensitivity: 0.48
+      digital_openness: 0.85
+      privacy_concern: 0.40
+      travel_orientation: 0.86
+      reward_orientation: 0.75
+    source_notes:
+      - "Frequent travelers are a plausible target segment for premium card benefits."
+      - "Payment mix grounded with SNB/SPM public payment-method studies."
+
+  - id: A3
+    name: Bern Family Budget Parent
+    weight: 23
+    age_band: "30-49"
+    region: "Bern / mid-sized Swiss cities"
+    language_region: "German-speaking Switzerland"
+    income_band: "middle"
+    household: "family with children"
+    education: "vocational / tertiary"
+    lifestyle: "values predictable expenses, family utility, grocery and online purchases"
+    payment_profile:
+      cash: 0.23
+      debit_card: 0.36
+      credit_card: 0.13
+      mobile_payment_apps: 0.28
+    attitudes:
+      price_sensitivity: 0.72
+      digital_openness: 0.68
+      privacy_concern: 0.53
+      travel_orientation: 0.40
+      reward_orientation: 0.82
+    source_notes:
+      - "Household composition and income are key persona factors in the Visa kickoff slides."
+
+  - id: A4
+    name: Geneva Premium Frequent Traveler
+    weight: 10
+    age_band: "30-54"
+    region: "Geneva / Lake Geneva"
+    language_region: "French-speaking Switzerland"
+    income_band: "high"
+    household: "two-person household"
+    education: "tertiary"
+    lifestyle: "international travel, premium service expectations, cross-border spending"
+    payment_profile:
+      cash: 0.08
+      debit_card: 0.18
+      credit_card: 0.42
+      mobile_payment_apps: 0.32
+    attitudes:
+      price_sensitivity: 0.25
+      digital_openness: 0.75
+      privacy_concern: 0.35
+      travel_orientation: 0.95
+      reward_orientation: 0.88
+    source_notes:
+      - "High-income and travel-oriented segment used for card value proposition testing."
+
+  - id: A5
+    name: Ticino Cash-Trusting Retiree
+    weight: 18
+    age_band: "55+"
+    region: "Ticino / smaller town"
+    language_region: "Italian-speaking Switzerland"
+    income_band: "low-to-middle"
+    household: "one-person / couple"
+    education: "vocational"
+    lifestyle: "prefers control and simplicity, local shopping, lower digital enthusiasm"
+    payment_profile:
+      cash: 0.48
+      debit_card: 0.34
+      credit_card: 0.08
+      mobile_payment_apps: 0.10
+    attitudes:
+      price_sensitivity: 0.80
+      digital_openness: 0.32
+      privacy_concern: 0.82
+      travel_orientation: 0.20
+      reward_orientation: 0.35
+    source_notes:
+      - "Older consumers use more cash; SNB 2025 charts break down payment methods by age."
+
+  - id: A6
+    name: Swiss SME Owner Cross-Border Purchaser
+    weight: 14
+    age_band: "40-59"
+    region: "St. Gallen / eastern Switzerland"
+    language_region: "German-speaking Switzerland"
+    income_band: "middle-to-high"
+    household: "couple / family"
+    education: "vocational / business"
+    lifestyle: "values control, business travel, FX clarity, receipts and protection"
+    payment_profile:
+      cash: 0.17
+      debit_card: 0.28
+      credit_card: 0.31
+      mobile_payment_apps: 0.24
+    attitudes:
+      price_sensitivity: 0.45
+      digital_openness: 0.62
+      privacy_concern: 0.55
+      travel_orientation: 0.72
+      reward_orientation: 0.68
+    source_notes:
+      - "Business-like behavior is included only as a consumer-style archetype, not Visa internal client data."
+
+  - id: A7
+    name: Lausanne Online Shopper
+    weight: 8
+    age_band: "20-44"
+    region: "Lausanne / Vaud"
+    language_region: "French-speaking Switzerland"
+    income_band: "middle"
+    household: "one-person / couple"
+    education: "tertiary"
+    lifestyle: "online shopping, subscriptions, compares benefits, likes simple protection"
+    payment_profile:
+      cash: 0.12
+      debit_card: 0.30
+      credit_card: 0.20
+      mobile_payment_apps: 0.38
+    attitudes:
+      price_sensitivity: 0.58
+      digital_openness: 0.83
+      privacy_concern: 0.46
+      travel_orientation: 0.50
+      reward_orientation: 0.72
+    source_notes:
+      - "Remote and online transaction behavior should be benchmarked against SNB/SPM when available."

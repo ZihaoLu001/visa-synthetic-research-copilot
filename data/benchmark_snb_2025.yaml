@@ -1,0 +1,62 @@
+anchors:
+  - name: Switzerland permanent resident population
+    value: "9,051,029 people at 31 Dec 2024"
+    source: "Swiss Federal Statistical Office / FSO population statistics, 2024 key figures"
+    url: "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36074226/master"
+  - name: Private households
+    value: "about 4.1 million private households at end 2024; over one third are one-person households"
+    source: "Swiss Federal Statistical Office / FSO population 2024 key figures"
+    url: "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36074226/master"
+  - name: SNB 2025 point-of-sale payment mix
+    value: "cash 30%, debit card 37%, credit card 13%, mobile payment apps 17%"
+    source: "Swiss National Bank Payment Methods Survey of Private Individuals 2025"
+    url: "https://www.snb.ch/dam/jcr%3A66f0422b-7961-45d9-8ce3-3d05a9dc0a06/paytrans_survey_report_2025.en.pdf"
+  - name: Swiss Payment Monitor
+    value: "long-term Swiss payment behavior study using representative survey data twice a year plus public digital payment data"
+    source: "Swiss Payment Monitor, ZHAW and University of St.Gallen"
+    url: "https://en.swisspaymentmonitor.ch/"
+  - name: Swiss Payment Monitor 1/2026 all-transaction payment mix
+    value: "mobile devices 31.4%, debit card 23.8%, cash 23.0%, credit card 17.2%"
+    source: "Swiss Payment Monitor 1/2026 current results / ZHAW and University of St.Gallen press release"
+    url: "https://www.zhaw.ch/storage/hochschule/medien/news/2026/Press_Release_Swiss_Payment_Monitor_2026_EN.pdf"
+
+benchmark_profiles:
+  snb_pos_2025:
+    label: "SNB 2025 point-of-sale transactions"
+    context: "in-person payments by private individuals"
+    source: "Swiss National Bank Payment Methods Survey of Private Individuals 2025"
+    url: "https://www.snb.ch/dam/jcr%3A66f0422b-7961-45d9-8ce3-3d05a9dc0a06/paytrans_survey_report_2025.en.pdf"
+    payment_mix:
+      cash: 30.0
+      debit_card: 37.0
+      credit_card: 13.0
+      mobile_payment_apps: 17.0
+
+  spm_all_transactions_2026_1:
+    label: "Swiss Payment Monitor 1/2026 all transactions"
+    context: "all payment transactions reported in the electronic diary"
+    source: "Swiss Payment Monitor 1/2026, ZHAW and University of St.Gallen"
+    url: "https://www.zhaw.ch/storage/hochschule/medien/news/2026/Press_Release_Swiss_Payment_Monitor_2026_EN.pdf"
+    payment_mix:
+      cash: 23.0
+      debit_card: 23.8
+      credit_card: 17.2
+      mobile_payment_apps: 31.4
+
+  spm_in_store_2026_1:
+    label: "Swiss Payment Monitor 1/2026 in-store transactions"
+    context: "in-store transactions only"
+    source: "Swiss Payment Monitor 1/2026, ZHAW and University of St.Gallen"
+    url: "https://www.zhaw.ch/storage/hochschule/medien/news/2026/Press_Release_Swiss_Payment_Monitor_2026_EN.pdf"
+    payment_mix:
+      cash: 26.5
+      debit_card: 27.1
+      credit_card: 18.7
+      mobile_payment_apps: 24.8
+
+# Backward-compatible default target used by older notebooks/tests.
+payment_mix_pos_2025:
+  cash: 30.0
+  debit_card: 37.0
+  credit_card: 13.0
+  mobile_payment_apps: 17.0
