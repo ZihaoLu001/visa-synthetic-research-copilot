@@ -86,6 +86,22 @@ def test_parser_extracts_external_concept_test_options():
     assert questions[2]["measures"] == "barriers"
 
 
+def test_parser_keeps_pdf_wrapped_question_lines_together():
+    llm = MockLLM()
+    questions = llm.generate_json(
+        "Parse the raw survey into JSON.\nRAW_SURVEY:\n"
+        "1. How confident are you in your ability to understand and navigate the technology and features\n"
+        "of your mobile phone?\n"
+        "Options: very confident; somewhat confident; not confident\n"
+        "2. Have you made a mobile payment in the past 12 months?\n"
+        "Options: yes; no"
+    )
+
+    assert len(questions) == 2
+    assert questions[0]["text"].endswith("of your mobile phone?")
+    assert questions[0]["options"] == ["very confident", "somewhat confident", "not confident"]
+
+
 def test_choice_agent_uses_real_options_instead_of_generic_labels():
     llm = MockLLM()
     prompt = """

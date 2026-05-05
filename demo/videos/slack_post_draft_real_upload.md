@@ -2,7 +2,7 @@ Hi Visa / IBM team,
 
 We recorded a short real-run demo of our current Visa Synthetic Research Copilot prototype.
 
-In the video, we upload a public Federal Reserve mobile-payments survey excerpt as a TXT attachment, run the end-to-end synthetic research workflow, and show:
+In the video, we upload a public Federal Reserve mobile-payments survey excerpt as a PDF attachment, run the end-to-end synthetic research workflow, and show:
 
 - flexible survey parsing from the uploaded file,
 - 96 Swiss synthetic consumer respondents,

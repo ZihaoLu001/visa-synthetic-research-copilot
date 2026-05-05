@@ -11,7 +11,7 @@ htmlcov/
 .streamlit/secrets.toml
 *.log
 *.tmp
-.streamlit_real_demo_pid
+.streamlit*_demo_pid
 outputs/
 exports/
 dist/
@@ -19,7 +19,9 @@ build/
 
 # Local video recording scratch files
 demo/videos/real_run_raw/
+demo/videos/pdf_run_raw/
 demo/videos/real*_*.png
+demo/videos/pdf_demo_*.png
 demo/videos/*contact_sheet.jpg
 demo/videos/upload_check.png
 demo/videos/visa_synthetic_research_copilot_slack_demo.mp4

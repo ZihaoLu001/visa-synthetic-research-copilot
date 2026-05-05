@@ -90,15 +90,18 @@ Keep `MODEL_PROVIDER=mock` available as the fallback for rehearsal and live demo
 
 ## Demo Flow
 
-1. Paste a survey/interview guide or upload a TXT, MD, PDF, DOCX, CSV, or XLSX research file.
-2. Tune the two default card concepts and fees.
-3. Run 48 or 96 synthetic respondents.
-4. Review adoption index, acceptable fee, feature and barrier signals.
-5. Open the Question Parser tab to prove the survey is not hardcoded and inspect the input extraction audit.
-6. Open segment and persona-level tables for traceability.
-7. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
-8. Download CSV, Markdown, or JSON outputs for partner review.
-9. Change a fee or feature live, rerun, and compare the directional movement.
+1. Upload a PDF survey/interview guide, or use TXT, MD, DOCX, CSV, or XLSX when that is what the client has.
+2. Review the extracted survey text and adjust questions if needed.
+3. Set the Swiss target market and tune the two default card concepts and fees.
+4. Run 48 or 96 synthetic respondents.
+5. Review adoption index, acceptable fee, feature and barrier signals.
+6. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
+7. Open segment and persona-level tables for traceability.
+8. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
+9. Download CSV, Markdown, or JSON outputs for partner review.
+10. Change a fee or feature live, rerun, and compare the directional movement.
+
+The Slack-ready real-run video is in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment.
 
 Suggested live stress test:
 
@@ -118,6 +121,8 @@ run_cli.py                     Offline CLI smoke demo
 demo/
   final_demo_survey.txt        Live-paste survey for the final demo
   api_smoke_payload.json       Cloud API smoke-test payload
+  public_survey_uploads/       Public survey excerpt in TXT and PDF upload formats
+  videos/                      Slack-ready real-run demo video and post draft
 data/
   swiss_archetypes.yaml        Swiss synthetic persona archetypes
   benchmark_snb_2025.yaml      Public benchmark anchors and validation profiles

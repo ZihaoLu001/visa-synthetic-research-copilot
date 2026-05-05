@@ -110,7 +110,22 @@ class MockLLM(BaseLLM):
             is_numbered = bool(re.match(r"^(?:Q\d+|\d+)[\).:-]\s+", line, flags=re.I))
             is_option = bool(re.match(r"^(?:[-*•]|[A-Ha-h][\).])\s+", line))
             is_inline_options = bool(re.match(r"^(?:options?|choices?|answers?|response options?)\s*[:\-]", line, flags=re.I))
-            looks_like_new_question = bool(current and line.endswith("?") and len(line) >= 16 and not is_option and not is_inline_options)
+            starts_like_question = bool(
+                re.match(
+                    r"^(?:how|what|which|why|when|where|would|do|does|did|have|has|are|is|can|could|should|"
+                    r"please|rate|rank|choose|select|in the past)\b",
+                    line,
+                    flags=re.I,
+                )
+            )
+            looks_like_new_question = bool(
+                current
+                and line.endswith("?")
+                and len(line) >= 16
+                and starts_like_question
+                and not is_option
+                and not is_inline_options
+            )
             if current and (is_numbered or looks_like_new_question):
                 blocks.append(current)
                 current = [line]

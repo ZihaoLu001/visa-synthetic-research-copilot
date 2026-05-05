@@ -16,6 +16,11 @@ from synthetic_researcher.schemas import Concept, SurveyRun
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 DEMO_SURVEYS = ROOT / "demo" / "external_survey_tests"
+PUBLIC_UPLOADS = ROOT / "demo" / "public_survey_uploads"
+FEDERAL_RESERVE_SURVEY_SOURCE = (
+    "https://www.federalreserve.gov/econresdata/mobile-devices/"
+    "2015-appendix-2-survey-of-consumers-use-of-mobile-financial-services-2014-questionnaire.htm"
+)
 
 
 st.set_page_config(page_title="Visa Synthetic Research Copilot", layout="wide", page_icon="V")
@@ -155,6 +160,53 @@ st.markdown(
       border-radius: 6px;
       font-weight: 700;
     }
+    .workflow-step {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.94);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin: 12px 0;
+    }
+    .workflow-step-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: var(--visa-electric);
+      color: white;
+      font-weight: 780;
+      font-size: 14px;
+    }
+    .workflow-step-title {
+      color: var(--visa-blue);
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 760;
+      margin: 0;
+    }
+    .workflow-step-copy {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      margin-left: 40px;
+    }
+    .upload-proof {
+      border: 1px solid #bfe3cf;
+      background: #effaf3;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #14532d;
+      font-size: 14px;
+      line-height: 1.45;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -202,79 +254,122 @@ def main() -> None:
 
     defaults = apply_demo_scenario(defaults, scenario)
 
-    with st.form("research_form", border=False):
-        left, right = st.columns([1.05, 0.95], gap="large")
-        with left:
-            st.markdown("#### Survey / Interview Input")
-            uploaded_survey = st.file_uploader(
-                "Upload a survey or interview guide",
-                type=supported_upload_types(),
-                help="Supports txt, md, pdf, docx, csv and xlsx survey/interview files.",
-            )
-            default_survey = """1. How likely would you be to adopt this card if it were offered by your bank?
+    default_survey = """1. How likely would you be to adopt this card if it were offered by your bank?
 2. What annual fee in CHF would feel acceptable for this card?
 3. Which benefit or feature feels most valuable to you, and why?
 4. What is the main barrier that would prevent you from using this card?"""
-            survey_presets = load_survey_presets(default_survey)
-            preset_name = st.selectbox(
-                "Question preset",
-                list(survey_presets.keys()),
-                help="Use a public-example-inspired stress test, or paste/upload your own survey below.",
-                key="question_preset_select",
+    survey_presets = load_survey_presets(default_survey)
+    if "survey_text_value" not in st.session_state:
+        st.session_state["survey_text_value"] = default_survey
+
+    render_workflow_step(
+        1,
+        "Upload a survey file",
+        "PDF is the recommended review format for partner demos. TXT, DOCX, CSV and XLSX also work.",
+    )
+    upload_col, sample_col = st.columns([0.62, 0.38], gap="large")
+    with upload_col:
+        uploaded_survey = st.file_uploader(
+            "Upload PDF, DOCX, XLSX or text survey",
+            type=supported_upload_types(),
+            help="Upload a survey, interview guide or concept test. The system extracts text before running the agents.",
+            key="survey_file_upload",
+        )
+    with sample_col:
+        st.markdown("**Need a realistic test file?**")
+        st.caption("Use the public mobile-payments survey excerpt for a reviewer-friendly PDF upload demo.")
+        sample_pdf = PUBLIC_UPLOADS / "federal_reserve_mobile_payments_excerpt.pdf"
+        if sample_pdf.exists():
+            st.download_button(
+                "Download sample PDF survey",
+                data=sample_pdf.read_bytes(),
+                file_name=sample_pdf.name,
+                mime="application/pdf",
+                width="stretch",
             )
-            if "survey_text_value" not in st.session_state:
-                st.session_state["survey_text_value"] = survey_presets[preset_name]
-            if uploaded_survey is None and st.session_state.get("last_question_preset") != preset_name:
-                st.session_state["survey_text_value"] = survey_presets[preset_name]
-                st.session_state["last_question_preset"] = preset_name
+        st.link_button("Open public source", FEDERAL_RESERVE_SURVEY_SOURCE, width="stretch")
+
+    preset_name = "Core Visa card survey"
+    input_metadata: dict[str, object] = {
+        "source": "preset",
+        "file_name": preset_name,
+        "file_type": "text",
+        "char_count": len(st.session_state["survey_text_value"]),
+        "extraction_notes": [f"Using app preset: {preset_name}."],
+    }
+    extracted_text: str | None = None
+    if uploaded_survey is not None:
+        try:
+            extracted = extract_survey_text(uploaded_survey.name, uploaded_survey.getvalue())
+            upload_key = f"{uploaded_survey.name}:{uploaded_survey.size}"
+            if st.session_state.get("last_uploaded_survey_key") != upload_key:
+                st.session_state["survey_text_value"] = extracted.text
+                st.session_state["last_uploaded_survey_key"] = upload_key
             default_survey = st.session_state["survey_text_value"]
-            input_metadata: dict[str, object] = {
-                "source": "preset",
-                "file_name": preset_name,
-                "file_type": "text",
-                "char_count": len(default_survey),
-                "extraction_notes": [f"Using app preset: {preset_name}."],
+            extracted_text = extracted.text
+            input_metadata = extracted.metadata()
+            st.markdown(
+                f"""
+                <div class="upload-proof">
+                  <strong>File loaded:</strong> {uploaded_survey.name}<br/>
+                  <strong>Type:</strong> {extracted.file_type.upper()} &nbsp; 
+                  <strong>Characters extracted:</strong> {extracted.char_count:,}<br/>
+                  The extracted text is ready to review in Step 2.
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            with st.expander("View extraction audit and text preview", expanded=False):
+                st.write("\n".join(f"- {note}" for note in extracted.extraction_notes))
+                st.code(extracted.text[:2200], language="text")
+        except SurveyExtractionError as exc:
+            st.error(str(exc))
+            input_metadata = {
+                "source": "direct_text_after_failed_upload",
+                "file_name": uploaded_survey.name,
+                "file_type": uploaded_survey.name.rsplit(".", 1)[-1].lower(),
+                "char_count": len(st.session_state["survey_text_value"]),
+                "extraction_notes": [f"Upload extraction failed: {exc}"],
             }
-            extracted_text: str | None = None
-            uploaded_just_loaded = False
-            if uploaded_survey is not None:
-                try:
-                    extracted = extract_survey_text(uploaded_survey.name, uploaded_survey.getvalue())
-                    upload_key = f"{uploaded_survey.name}:{uploaded_survey.size}"
-                    if st.session_state.get("last_uploaded_survey_key") != upload_key:
-                        st.session_state["survey_text_value"] = extracted.text
-                        st.session_state["last_uploaded_survey_key"] = upload_key
-                        uploaded_just_loaded = True
-                    default_survey = st.session_state["survey_text_value"]
-                    extracted_text = extracted.text
-                    input_metadata = extracted.metadata()
-                    st.success(
-                        f"Loaded {uploaded_survey.name} ({extracted.file_type}, {extracted.char_count:,} characters)."
-                    )
-                    with st.expander("Input extraction audit", expanded=False):
-                        st.write("\n".join(f"- {note}" for note in extracted.extraction_notes))
-                        st.code(extracted.text[:1800], language="text")
-                except SurveyExtractionError as exc:
-                    st.error(str(exc))
-                    input_metadata = {
-                        "source": "direct_text_after_failed_upload",
-                        "file_name": uploaded_survey.name,
-                        "file_type": uploaded_survey.name.rsplit(".", 1)[-1].lower(),
-                        "char_count": len(default_survey),
-                        "extraction_notes": [f"Upload extraction failed: {exc}"],
-                    }
+    else:
+        preset_name = st.selectbox(
+            "Or start from an example survey",
+            list(survey_presets.keys()),
+            help="Use a public-example-inspired stress test, or paste your own survey in Step 2.",
+            key="question_preset_select",
+        )
+        if st.session_state.get("last_question_preset") != preset_name:
+            st.session_state["survey_text_value"] = survey_presets[preset_name]
+            st.session_state["last_question_preset"] = preset_name
+        default_survey = st.session_state["survey_text_value"]
+        input_metadata = {
+            "source": "preset",
+            "file_name": preset_name,
+            "file_type": "text",
+            "char_count": len(default_survey),
+            "extraction_notes": [f"Using app preset: {preset_name}."],
+        }
+
+    render_workflow_step(
+        2,
+        "Review or adjust questions",
+        "The survey text below is what the parser agent receives. Reviewers can edit it before running.",
+    )
+    with st.form("research_form", border=False):
+        left, right = st.columns([1.05, 0.95], gap="large")
+        with left:
             raw_survey = st.text_area(
-                "Paste survey questions",
+                "Survey text for the agents",
                 key="survey_text_value",
-                height=224,
-                label_visibility="collapsed",
+                height=260,
+                help="You can keep the extracted PDF text as-is or edit it before running the synthetic respondents.",
             )
             input_metadata = {**input_metadata, "char_count": len(raw_survey)}
             survey_to_run = raw_survey
             if extracted_text is not None:
                 input_metadata["edited_after_extraction"] = raw_survey.strip() != extracted_text.strip()
-                if uploaded_just_loaded and raw_survey.strip() != extracted_text.strip():
-                    survey_to_run = extracted_text
+                if input_metadata["edited_after_extraction"]:
+                    input_metadata["source"] = "uploaded_file_edited_text"
             elif raw_survey.strip() != default_survey.strip():
                 input_metadata["source"] = "edited_preset_or_direct_text"
                 input_metadata["edited_after_extraction"] = True
@@ -285,10 +380,20 @@ def main() -> None:
                 label_visibility="collapsed",
             )
         with right:
+            render_workflow_step(
+                3,
+                "Configure concepts",
+                "Use the default Visa card propositions, tune pricing/features, or paste a client proposition.",
+            )
             st.markdown("#### Product Concepts")
             concepts = concept_editor(defaults, target_context)
 
-        submitted = st.form_submit_button("Run synthetic survey", type="primary", width="stretch")
+        render_workflow_step(
+            4,
+            "Run and review results",
+            "Launch the parser, persona respondent agents, aggregation and validation layers.",
+        )
+        submitted = st.form_submit_button("Run synthetic survey and generate insights", type="primary", width="stretch")
 
     if submitted:
         run_synthetic_survey(provider, survey_to_run, concepts, micro_n, consistency_runs, input_metadata)
@@ -316,6 +421,21 @@ def apply_demo_scenario(defaults: list[Concept], scenario: str) -> list[Concept]
             description=concepts[0].description + " Messaging emphasizes purchase protection, claim simplicity and transparent coverage.",
         )
     return concepts
+
+
+def render_workflow_step(number: int, title: str, copy: str) -> None:
+    st.markdown(
+        f"""
+        <div class="workflow-step">
+          <div class="workflow-step-head">
+            <span class="step-badge">{number}</span>
+            <h2 class="workflow-step-title">{title}</h2>
+          </div>
+          <div class="workflow-step-copy">{copy}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def concept_editor(defaults: list[Concept], target_context: str) -> list[Concept]:

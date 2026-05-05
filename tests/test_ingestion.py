@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from io import BytesIO
+from pathlib import Path
 
 import pandas as pd
 from docx import Document
 
 from synthetic_researcher.ingestion import extract_survey_text, supported_upload_types
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_supported_upload_types_cover_visa_testing_formats():
@@ -55,3 +58,14 @@ def test_extract_xlsx_file():
     assert extracted.file_type == "xlsx"
     assert "[Sheet: Survey]" in extracted.text
     assert "annual fee" in extracted.text
+
+
+def test_extract_public_pdf_demo_file():
+    payload = (ROOT / "demo" / "public_survey_uploads" / "federal_reserve_mobile_payments_excerpt.pdf").read_bytes()
+
+    extracted = extract_survey_text("federal_reserve_mobile_payments_excerpt.pdf", payload)
+
+    assert extracted.file_type == "pdf"
+    assert "mobile payment" in extracted.text.lower()
+    assert "annual fee in CHF" in extracted.text
+    assert extracted.extraction_notes == ["Extracted text from 1 PDF page(s)."]
