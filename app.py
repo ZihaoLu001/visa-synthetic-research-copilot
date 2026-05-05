@@ -7,6 +7,12 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from synthetic_researcher.consulting import (
+    build_decision_brief,
+    default_research_brief,
+    format_decision_brief_markdown,
+    methodology_snapshot,
+)
 from synthetic_researcher.ingestion import SurveyExtractionError, extract_survey_text, supported_upload_types
 from synthetic_researcher.llm import LLMError, get_llm
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator, load_concepts
@@ -207,6 +213,26 @@ st.markdown(
       font-size: 14px;
       line-height: 1.45;
     }
+    .decision-callout {
+      border-left: 5px solid var(--visa-electric);
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 18px 20px;
+      box-shadow: 0 12px 32px rgba(26,31,113,0.08);
+      margin-bottom: 16px;
+    }
+    .decision-headline {
+      color: var(--visa-blue);
+      font-size: 21px;
+      font-weight: 780;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .decision-copy {
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.5;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -253,6 +279,7 @@ def main() -> None:
         st.write("Directional early-stage research only. Final validation remains with Visa and real customer data.")
 
     defaults = apply_demo_scenario(defaults, scenario)
+    research_brief = render_research_brief()
 
     default_survey = """1. How likely would you be to adopt this card if it were offered by your bank?
 2. What annual fee in CHF would feel acceptable for this card?
@@ -396,13 +423,71 @@ def main() -> None:
         submitted = st.form_submit_button("Run synthetic survey and generate insights", type="primary", width="stretch")
 
     if submitted:
-        run_synthetic_survey(provider, survey_to_run, concepts, micro_n, consistency_runs, input_metadata)
+        run_synthetic_survey(provider, survey_to_run, concepts, micro_n, consistency_runs, input_metadata, research_brief)
 
     run = st.session_state.get("last_run")
     if run:
         render_results(run)
     else:
         render_empty_state()
+
+
+def render_research_brief() -> dict[str, str]:
+    defaults = default_research_brief()
+    st.markdown(
+        """
+        <div class="visa-shell">
+          <div class="mini-label">Consulting setup</div>
+          <div class="visa-title" style="font-size:24px;margin-bottom:8px;">Research Brief</div>
+          <div class="visa-subtitle">
+            Start with the business decision, not the model. These fields make the output read like a
+            VCA decision brief and help reviewers see that the tool is built for consulting work, not
+            free-form chatbot answers.
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    with st.expander("Edit research objective, hypotheses and decision rule", expanded=True):
+        c1, c2 = st.columns(2, gap="large")
+        with c1:
+            project_objective = st.text_area(
+                "Project objective",
+                value=defaults["project_objective"],
+                height=96,
+                help="What should this synthetic research run help the consultant learn?",
+            )
+            client_decision = st.text_area(
+                "Client decision to support",
+                value=defaults["client_decision"],
+                height=96,
+                help="Which decision should the partner/client make after reading the brief?",
+            )
+        with c2:
+            hypotheses = st.text_area(
+                "Hypotheses to test",
+                value=defaults["hypotheses"],
+                height=130,
+                help="One hypothesis per line. The app will map the output back to these hypotheses.",
+            )
+            decision_rule = st.text_area(
+                "Decision rule",
+                value=defaults["decision_rule"],
+                height=72,
+                help="Define what would make a synthetic finding worth advancing to real validation.",
+            )
+        stakeholder_output = st.text_input(
+            "Expected stakeholder output",
+            value=defaults["stakeholder_output"],
+            help="This is used in the downloadable decision brief.",
+        )
+    return {
+        "project_objective": project_objective,
+        "client_decision": client_decision,
+        "hypotheses": hypotheses,
+        "decision_rule": decision_rule,
+        "stakeholder_output": stakeholder_output,
+    }
 
 
 def apply_demo_scenario(defaults: list[Concept], scenario: str) -> list[Concept]:
@@ -492,6 +577,7 @@ def run_synthetic_survey(
     micro_n: int,
     consistency_runs: int,
     input_metadata: dict[str, object],
+    research_brief: dict[str, str],
 ) -> None:
     try:
         with st.status("Running parser, persona agents, analytics and validation...", expanded=False):
@@ -504,13 +590,17 @@ def run_synthetic_survey(
             st.write("Survey Parser Agent")
             st.write("Persona Respondent Agents")
             st.write("Insight Analyst and Validator")
-            st.session_state["last_run"] = orchestrator.run(
+            run = orchestrator.run(
                 raw_survey=raw_survey,
                 concepts=concepts,
                 micro_population_n=micro_n,
                 consistency_runs=consistency_runs,
                 input_source=input_metadata,
             )
+            run.aggregate["provider"] = provider
+            run.aggregate["research_brief"] = research_brief
+            run.aggregate["decision_brief"] = build_decision_brief(run, research_brief, provider=provider)
+            st.session_state["last_run"] = run
     except LLMError as exc:
         st.error(str(exc))
     except Exception as exc:
@@ -529,8 +619,9 @@ def render_empty_state() -> None:
 def render_results(run: SurveyRun) -> None:
     st.success(f"Run complete: {run.run_id}")
     render_kpis(run)
-    summary_tab, questions_tab, segment_tab, persona_tab, validation_tab, scorecard_tab, architecture_tab = st.tabs(
+    decision_tab, summary_tab, questions_tab, segment_tab, persona_tab, validation_tab, scorecard_tab, architecture_tab = st.tabs(
         [
+            "Decision Brief",
             "Consultant Summary",
             "Question Parser",
             "Segment Explorer",
@@ -540,6 +631,8 @@ def render_results(run: SurveyRun) -> None:
             "Architecture",
         ]
     )
+    with decision_tab:
+        render_decision_brief(run)
     with summary_tab:
         render_summary(run)
     with questions_tab:
@@ -570,6 +663,96 @@ def render_kpis(run: SurveyRun) -> None:
     card(c3, "Validation", str(validation.get("overall", {}).get("score", "-")), "Weighted confidence scorecard.")
     card(c4, "Benchmark", str(benchmark.get("score", "-")), benchmark.get("primary_profile_label", "Public payment mix alignment."))
     card(c5, "Runtime", f"{runtime.get('elapsed_seconds', '-')}s", f"{runtime.get('questions_parsed', '-')} parsed questions.")
+
+
+def render_decision_brief(run: SurveyRun) -> None:
+    aggregate = run.aggregate
+    research = aggregate.get("research_brief") or default_research_brief()
+    decision = aggregate.get("decision_brief") or build_decision_brief(
+        run,
+        research,
+        provider=str(aggregate.get("provider", "mock")),
+    )
+    st.markdown(
+        f"""
+        <div class="decision-callout">
+          <div class="mini-label">Executive answer</div>
+          <div class="decision-headline">{decision.get('decision_posture', 'Decision posture unavailable')}</div>
+          <div class="decision-copy">{decision.get('executive_answer', 'No decision brief generated.')}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Lead concept", decision.get("lead_concept_name") or decision.get("lead_concept_id") or "-")
+    c2.metric("Adoption gap", f"{decision.get('adoption_gap_vs_next', '-')}", "vs next concept")
+    c3.metric("Validation", decision.get("validation_score", "-"), decision.get("validation_band", ""))
+    c4.metric("Evidence mode", str(aggregate.get("provider", "mock")), "provider abstraction")
+
+    with st.expander("Research brief used for this run", expanded=True):
+        r1, r2 = st.columns(2, gap="large")
+        with r1:
+            st.markdown("**Project objective**")
+            st.write(research.get("project_objective", "n/a"))
+            st.markdown("**Client decision**")
+            st.write(research.get("client_decision", "n/a"))
+        with r2:
+            st.markdown("**Decision rule**")
+            st.write(research.get("decision_rule", "n/a"))
+            st.markdown("**Expected output**")
+            st.write(research.get("stakeholder_output", "n/a"))
+
+    st.markdown("#### Concept Decision Matrix")
+    matrix = pd.DataFrame(decision.get("concept_matrix", []))
+    if not matrix.empty:
+        display_cols = [
+            "concept_id",
+            "concept_name",
+            "adoption_index",
+            "mean_likert",
+            "price_signal",
+            "strongest_segments",
+            "weakest_segments",
+            "top_signals",
+            "recommended_action",
+        ]
+        st.dataframe(matrix[[col for col in display_cols if col in matrix.columns]], width="stretch", hide_index=True)
+    else:
+        st.info("No adoption-style concept matrix is available. Check whether the survey includes a likelihood or appeal question.")
+
+    s1, s2 = st.columns(2, gap="large")
+    with s1:
+        st.markdown("#### So What for VCA")
+        for item in decision.get("so_what", []):
+            st.write(f"- {item}")
+    with s2:
+        st.markdown("#### Recommended Real Research")
+        for item in decision.get("recommended_real_research", []):
+            st.write(f"- {item}")
+
+    st.markdown("#### Hypothesis Readout")
+    hypotheses = pd.DataFrame(decision.get("hypothesis_readout", []))
+    if not hypotheses.empty:
+        st.dataframe(hypotheses, width="stretch", hide_index=True)
+    else:
+        st.info("No hypotheses were provided.")
+
+    st.markdown("#### Methodology and Model Transparency")
+    for item in decision.get("methodology", methodology_snapshot(str(aggregate.get("provider", "mock")))):
+        st.write(f"- {item}")
+
+    with st.expander("Limitations and governance guardrails", expanded=True):
+        for item in decision.get("limitations", []):
+            st.write(f"- {item}")
+
+    decision_report = format_decision_brief_markdown(run)
+    st.download_button(
+        "Download Decision Brief",
+        data=decision_report.encode("utf-8"),
+        file_name=f"vca_decision_brief_{run.run_id}.md",
+        mime="text/markdown",
+    )
 
 
 def render_summary(run: SurveyRun) -> None:

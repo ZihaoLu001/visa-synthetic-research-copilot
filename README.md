@@ -4,6 +4,8 @@ Running PoC for the IBM watsonx / Visa Consulting & Analytics **Multi-Agent Synt
 
 The app accepts flexible survey, interview, or card value proposition test questions, runs a panel of public-data-grounded Swiss synthetic consumer personas, and returns:
 
+- a consultant research brief with objective, decision rule, hypotheses and expected stakeholder output
+- a decision brief that translates synthetic evidence into VCA-style recommendation, action, caveats and next real-research steps
 - persona-level survey responses
 - aggregated adoption, pricing, feature, and barrier signals
 - segment-level fit by Swiss persona archetype
@@ -24,6 +26,27 @@ The kickoff deck asks for three layers:
 3. **Validation & insight**: aggregated consultant output plus individual responses, with benchmark and consistency checks.
 
 This repo implements that flow in a small, demo-friendly Streamlit application with a deterministic mock provider and optional watsonx.ai provider.
+
+The product is intentionally framed as a **consultant-grade pilot workbench**, not a generic chatbot. A user starts with the business decision and hypotheses, uploads or pastes a survey, then reviews a Decision Brief that links the output back to actionability, validation posture and next real customer research.
+
+## Algorithm and Model Stack
+
+Current runtime has two interchangeable provider modes:
+
+- `MODEL_PROVIDER=mock` uses a deterministic `MockLLM`. This is the default for classroom demos and Slack review because it is fast, reproducible and avoids IBM quota/runtime risk.
+- `MODEL_PROVIDER=watsonx` uses IBM watsonx.ai through `ibm-watsonx-ai` `ModelInference`, with default model `ibm/granite-3-8b-instruct`. Set `WATSONX_URL`, `WATSONX_PROJECT_ID`, `WATSONX_APIKEY`, and optionally `WATSONX_MODEL_ID`.
+
+The main algorithms are transparent and replaceable:
+
+- File ingestion extracts text from PDF, DOCX, XLSX, CSV, TXT or pasted survey content and stores an audit trail.
+- Survey parsing turns arbitrary research questions into structured question objects: Likert, choice, price or open text.
+- Persona sampling expands Swiss public-data-grounded archetypes into a weighted synthetic micro-population.
+- Persona response generation asks one persona agent at a time, using concept context, public benchmark context and prior answers for consistency.
+- Aggregation computes weighted adoption index, acceptable-fee signals, feature/barrier labels, segment fit and persona quotes.
+- Validation computes benchmark alignment MAE, repeated-run Likert variance, persona coverage, question construct coverage and judge-style realism flags.
+- Consulting synthesis builds a VCA Decision Brief: lead concept, evidence quality, decision posture, hypothesis readout, next tests and governance caveats.
+
+The `mock` provider is not presented as a real customer model. It is a reliability fallback. A stronger pilot should run the same workflow with watsonx credentials and then calibrate persona weights/prompts against Visa internal research.
 
 ## Final Presentation Slot
 
@@ -90,16 +113,18 @@ Keep `MODEL_PROVIDER=mock` available as the fallback for rehearsal and live demo
 
 ## Demo Flow
 
-1. Upload a PDF survey/interview guide, or use TXT, MD, DOCX, CSV, or XLSX when that is what the client has.
-2. Review the extracted survey text and adjust questions if needed.
-3. Set the Swiss target market and tune the two default card concepts and fees.
-4. Run 48 or 96 synthetic respondents.
-5. Review adoption index, acceptable fee, feature and barrier signals.
-6. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
-7. Open segment and persona-level tables for traceability.
-8. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
-9. Download CSV, Markdown, or JSON outputs for partner review.
-10. Change a fee or feature live, rerun, and compare the directional movement.
+1. Edit the Research Brief: objective, client decision, hypotheses, decision rule and desired stakeholder output.
+2. Upload a PDF survey/interview guide, or use TXT, MD, DOCX, CSV, or XLSX when that is what the client has.
+3. Review the extracted survey text and adjust questions if needed.
+4. Set the Swiss target market and tune the two default card concepts and fees.
+5. Run 48 or 96 synthetic respondents.
+6. Open Decision Brief for lead concept, decision posture, hypothesis readout, caveats and recommended real research.
+7. Review adoption index, acceptable fee, feature and barrier signals.
+8. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
+9. Open segment and persona-level tables for traceability.
+10. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
+11. Download CSV, Markdown Decision Brief, full Markdown report, or JSON outputs for partner review.
+12. Change a fee or feature live, rerun, and compare the directional movement.
 
 The Slack-ready PDF operation manual is in `demo/manuals/visa_synthetic_research_copilot_operation_manual.pdf`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment, plus screenshots and reviewer instructions. The real-run video is retained in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`.
 
@@ -133,6 +158,7 @@ synthetic_researcher/
   agents.py                    Survey parser, persona respondent, analyst
   analytics.py                 Aggregation and scoring
   ingestion.py                 TXT/MD/PDF/DOCX/CSV/XLSX survey extraction
+  consulting.py                VCA-style research brief and decision brief synthesis
   llm.py                       Mock + IBM watsonx providers
   orchestrator.py              End-to-end multi-agent run
   reporting.py                 Markdown consultant report

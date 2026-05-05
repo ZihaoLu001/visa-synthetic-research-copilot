@@ -8,6 +8,7 @@ Visa Synthetic Research Copilot helps VCA consultants pressure-test early card, 
 
 ```text
 Consultant UI
+  -> Research Brief / Decision Rule
   -> Survey File/Text Ingestion
   -> Survey Parser Agent
   -> Persona Builder / Selector
@@ -15,13 +16,16 @@ Consultant UI
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark / Consistency / Coverage / Realism Validator
-  -> Consultant Report Export
+  -> VCA Decision Brief / Consultant Report Export
 ```
 
 ## Components
 
 `app.py`
-: Streamlit cockpit for uploading or pasting survey questions, editing card concepts, selecting respondent count, choosing provider, and setting validation repetitions.
+: Streamlit cockpit for setting the research brief and decision rule, uploading or pasting survey questions, editing card concepts, selecting respondent count, choosing provider, and setting validation repetitions.
+
+`consulting.py`
+: Converts raw synthetic evidence into a VCA-style decision brief: executive answer, decision posture, concept matrix, "so what" implications, hypothesis readout, next real-research actions, methodology snapshot and limitations.
 
 `ingestion.py`
 : Converts pasted text plus TXT, MD, PDF, DOCX, CSV, and XLSX uploads into normalized survey text with extraction metadata. This lets Visa or IBM test the prototype with a real marketing research survey file instead of retyping every question.
@@ -38,6 +42,9 @@ Consultant UI
 `InsightAnalystAgent`
 : Converts aggregate metrics into consultant-facing recommendation, watchouts, and next test suggestions.
 
+`Decision Brief`
+: Sits above the analyst summary. It answers the business question first, then links the recommendation to adoption, price, segment fit, validation score and the user's stated hypotheses. This is the layer that makes the prototype read like a consulting workbench instead of a generic synthetic respondent table.
+
 `validation.py`
 : Runs benchmark alignment, internal consistency, persona coverage, survey construct coverage, judge-style realism checks and an overall validation confidence score.
 
@@ -52,6 +59,13 @@ class BaseLLM:
 ```
 
 This keeps orchestration independent from any single model. `MockLLM` provides deterministic offline behavior for demo reliability. `WatsonxLLM` can call IBM watsonx.ai with `ibm-watsonx-ai` when credentials are available.
+
+Current default:
+
+- `MODEL_PROVIDER=mock`: deterministic fallback, reproducible for classroom and partner-review demos.
+- `MODEL_PROVIDER=watsonx`: IBM watsonx.ai, default `WATSONX_MODEL_ID=ibm/granite-3-8b-instruct`.
+
+The production recommendation is to keep mock as a smoke-test fallback while running pilot evidence generation through watsonx.ai, then calibrating outputs against Visa internal studies when Visa can provide validation targets.
 
 ## Validation Layer
 
@@ -74,6 +88,7 @@ The app also records an input-source audit in every run: source type, uploaded f
 ## Extension Points
 
 - Replace deterministic analyst with a watsonx.ai analyst prompt.
+- Add authenticated project storage, run history, reviewer approval and audit logs for a true enterprise pilot.
 - Add LangGraph or watsonx Orchestrate ADK for durable multi-agent orchestration.
 - Add calibrated weights from more granular FSO tables.
 - Add PowerPoint/PDF report export for final consultant deliverables.

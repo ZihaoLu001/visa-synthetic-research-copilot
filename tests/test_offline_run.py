@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from synthetic_researcher.consulting import build_decision_brief, default_research_brief, format_decision_brief_markdown
 from synthetic_researcher.llm import MockLLM
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.reporting import build_markdown_report
@@ -32,6 +33,14 @@ def test_offline_run_completes():
     assert report.startswith("# Visa Synthetic Research Copilot Report")
     assert "## Input Source" in report
     assert "## KPI Evidence" in report
+
+    brief = default_research_brief()
+    run.aggregate["provider"] = "mock"
+    run.aggregate["research_brief"] = brief
+    run.aggregate["decision_brief"] = build_decision_brief(run, brief, provider="mock")
+    assert run.aggregate["decision_brief"]["concept_matrix"]
+    assert "Decision Brief" in build_markdown_report(run)
+    assert "Methodology Snapshot" in format_decision_brief_markdown(run)
 
 
 def test_parser_handles_new_survey_text():

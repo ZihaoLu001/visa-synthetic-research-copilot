@@ -10,6 +10,8 @@ def build_markdown_report(run: SurveyRun) -> str:
     aggregate = run.aggregate
     validation = run.validation
     analyst = aggregate.get("analyst", {})
+    research = aggregate.get("research_brief", {})
+    decision = aggregate.get("decision_brief", {})
     lines = [
         "# Visa Synthetic Research Copilot Report",
         "",
@@ -17,6 +19,7 @@ def build_markdown_report(run: SurveyRun) -> str:
         f"Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
         f"Time to insight: {aggregate.get('runtime', {}).get('elapsed_seconds', 'n/a')} seconds",
         f"Synthetic responses: {aggregate.get('response_count', 'n/a')}",
+        f"Provider: {aggregate.get('provider', 'mock')}",
         "",
         "## Input Source",
         "",
@@ -24,6 +27,23 @@ def build_markdown_report(run: SurveyRun) -> str:
         f"- File: {aggregate.get('input_source', {}).get('file_name') or 'pasted text'}",
         f"- File type: {aggregate.get('input_source', {}).get('file_type', 'text')}",
         f"- Characters analyzed: {aggregate.get('input_source', {}).get('char_count', 'n/a')}",
+        "",
+        "## Research Brief",
+        "",
+        f"- Objective: {research.get('project_objective', 'n/a')}",
+        f"- Client decision: {research.get('client_decision', 'n/a')}",
+        f"- Decision rule: {research.get('decision_rule', 'n/a')}",
+        "",
+        "## Decision Brief",
+        "",
+        decision.get("executive_answer", "Decision brief was not generated for this run."),
+        "",
+        f"Decision posture: {decision.get('decision_posture', 'n/a')}",
+        f"Validation posture: {decision.get('validation_band', 'n/a')} ({decision.get('validation_score', 'n/a')}/100)",
+        "",
+        "### So What for VCA",
+        "",
+        *[f"- {item}" for item in decision.get("so_what", [])],
         "",
         "## Executive Recommendation",
         "",

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from synthetic_researcher.consulting import build_decision_brief, default_research_brief
 from synthetic_researcher.llm import get_llm
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.reporting import build_markdown_report
@@ -23,6 +24,10 @@ def main() -> None:
         micro_population_n=48,
         consistency_runs=2,
     )
+    brief = default_research_brief()
+    run.aggregate["provider"] = "mock"
+    run.aggregate["research_brief"] = brief
+    run.aggregate["decision_brief"] = build_decision_brief(run, brief, provider="mock")
     print(json.dumps({
         "run_id": run.run_id,
         "aggregate": run.aggregate,
