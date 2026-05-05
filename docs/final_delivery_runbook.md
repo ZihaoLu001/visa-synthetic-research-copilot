@@ -94,7 +94,8 @@ Current status:
 - URL: `https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud`
 - API app name: `visa-synthetic-research-api`
 - API URL: `https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud`
-- Runtime mode: `MODEL_PROVIDER=mock`, `APP_MODE=streamlit`
+- Runtime mode for final real-model proof: `MODEL_PROVIDER=watsonx`, `APP_MODE=streamlit`
+- Fallback rehearsal mode: `MODEL_PROVIDER=mock`
 - Source-build blocker: Container Registry/service ID policy assignment permission, trace ID `codeengine-cli-di8dq00g89`
 
 Preferred browser path:
@@ -112,11 +113,14 @@ Preferred browser path:
 6. Set:
 
    ```text
-   MODEL_PROVIDER=mock
+   MODEL_PROVIDER=watsonx
    APP_MODE=streamlit
+   WATSONX_URL=https://us-south.ml.cloud.ibm.com
+   WATSONX_PROJECT_ID=<project-id>
+   WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
    ```
 
-7. Open the generated application URL and run the demo.
+7. Store `WATSONX_APIKEY` as a Code Engine secret, then open the generated application URL and run the demo.
 
 Important: do not manually set an environment variable named `PORT`; Code Engine reserves it. Use the application listening port setting `8080` instead.
 
@@ -138,7 +142,7 @@ The OpenAPI contract in `orchestrate/openapi/visa_synthetic_research_api.yaml` a
 ## Risk Controls
 
 - Keep local Streamlit ready even though Code Engine is already deployed, in case the public app cold-starts slowly or the course account hits quota.
-- Keep `MODEL_PROVIDER=mock` ready even if watsonx.ai quota is exhausted.
+- Keep `MODEL_PROVIDER=mock` ready if watsonx.ai quota is exhausted, but present `watsonx` as the primary final-model path.
 - Keep the deployed FastAPI/OpenAPI route as the Orchestrate proof. Slack reports show custom Python tools with dependencies can fail during Orchestrate deployment, so this should not be the only demo path unless IBM confirms the issue is resolved.
 - Use HTTP services for Code Engine. Do not introduce a raw TCP database dependency for the final demo.
 - Do not commit `.env`, API keys, Slack codes, meeting passwords, or private Visa data.

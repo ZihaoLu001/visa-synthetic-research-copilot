@@ -30,7 +30,7 @@ Use the default concepts:
 
 ## 4. Run Synthetic Respondents
 
-Run 48 or 96 respondents in mock mode. Point out that the respondents are expanded from high-quality Swiss archetypes rather than hardcoded one-off answers.
+Run 48 or 96 respondents in watsonx mode for the final real-model proof. Point out that the respondents are expanded from high-quality Swiss archetypes rather than hardcoded one-off answers. Keep mock mode ready only as a fallback if classroom quota is exhausted.
 
 ## 5. Show Outputs
 

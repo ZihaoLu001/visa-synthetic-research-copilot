@@ -6,6 +6,16 @@ import re
 from abc import ABC, abstractmethod
 from typing import Any
 
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except Exception:  # pragma: no cover - dotenv is a convenience, not a runtime requirement
+    pass
+
+WATSONX_DEFAULT_MODEL_ID = "ibm/granite-3-8b-instruct"
+WATSONX_REQUIRED_ENV = ("WATSONX_URL", "WATSONX_PROJECT_ID", "WATSONX_APIKEY")
+
 
 class LLMError(RuntimeError):
     pass
@@ -431,13 +441,17 @@ class WatsonxLLM(BaseLLM):
         except Exception as exc:  # pragma: no cover - optional dependency
             raise LLMError("Install ibm-watsonx-ai to use WatsonxLLM") from exc
 
+        status = watsonx_config_status()
         url = os.getenv("WATSONX_URL")
         api_key = os.getenv("WATSONX_APIKEY")
         project_id = os.getenv("WATSONX_PROJECT_ID")
-        model_id = os.getenv("WATSONX_MODEL_ID", "ibm/granite-3-8b-instruct")
+        model_id = status["model_id"]
         if not url or not api_key or not project_id:
-            raise LLMError("Missing WATSONX_URL, WATSONX_APIKEY, or WATSONX_PROJECT_ID")
+            missing = ", ".join(status["missing"])
+            raise LLMError(f"Missing watsonx.ai configuration: {missing}. Set these in .env or Code Engine env/secrets.")
 
+        self.model_id = model_id
+        self.url = url
         credentials = Credentials(url=url, api_key=api_key)
         self.model = ModelInference(
             model_id=model_id,
@@ -450,8 +464,22 @@ class WatsonxLLM(BaseLLM):
         return self.model.generate_text(prompt=prompt)
 
 
+def watsonx_config_status() -> dict[str, Any]:
+    missing = [key for key in WATSONX_REQUIRED_ENV if not os.getenv(key)]
+    return {
+        "configured": not missing,
+        "missing": missing,
+        "url": os.getenv("WATSONX_URL", ""),
+        "project_id_set": bool(os.getenv("WATSONX_PROJECT_ID")),
+        "api_key_set": bool(os.getenv("WATSONX_APIKEY")),
+        "model_id": os.getenv("WATSONX_MODEL_ID", WATSONX_DEFAULT_MODEL_ID),
+    }
+
+
 def get_llm(provider: str | None = None) -> BaseLLM:
-    provider = (provider or os.getenv("MODEL_PROVIDER", "mock")).lower()
+    provider = (provider or os.getenv("MODEL_PROVIDER", "auto")).lower()
+    if provider == "auto":
+        provider = "watsonx" if watsonx_config_status()["configured"] else "mock"
     if provider == "watsonx":
         return WatsonxLLM()
     return MockLLM()

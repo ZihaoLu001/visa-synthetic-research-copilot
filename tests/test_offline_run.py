@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from synthetic_researcher.consulting import build_decision_brief, default_research_brief, format_decision_brief_markdown
-from synthetic_researcher.llm import MockLLM
+from synthetic_researcher.llm import MockLLM, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.reporting import build_markdown_report
 
@@ -135,3 +135,17 @@ Measures: feature preference
 
     assert answer["answer_label"] in {"travel insurance", "purchase protection"}
     assert answer["answer_label"] not in {"Concept A", "Concept B", "Neither"}
+
+
+def test_watsonx_config_status_redacts_secret(monkeypatch):
+    monkeypatch.setenv("WATSONX_URL", "https://us-south.ml.cloud.ibm.com")
+    monkeypatch.setenv("WATSONX_PROJECT_ID", "project-123")
+    monkeypatch.setenv("WATSONX_APIKEY", "secret-value-that-must-not-leak")
+    monkeypatch.setenv("WATSONX_MODEL_ID", "ibm/granite-3-8b-instruct")
+
+    status = watsonx_config_status()
+
+    assert status["configured"] is True
+    assert status["missing"] == []
+    assert status["api_key_set"] is True
+    assert "secret-value" not in str(status)

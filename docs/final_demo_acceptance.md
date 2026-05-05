@@ -61,7 +61,7 @@ Use `demo/final_demo_survey.txt` as the live paste input:
 Demo sequence:
 
 1. Open the Streamlit URL.
-2. Keep model provider set to `mock` for reliable live execution.
+2. For the final real-model proof, set model provider to `watsonx` and confirm the sidebar shows `Real LLM ready`. Keep `mock` available only as a fallback for rehearsal or quota issues.
 3. Keep respondents at `96` for the main full-scale demo.
 4. Use `Core Visa card survey`, or switch `Question preset` to one of the external stress tests.
 5. Paste/upload a different survey if Visa wants to test from their side.

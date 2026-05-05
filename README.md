@@ -31,10 +31,11 @@ The product is intentionally framed as a **consultant-grade pilot workbench**, n
 
 ## Algorithm and Model Stack
 
-Current runtime has two interchangeable provider modes:
+Current runtime has two interchangeable provider modes and an `auto` default:
 
-- `MODEL_PROVIDER=mock` uses a deterministic `MockLLM`. This is the default for classroom demos and Slack review because it is fast, reproducible and avoids IBM quota/runtime risk.
 - `MODEL_PROVIDER=watsonx` uses IBM watsonx.ai through `ibm-watsonx-ai` `ModelInference`, with default model `ibm/granite-3-8b-instruct`. Set `WATSONX_URL`, `WATSONX_PROJECT_ID`, `WATSONX_APIKEY`, and optionally `WATSONX_MODEL_ID`.
+- `MODEL_PROVIDER=mock` uses a deterministic `MockLLM` for rehearsals, CI and quota-failure fallback.
+- `MODEL_PROVIDER=auto` uses watsonx when all credentials are present and falls back to mock only when they are missing.
 
 The main algorithms are transparent and replaceable:
 
@@ -46,7 +47,7 @@ The main algorithms are transparent and replaceable:
 - Validation computes benchmark alignment MAE, repeated-run Likert variance, persona coverage, question construct coverage and judge-style realism flags.
 - Consulting synthesis builds a VCA Decision Brief: lead concept, evidence quality, decision posture, hypothesis readout, next tests and governance caveats.
 
-The `mock` provider is not presented as a real customer model. It is a reliability fallback. A stronger pilot should run the same workflow with watsonx credentials and then calibrate persona weights/prompts against Visa internal research.
+The `mock` provider is not presented as a real customer model. It is a reliability fallback. The final partner proof should run the same workflow with watsonx credentials and then calibrate persona weights/prompts against Visa internal research.
 
 ## Final Presentation Slot
 
@@ -97,7 +98,7 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 
 Slack and lab review on 2026-05-05 confirmed that the safest final platform story is **Code Engine as the primary stakeholder demo** plus **OpenAPI/FastAPI as the Orchestrate integration proof**. Several teams reported watsonx.ai quota, Container Registry, and Orchestrate custom Python dependency issues in Slack, so the deterministic mock provider and the deployed HTTP API remain intentional risk controls. See `docs/slack_platform_findings.md`.
 
-## Optional IBM watsonx.ai Setup
+## Real IBM watsonx.ai Setup
 
 Copy `.env.example` to `.env` and set:
 
@@ -109,7 +110,19 @@ WATSONX_APIKEY=...
 WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
 ```
 
-Keep `MODEL_PROVIDER=mock` available as the fallback for rehearsal and live demo reliability.
+Then verify a real IBM Granite call:
+
+```powershell
+python scripts/watsonx_smoke_test.py
+```
+
+For a tiny end-to-end LLM-backed run, use:
+
+```powershell
+python scripts/watsonx_smoke_test.py --mini-run
+```
+
+Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and quota issues. In the Streamlit app, select **watsonx** for the final real-model proof.
 
 ## Demo Flow
 
@@ -175,6 +188,7 @@ scripts/
   deploy_code_engine.ps1       IBM Code Engine deployment helper
   smoke_deployment.ps1         Verifies the deployed Streamlit and API apps
   run_external_survey_tests.ps1 Posts public-example-inspired surveys to the deployed API
+  watsonx_smoke_test.py        Verifies a live IBM watsonx.ai / Granite call
 docs/
   architecture.md              System design and extension notes
   demo_script.md               6-7 minute demo script
@@ -185,6 +199,7 @@ docs/
   external_survey_testing.md    Public-survey-inspired acceptance-test evidence
   final_presentation_plan.md   20-minute presentation structure
   partner_questions.md          Slack/Q&A messages for IBM and Visa alignment
+  real_watsonx_runbook.md       Checklist for the final real-model proof
   requirement_traceability.md  Email/lab/rubric/Visa requirement checklist
   research_notes.md            Framework and synthetic survey research notes
   slack_platform_findings.md   Slack-derived IBM platform and deployment decisions

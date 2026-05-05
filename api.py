@@ -5,7 +5,7 @@ from typing import Literal
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
-from synthetic_researcher.llm import get_llm
+from synthetic_researcher.llm import get_llm, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.schemas import Concept
 
@@ -51,8 +51,17 @@ def _orchestrator() -> SyntheticResearchOrchestrator:
 
 
 @app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok", "service": "visa-synthetic-research-copilot"}
+def health() -> dict[str, object]:
+    wx_status = watsonx_config_status()
+    provider = "watsonx" if wx_status["configured"] else "mock"
+    return {
+        "status": "ok",
+        "service": "visa-synthetic-research-copilot",
+        "active_provider_if_auto": provider,
+        "watsonx_configured": wx_status["configured"],
+        "watsonx_missing": wx_status["missing"],
+        "watsonx_model_id": wx_status["model_id"],
+    }
 
 
 @app.post("/run")

@@ -14,7 +14,7 @@ from synthetic_researcher.consulting import (
     methodology_snapshot,
 )
 from synthetic_researcher.ingestion import SurveyExtractionError, extract_survey_text, supported_upload_types
-from synthetic_researcher.llm import LLMError, get_llm
+from synthetic_researcher.llm import LLMError, get_llm, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator, load_concepts
 from synthetic_researcher.reporting import build_markdown_report
 from synthetic_researcher.schemas import Concept, SurveyRun
@@ -263,7 +263,21 @@ def main() -> None:
 
     with st.sidebar:
         st.subheader("Run Settings")
-        provider = st.selectbox("Model provider", ["mock", "watsonx"], index=0)
+        wx_status = watsonx_config_status()
+        provider_options = ["watsonx", "mock"]
+        provider_default = 0 if wx_status["configured"] else 1
+        provider = st.selectbox(
+            "Model provider",
+            provider_options,
+            index=provider_default,
+            help="Use watsonx for the real IBM Granite model run. Mock is only a deterministic fallback.",
+        )
+        if provider == "watsonx" and wx_status["configured"]:
+            st.success(f"Real LLM ready: {wx_status['model_id']}")
+        elif provider == "watsonx":
+            st.error("watsonx selected but credentials are missing: " + ", ".join(wx_status["missing"]))
+        else:
+            st.warning("Mock fallback selected. Use watsonx for the final real-model proof.")
         micro_n = st.slider("Synthetic respondents", min_value=12, max_value=96, value=96, step=12)
         consistency_runs = st.slider("Repeated consistency runs", min_value=1, max_value=3, value=2, step=1)
         scenario = st.selectbox(

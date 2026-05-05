@@ -50,19 +50,24 @@ Use this path first:
 8. Use branch `main`.
 9. Keep the repo root as the build context; the included `Dockerfile` provides the runtime.
 10. Set listening port `8080`.
-11. Set environment variables:
+11. Set environment variables for the final real-model proof:
 
 ```text
-MODEL_PROVIDER=mock
+MODEL_PROVIDER=watsonx
 APP_MODE=streamlit
+WATSONX_URL=https://us-south.ml.cloud.ibm.com
+WATSONX_PROJECT_ID=<project-id>
+WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
 ```
+
+Store `WATSONX_APIKEY` as a Code Engine secret. Use `MODEL_PROVIDER=mock` only for rehearsal or quota-failure fallback.
 
 After deployment, open the generated Code Engine application URL. This should load the Streamlit consultant cockpit.
 
 For API/Orchestrate integration mode, create or update the application with:
 
 ```text
-MODEL_PROVIDER=mock
+MODEL_PROVIDER=watsonx
 APP_MODE=api
 ```
 
@@ -113,8 +118,11 @@ ibmcloud ce application create \
   --name visa-synthetic-research-copilot \
   --build-source . \
   --port 8080 \
-  --env MODEL_PROVIDER=mock \
-  --env APP_MODE=streamlit
+  --env MODEL_PROVIDER=watsonx \
+  --env APP_MODE=streamlit \
+  --env WATSONX_URL=https://us-south.ml.cloud.ibm.com \
+  --env WATSONX_PROJECT_ID=<project-id> \
+  --env WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
 ```
 
 For the Group 28 deployment helper:
@@ -127,7 +135,7 @@ Use `-Mode api` if the deployment is meant to be imported into watsonx Orchestra
 
 This helper is optional. It exists for repeatable deployment once the IBM Cloud CLI is installed, but the browser console path above is enough for the course workflow.
 
-For watsonx.ai-backed runs, configure the same environment variables used locally:
+For watsonx.ai-backed runs, configure the same environment variables used locally. This is the recommended setting for the final real-model proof:
 
 ```bash
 ibmcloud ce application update \
@@ -139,6 +147,8 @@ ibmcloud ce application update \
 ```
 
 Store `WATSONX_APIKEY` as a Code Engine secret rather than committing it to the repository.
+
+Before presenting, open the app sidebar and confirm it shows `Real LLM ready: ibm/granite-3-8b-instruct` rather than the mock fallback warning. The `/health` endpoint also exposes `watsonx_configured: true` without leaking secrets.
 
 ## Verified Runtime-Clone Fallback
 

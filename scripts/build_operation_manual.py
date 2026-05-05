@@ -387,7 +387,7 @@ def manual_html() -> str:
                 </div>
                 <div class="box blue" style="margin-top:5mm;">
                   <h3>Recommended reviewer setting</h3>
-                  <p>Keep <strong>Model provider = mock</strong>, <strong>respondents = 96</strong>, and <strong>consistency runs = 2</strong> for a reliable live demo. watsonx.ai can be enabled when credentials and quota are available.</p>
+                  <p>Use <strong>Model provider = watsonx</strong> for the final real-model proof once credentials are configured. Keep <strong>mock</strong> only as a fallback for rehearsal or quota issues. Use <strong>respondents = 96</strong> and <strong>consistency runs = 2</strong> for the full partner walkthrough.</p>
                 </div>
               </div>
             </div>

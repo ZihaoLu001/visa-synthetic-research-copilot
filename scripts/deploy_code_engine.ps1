@@ -4,7 +4,9 @@ param(
     [string]$ResourceGroup = "watsonx_Challenge_2026_Students",
     [string]$Region = "eu-de",
     [ValidateSet("streamlit", "api")]
-    [string]$Mode = "streamlit"
+    [string]$Mode = "streamlit",
+    [ValidateSet("watsonx", "mock", "auto")]
+    [string]$ModelProvider = "watsonx"
 )
 
 $ErrorActionPreference = "Stop"
@@ -29,7 +31,7 @@ ibmcloud ce application create `
     --name $AppName `
     --build-source . `
     --port 8080 `
-    --env MODEL_PROVIDER=mock `
+    --env MODEL_PROVIDER=$ModelProvider `
     --env APP_MODE=$Mode
 
 ibmcloud ce application get --name $AppName

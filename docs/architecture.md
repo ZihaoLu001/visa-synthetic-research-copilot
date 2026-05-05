@@ -58,14 +58,15 @@ class BaseLLM:
     def generate_json(self, prompt: str) -> Any: ...
 ```
 
-This keeps orchestration independent from any single model. `MockLLM` provides deterministic offline behavior for demo reliability. `WatsonxLLM` can call IBM watsonx.ai with `ibm-watsonx-ai` when credentials are available.
+This keeps orchestration independent from any single model. `WatsonxLLM` calls IBM watsonx.ai with `ibm-watsonx-ai` when credentials are available. `MockLLM` remains a deterministic fallback for CI, rehearsals and quota failures.
 
 Current default:
 
-- `MODEL_PROVIDER=mock`: deterministic fallback, reproducible for classroom and partner-review demos.
 - `MODEL_PROVIDER=watsonx`: IBM watsonx.ai, default `WATSONX_MODEL_ID=ibm/granite-3-8b-instruct`.
+- `MODEL_PROVIDER=mock`: deterministic fallback, reproducible for CI and rehearsals.
+- `MODEL_PROVIDER=auto`: selects watsonx when `WATSONX_URL`, `WATSONX_PROJECT_ID` and `WATSONX_APIKEY` are present; otherwise falls back to mock.
 
-The production recommendation is to keep mock as a smoke-test fallback while running pilot evidence generation through watsonx.ai, then calibrating outputs against Visa internal studies when Visa can provide validation targets.
+The production recommendation is to run pilot evidence generation through watsonx.ai, keep mock as a smoke-test fallback, and calibrate outputs against Visa internal studies when Visa can provide validation targets.
 
 ## Validation Layer
 

@@ -17,7 +17,7 @@ This note records the deployment and platform guidance extracted from the IBM Sl
 | Code Engine Application is the main stakeholder demo path. | Code Engine lab says applications are ideal for presenting a proof of concept to stakeholders without managing servers. | Streamlit cockpit is the primary live demo and has a verified public Code Engine URL. |
 | Code Engine apps should expose HTTP endpoints. | A 2026-04-23 thread reports raw TCP services such as PostgreSQL are not working as Code Engine applications; HTTP requests are the reliable path. | The project exposes Streamlit and FastAPI over HTTP. No raw TCP database is required for the final demo. |
 | Do not make Container Registry source builds the only path. | 2026-04-20 and 2026-04-25 threads report registry storage quota failures. 2026-04-28 thread reports namespace/permission confusion; Dimitri says the namespace already exists and should not be manually created. | The repo keeps normal GitHub source-build docs, but also documents the verified runtime-clone fallback. Ask IBM to confirm source-build permissions or accept the current fallback. |
-| Keep `MODEL_PROVIDER=mock` as a required fallback. | 2026-04-11, 2026-04-13, and 2026-05-04 messages show `token_quota_reached (403)` for watsonx.ai runtime calls; IBM can upgrade quotas but issues can still happen. | Demo reliability does not depend on live LLM quota. watsonx.ai remains an IBM ecosystem proof when credentials and quota are available. |
+| Keep `MODEL_PROVIDER=mock` as a fallback, but use `MODEL_PROVIDER=watsonx` for the final real-model proof. | 2026-04-11, 2026-04-13, and 2026-05-04 messages show `token_quota_reached (403)` for watsonx.ai runtime calls; IBM can upgrade quotas but issues can still happen. | The app now surfaces whether watsonx is configured. Demo reliability has a fallback, but the partner proof should show IBM Granite running when credentials and quota are available. |
 | Create watsonx.ai project/API key inside the watsonx.ai instance, not generic IBM Cloud project creation. | 2026-03-18 thread says to navigate to the group watsonx.ai instance, create a project there, and then create the API key. | `.env.example` and docs use `WATSONX_PROJECT_ID` and `WATSONX_APIKEY`, but final demo can run without them. |
 | Keep Orchestrate as integration/extension unless tool deployment is confirmed. | 2026-04-27 and 2026-05-02 thread shows custom Python tools with `requirements.txt` can block invocation and agent deployment with `uv install`/500 errors. | The critical path is Streamlit on Code Engine plus FastAPI/OpenAPI tool import. The ADK spec is architecture evidence, not the only runtime. |
 | Orchestrate plan expiry needs no student action. | 2026-04-05/06 thread says free-plan expiry is expected and plans will be upgraded. 2026-04-07 confirms UC-account Orchestrate instances were upgraded to `Essentials Agentic MAU`. | No local migration is needed solely because the UI shows a plan expiry warning. |
@@ -27,7 +27,7 @@ This note records the deployment and platform guidance extracted from the IBM Sl
 
 1. Primary demo: Code Engine Streamlit application.
 2. Integration proof: Code Engine FastAPI endpoint imported into watsonx Orchestrate or Agent Builder through OpenAPI.
-3. IBM model proof: optional watsonx.ai provider when project credentials and quota are available.
+3. IBM model proof: watsonx.ai provider with `ibm/granite-3-8b-instruct` when project credentials and quota are available.
 4. Reliability fallback: deterministic mock provider, already used by the verified cloud demo.
 5. Future extension: package the workflow into Orchestrate ADK or custom tools only after IBM confirms the dependency deployment issue is resolved.
 
@@ -63,4 +63,3 @@ Use the Q&A form mentioned in general Slack for formal session questions:
 ibm.biz/agenticaichallenge-qa
 password: watsonxagents
 ```
-
