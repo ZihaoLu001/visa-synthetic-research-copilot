@@ -48,25 +48,31 @@ Verified on 2026-05-04 with `/health` HTTP 200 and `POST /run` HTTP 200 returnin
 
 ## Do Before The Final Rehearsal
 
-1. Run local Streamlit:
+1. Run the deployed cloud smoke test:
+
+   ```powershell
+   .\scripts\smoke_deployment.ps1
+   ```
+
+2. Run local Streamlit:
 
    ```powershell
    streamlit run app.py
    ```
 
-2. Run local API:
+3. Run local API:
 
    ```powershell
    uvicorn api:app --host 0.0.0.0 --port 8080
    ```
 
-3. Run tests:
+4. Run tests:
 
    ```powershell
    python -m pytest -q
    ```
 
-4. Practice this live sequence:
+5. Practice this live sequence:
 
    - Paste a new survey question live.
    - Run 48 or 96 respondents.

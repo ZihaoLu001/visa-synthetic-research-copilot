@@ -114,6 +114,9 @@ What is the main barrier that would stop you?
 app.py                         Streamlit consultant cockpit
 api.py                         FastAPI integration endpoint for Code Engine / Orchestrate
 run_cli.py                     Offline CLI smoke demo
+demo/
+  final_demo_survey.txt        Live-paste survey for the final demo
+  api_smoke_payload.json       Cloud API smoke-test payload
 data/
   swiss_archetypes.yaml        Swiss synthetic persona archetypes
   benchmark_snb_2025.yaml      Public benchmark anchors and validation profiles
@@ -136,11 +139,13 @@ orchestrate/
   openapi/                     OpenAPI contract for importing the API as a tool
 scripts/
   deploy_code_engine.ps1       IBM Code Engine deployment helper
+  smoke_deployment.ps1         Verifies the deployed Streamlit and API apps
 docs/
   architecture.md              System design and extension notes
   demo_script.md               6-7 minute demo script
   code_engine_deployment.md     Optional IBM Code Engine deployment path
   evaluation_scorecard.md      Mapping to final presentation grading criteria
+  final_demo_acceptance.md     Final deployed-demo acceptance checklist
   final_delivery_runbook.md     Group 28 final delivery checklist
   final_presentation_plan.md   20-minute presentation structure
   partner_questions.md          Slack/Q&A messages for IBM and Visa alignment

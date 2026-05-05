@@ -145,6 +145,7 @@ Store `WATSONX_APIKEY` as a Code Engine secret rather than committing it to the 
 If GitHub source build fails because Code Engine cannot assign the required Container Registry policies, the following fallback can still expose the Streamlit demo from the cloud. It starts from the public `python:3.12-slim` image, downloads the public GitHub repo at container start, installs dependencies, and launches Streamlit.
 
 Do not set an environment variable named `PORT`; Code Engine reserves it.
+The Dockerfile uses `APP_PORT` internally for this reason.
 
 ```bash
 ibmcloud target -r eu-de -g group28
