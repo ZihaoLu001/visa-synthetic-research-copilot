@@ -6,7 +6,7 @@ Use this document to prepare messages for Slack or the Q&A submission form befor
 
 - Visa-specific product, use-case, persona, survey, or architecture questions: `#watsonx-agentic-ai-challenge-2026-visa`.
 - General IBM technical questions, quota issues, Code Engine, watsonx.ai, or Orchestrate setup: `#watsonx-agentic-ai-challenge-2026-general-guest`.
-- Formal Q&A sessions: use the Q&A submission form linked in the general Slack channel for the 5 May and 12 May sessions.
+- Formal Q&A sessions: use the Q&A submission form linked in the general Slack channel for the 5 May and 12 May sessions: `ibm.biz/agenticaichallenge-qa`, password `watsonxagents`.
 - Urgent partner alignment: post in the Visa channel and mention the lab team contacts already active there.
 
 ## Recommended Slack Message
@@ -29,7 +29,7 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 
 Could you confirm:
 1. For the final demo, is a Code Engine deployment plus watsonx.ai model provider sufficient, or do you expect the main workflow itself to run inside watsonx Orchestrate?
-2. Given the recent ADK/custom Python tool deployment issues mentioned in Slack, is it acceptable to present Orchestrate as an integration layer/production extension rather than the critical-path runtime?
+2. Given the recent ADK/custom Python tool dependency deployment issues mentioned in Slack, is it acceptable to present Orchestrate as an OpenAPI integration layer/production extension rather than the critical-path runtime?
 3. Could Visa share one example card/product concept or marketing research survey question set they would like us to test in the final demo?
 4. IBM source build from GitHub is currently blocked by Container Registry/service ID policy assignment permissions for Group 28. Could IBM enable this permission or confirm that the current Code Engine runtime-clone deployment is acceptable?
 

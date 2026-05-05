@@ -44,6 +44,7 @@ Verified on 2026-05-04 with `/health` HTTP 200 and `POST /run` HTTP 200 returnin
 2. Ask IBM to enable normal GitHub source-build / Container Registry permissions for Group 28, or confirm that the current runtime-clone Code Engine deployment is acceptable for the final demo.
 3. Confirm whether Visa can provide one representative survey/interview guide.
 4. Confirm whether they expect Orchestrate to be part of the live runtime or just the architecture story.
+5. Refer to `docs/slack_platform_findings.md` when explaining why the current low-risk route is Code Engine plus OpenAPI instead of an Orchestrate custom Python tool as the only runtime.
 
 ## Do Before The Final Rehearsal
 
@@ -132,5 +133,7 @@ The OpenAPI contract in `orchestrate/openapi/visa_synthetic_research_api.yaml` a
 
 - Keep local Streamlit ready even though Code Engine is already deployed, in case the public app cold-starts slowly or the course account hits quota.
 - Keep `MODEL_PROVIDER=mock` ready even if watsonx.ai quota is exhausted.
+- Keep the deployed FastAPI/OpenAPI route as the Orchestrate proof. Slack reports show custom Python tools with dependencies can fail during Orchestrate deployment, so this should not be the only demo path unless IBM confirms the issue is resolved.
+- Use HTTP services for Code Engine. Do not introduce a raw TCP database dependency for the final demo.
 - Do not commit `.env`, API keys, Slack codes, meeting passwords, or private Visa data.
 - Treat synthetic output as directional and validation-ready, not as real customer evidence.

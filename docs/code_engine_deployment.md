@@ -30,6 +30,14 @@ The deployment uses a temporary runtime-clone fallback from the public GitHub re
 
 The Cloud setup lab marks the IBM Cloud CLI as optional. You do **not** need to run Docker locally to deploy this project if the IBM Cloud Console has access to the GitHub repository and the assigned Code Engine project.
 
+Slack clarification from the general channel matters here:
+
+- Do not create a new Code Engine project. Select the project already assigned to Group 28 / Visa.
+- Use region `eu-de`.
+- If using the CLI, target the right resource group first. The course threads show this can be the missing step before `ibmcloud ce project select`.
+- Do not manually create a Container Registry namespace. IBM indicated in Slack that group namespaces already exist for the course groups.
+- Code Engine Applications are the right fit for HTTP apps. Avoid making raw TCP services, such as a self-hosted PostgreSQL port, part of the final critical path.
+
 Use this path first:
 
 1. Open IBM Cloud in the browser.
@@ -208,6 +216,8 @@ Recommended final-demo stance:
 1. Use Streamlit on Code Engine for the primary visual demo.
 2. Use the API/OpenAPI asset as the integration proof for Orchestrate.
 3. Avoid making Orchestrate custom Python tool deployment the critical path, because Slack reports show several teams hitting dependency and permission issues.
+
+The 2026-04-27 and 2026-05-02 Slack thread is the key risk signal: standalone Orchestrate agents can deploy, but agents that attach custom Python tools with dependencies can fail during tool deployment. Calling this repo's deployed FastAPI endpoint as an OpenAPI tool is therefore the lower-risk IBM-platform integration route for final delivery.
 
 ## Demo Positioning
 

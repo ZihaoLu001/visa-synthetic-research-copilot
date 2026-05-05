@@ -71,6 +71,8 @@ The API integration endpoint for watsonx Orchestrate/OpenAPI tool import is also
 https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 ```
 
+Slack and lab review on 2026-05-05 confirmed that the safest final platform story is **Code Engine as the primary stakeholder demo** plus **OpenAPI/FastAPI as the Orchestrate integration proof**. Several teams reported watsonx.ai quota, Container Registry, and Orchestrate custom Python dependency issues in Slack, so the deterministic mock provider and the deployed HTTP API remain intentional risk controls. See `docs/slack_platform_findings.md`.
+
 ## Optional IBM watsonx.ai Setup
 
 Copy `.env.example` to `.env` and set:
@@ -144,6 +146,7 @@ docs/
   partner_questions.md          Slack/Q&A messages for IBM and Visa alignment
   requirement_traceability.md  Email/lab/rubric/Visa requirement checklist
   research_notes.md            Framework and synthetic survey research notes
+  slack_platform_findings.md   Slack-derived IBM platform and deployment decisions
   sources.md                   Public data sources
 ```
 
