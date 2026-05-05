@@ -25,7 +25,7 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | API response volume | 24 respondents, 2 concepts, 5 questions, 2 consistency runs = 240 persona-question responses |
 | Validation evidence | Overall validation score returned by API |
 | External survey API stress tests | 3 public-example-inspired surveys returned synthetic responses, validation evidence, and 100.0 JSON parse success |
-| Local regression tests | `10 passed` |
+| Local regression tests | `11 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
 
 ## One-Command Smoke Test

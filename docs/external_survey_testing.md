@@ -51,7 +51,7 @@ Local current-code verification:
 
 | Survey | Questions parsed | Responses | Overall validation | Question coverage |
 | --- | ---: | ---: | ---: | ---: |
-| `card_pricing_message_test.txt` | 8 | 384 | 94.5 | 85 |
+| `card_pricing_message_test.txt` | 8 | 384 | 90.5 | 100 |
 | `concept_test_qualtrics_surveymonkey_style.txt` | 8 | 384 | 96.8 | 100 |
 | `payment_behavior_federal_reserve_style.txt` | 8 | 384 | 94.5 | 85 |
 

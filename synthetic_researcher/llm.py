@@ -57,14 +57,30 @@ class MockLLM(BaseLLM):
             lower = text.lower()
             if options:
                 qtype = "choice"
-            elif re.search(r"\b(price|fee|fees|pay|chf|willingness)\b", lower):
-                qtype = "price"
             elif ("feature" in lower or "benefit" in lower) and "why" in lower:
                 qtype = "open"
             elif any(k in lower for k in ["choose", "select", "prefer", "rank", "pick"]):
                 qtype = "choice"
-            elif any(k in lower for k in ["likely", "likelihood", "adopt", "attractive", "relevant", "trust", "value"]):
+            elif any(k in lower for k in [
+                "likely",
+                "likelihood",
+                "adopt",
+                "attractive",
+                "appeal",
+                "appealing",
+                "relevant",
+                "trust",
+                "value",
+                "quality",
+                "innovative",
+                "satisfaction",
+                "ease",
+                "how often",
+                "frequency",
+            ]):
                 qtype = "likert"
+            elif re.search(r"\b(price|fee|fees|pay|chf|willingness)\b", lower):
+                qtype = "price"
             else:
                 qtype = "open"
             questions.append({
@@ -157,12 +173,25 @@ class MockLLM(BaseLLM):
     def _measure(lower: str) -> str:
         if "barrier" in lower or "concern" in lower or "prevent" in lower:
             return "barriers"
+        if any(k in lower for k in [
+            "likely",
+            "adopt",
+            "trust",
+            "value",
+            "appeal",
+            "appealing",
+            "quality",
+            "innovative",
+            "satisfaction",
+            "ease",
+            "how often",
+            "frequency",
+        ]):
+            return "adoption likelihood"
         if re.search(r"\b(price|fee|fees|pay|chf|willingness)\b", lower):
             return "price sensitivity"
-        if "feature" in lower or "benefit" in lower or "prefer" in lower:
+        if any(k in lower for k in ["feature", "benefit", "prefer", "message", "convincing"]):
             return "feature preference"
-        if "likely" in lower or "adopt" in lower or "trust" in lower or "value" in lower:
-            return "adoption likelihood"
         return "general feedback"
 
     def _persona_answer(self, prompt: str) -> dict[str, Any]:

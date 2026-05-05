@@ -46,6 +46,19 @@ def test_parser_handles_new_survey_text():
     assert questions[2]["measures"] == "barriers"
 
 
+def test_parser_recognizes_concept_test_rating_language():
+    llm = MockLLM()
+    questions = llm.generate_json(
+        "Parse the raw survey into JSON.\nRAW_SURVEY:\n"
+        "1. How appealing is this card concept overall?\n"
+        "2. How often would you use it for everyday payments?\n"
+        "3. How innovative is the product?"
+    )
+
+    assert [q["type"] for q in questions] == ["likert", "likert", "likert"]
+    assert all(q["measures"] == "adoption likelihood" for q in questions)
+
+
 def test_parser_extracts_external_concept_test_options():
     llm = MockLLM()
     questions = llm.generate_json(

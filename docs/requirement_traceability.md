@@ -57,7 +57,7 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | --- | --- |
 | Concept-test survey inspired by Qualtrics / SurveyMonkey patterns | 8 questions parsed, 384 responses generated at 24 respondents x 2 concepts x 8 questions, validation score 96.8, coverage score 100. |
 | Payment-behavior survey inspired by Federal Reserve payment questionnaire patterns | 8 questions parsed, 384 responses generated, validation score 94.5, coverage score 85. |
-| Card pricing and message test | 8 questions parsed, 384 responses generated, validation score 94.5, coverage score 85. |
+| Card pricing and message test | 8 questions parsed, 384 responses generated, validation score 90.5, coverage score 100. |
 
 The deployed API was also smoke-tested with the same three files before forcing a Code Engine container restart and returned 432 responses per file, validation score 94.5, coverage score 85, and JSON parse success 100.0. The response count difference is expected because that deployed runtime still counted the leading scenario line as a question; the current code filters those background lines.
 
