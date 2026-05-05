@@ -89,7 +89,7 @@ def build_decision_brief(run: SurveyRun, research_brief: dict[str, str], provide
 
 def methodology_snapshot(provider: str = "mock") -> list[str]:
     provider_line = (
-        "LLM provider: IBM watsonx.ai through ibm-watsonx-ai ModelInference, default model ibm/granite-3-8b-instruct."
+        "LLM provider: IBM watsonx.ai through ibm-watsonx-ai ModelInference, default model ibm/granite-4-h-small."
         if provider == "watsonx"
         else "LLM provider: deterministic MockLLM fallback for reliable offline and classroom demos; switch MODEL_PROVIDER=watsonx for IBM Granite calls."
     )

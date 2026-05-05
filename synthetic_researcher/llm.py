@@ -13,7 +13,7 @@ try:
 except Exception:  # pragma: no cover - dotenv is a convenience, not a runtime requirement
     pass
 
-WATSONX_DEFAULT_MODEL_ID = "ibm/granite-3-8b-instruct"
+WATSONX_DEFAULT_MODEL_ID = "ibm/granite-4-h-small"
 WATSONX_REQUIRED_ENV = ("WATSONX_URL", "WATSONX_PROJECT_ID", "WATSONX_APIKEY")
 
 
@@ -461,7 +461,21 @@ class WatsonxLLM(BaseLLM):
         )
 
     def generate_text(self, prompt: str) -> str:  # pragma: no cover - cloud call
-        return self.model.generate_text(prompt=prompt)
+        try:
+            return self.model.generate_text(prompt=prompt)
+        except Exception as exc:
+            message = str(exc)
+            if "token_quota_reached" in message:
+                raise LLMError(
+                    "watsonx.ai authentication succeeded, but the IBM Runtime token quota is exhausted for this account/project. "
+                    "Ask IBM to restore or increase quota, or switch to the deterministic mock provider only for rehearsal."
+                ) from exc
+            if "not supported for this environment" in message or "model_no_support" in message:
+                raise LLMError(
+                    f"watsonx.ai model '{self.model_id}' is not available for the current Frankfurt project. "
+                    "Set WATSONX_MODEL_ID to a model listed as supported in this environment."
+                ) from exc
+            raise LLMError(f"watsonx.ai generation failed: {message}") from exc
 
 
 def watsonx_config_status() -> dict[str, Any]:

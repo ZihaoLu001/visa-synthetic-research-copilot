@@ -55,9 +55,9 @@ Use this path first:
 ```text
 MODEL_PROVIDER=watsonx
 APP_MODE=streamlit
-WATSONX_URL=https://us-south.ml.cloud.ibm.com
+WATSONX_URL=https://eu-de.ml.cloud.ibm.com
 WATSONX_PROJECT_ID=<project-id>
-WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
+WATSONX_MODEL_ID=ibm/granite-4-h-small
 ```
 
 Store `WATSONX_APIKEY` as a Code Engine secret. Use `MODEL_PROVIDER=mock` only for rehearsal or quota-failure fallback.
@@ -120,9 +120,9 @@ ibmcloud ce application create \
   --port 8080 \
   --env MODEL_PROVIDER=watsonx \
   --env APP_MODE=streamlit \
-  --env WATSONX_URL=https://us-south.ml.cloud.ibm.com \
+  --env WATSONX_URL=https://eu-de.ml.cloud.ibm.com \
   --env WATSONX_PROJECT_ID=<project-id> \
-  --env WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
+  --env WATSONX_MODEL_ID=ibm/granite-4-h-small
 ```
 
 For the Group 28 deployment helper:
@@ -141,14 +141,14 @@ For watsonx.ai-backed runs, configure the same environment variables used locall
 ibmcloud ce application update \
   --name visa-synthetic-research-copilot \
   --env MODEL_PROVIDER=watsonx \
-  --env WATSONX_URL=https://us-south.ml.cloud.ibm.com \
+  --env WATSONX_URL=https://eu-de.ml.cloud.ibm.com \
   --env WATSONX_PROJECT_ID=<project-id> \
-  --env WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
+  --env WATSONX_MODEL_ID=ibm/granite-4-h-small
 ```
 
 Store `WATSONX_APIKEY` as a Code Engine secret rather than committing it to the repository.
 
-Before presenting, open the app sidebar and confirm it shows `Real LLM ready: ibm/granite-3-8b-instruct` rather than the mock fallback warning. The `/health` endpoint also exposes `watsonx_configured: true` without leaking secrets.
+Before presenting, open the app sidebar and confirm it shows `Real LLM ready: ibm/granite-4-h-small` rather than the mock fallback warning. The `/health` endpoint also exposes `watsonx_configured: true` without leaking secrets.
 
 ## Verified Runtime-Clone Fallback
 

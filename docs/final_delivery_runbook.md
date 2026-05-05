@@ -115,9 +115,9 @@ Preferred browser path:
    ```text
    MODEL_PROVIDER=watsonx
    APP_MODE=streamlit
-   WATSONX_URL=https://us-south.ml.cloud.ibm.com
+   WATSONX_URL=https://eu-de.ml.cloud.ibm.com
    WATSONX_PROJECT_ID=<project-id>
-   WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
+   WATSONX_MODEL_ID=ibm/granite-4-h-small
    ```
 
 7. Store `WATSONX_APIKEY` as a Code Engine secret, then open the generated application URL and run the demo.

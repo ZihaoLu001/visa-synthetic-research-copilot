@@ -62,7 +62,7 @@ This keeps orchestration independent from any single model. `WatsonxLLM` calls I
 
 Current default:
 
-- `MODEL_PROVIDER=watsonx`: IBM watsonx.ai, default `WATSONX_MODEL_ID=ibm/granite-3-8b-instruct`.
+- `MODEL_PROVIDER=watsonx`: IBM watsonx.ai, default `WATSONX_MODEL_ID=ibm/granite-4-h-small`.
 - `MODEL_PROVIDER=mock`: deterministic fallback, reproducible for CI and rehearsals.
 - `MODEL_PROVIDER=auto`: selects watsonx when `WATSONX_URL`, `WATSONX_PROJECT_ID` and `WATSONX_APIKEY` are present; otherwise falls back to mock.
 

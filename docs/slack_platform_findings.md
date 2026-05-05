@@ -27,7 +27,7 @@ This note records the deployment and platform guidance extracted from the IBM Sl
 
 1. Primary demo: Code Engine Streamlit application.
 2. Integration proof: Code Engine FastAPI endpoint imported into watsonx Orchestrate or Agent Builder through OpenAPI.
-3. IBM model proof: watsonx.ai provider with `ibm/granite-3-8b-instruct` when project credentials and quota are available.
+3. IBM model proof: watsonx.ai provider with `ibm/granite-4-h-small` when project credentials and quota are available.
 4. Reliability fallback: deterministic mock provider, already used by the verified cloud demo.
 5. Future extension: package the workflow into Orchestrate ADK or custom tools only after IBM confirms the dependency deployment issue is resolved.
 

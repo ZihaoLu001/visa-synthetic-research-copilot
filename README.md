@@ -33,7 +33,7 @@ The product is intentionally framed as a **consultant-grade pilot workbench**, n
 
 Current runtime has two interchangeable provider modes and an `auto` default:
 
-- `MODEL_PROVIDER=watsonx` uses IBM watsonx.ai through `ibm-watsonx-ai` `ModelInference`, with default model `ibm/granite-3-8b-instruct`. Set `WATSONX_URL`, `WATSONX_PROJECT_ID`, `WATSONX_APIKEY`, and optionally `WATSONX_MODEL_ID`.
+- `MODEL_PROVIDER=watsonx` uses IBM watsonx.ai through `ibm-watsonx-ai` `ModelInference`, with default model `ibm/granite-4-h-small`. Set `WATSONX_URL`, `WATSONX_PROJECT_ID`, `WATSONX_APIKEY`, and optionally `WATSONX_MODEL_ID`.
 - `MODEL_PROVIDER=mock` uses a deterministic `MockLLM` for rehearsals, CI and quota-failure fallback.
 - `MODEL_PROVIDER=auto` uses watsonx when all credentials are present and falls back to mock only when they are missing.
 
@@ -104,10 +104,10 @@ Copy `.env.example` to `.env` and set:
 
 ```bash
 MODEL_PROVIDER=watsonx
-WATSONX_URL=https://us-south.ml.cloud.ibm.com
+WATSONX_URL=https://eu-de.ml.cloud.ibm.com
 WATSONX_PROJECT_ID=...
 WATSONX_APIKEY=...
-WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
+WATSONX_MODEL_ID=ibm/granite-4-h-small
 ```
 
 Then verify a real IBM Granite call:

@@ -138,10 +138,10 @@ Measures: feature preference
 
 
 def test_watsonx_config_status_redacts_secret(monkeypatch):
-    monkeypatch.setenv("WATSONX_URL", "https://us-south.ml.cloud.ibm.com")
+    monkeypatch.setenv("WATSONX_URL", "https://eu-de.ml.cloud.ibm.com")
     monkeypatch.setenv("WATSONX_PROJECT_ID", "project-123")
     monkeypatch.setenv("WATSONX_APIKEY", "secret-value-that-must-not-leak")
-    monkeypatch.setenv("WATSONX_MODEL_ID", "ibm/granite-3-8b-instruct")
+    monkeypatch.setenv("WATSONX_MODEL_ID", "ibm/granite-4-h-small")
 
     status = watsonx_config_status()
 

@@ -8,10 +8,10 @@ Create a local `.env` file from `.env.example` or configure the same values as C
 
 ```bash
 MODEL_PROVIDER=watsonx
-WATSONX_URL=https://us-south.ml.cloud.ibm.com
+WATSONX_URL=https://eu-de.ml.cloud.ibm.com
 WATSONX_PROJECT_ID=<watsonx.ai-project-id>
 WATSONX_APIKEY=<ibm-cloud-api-key>
-WATSONX_MODEL_ID=ibm/granite-3-8b-instruct
+WATSONX_MODEL_ID=ibm/granite-4-h-small
 ```
 
 Do not commit `.env` or any API key. The repository `.gitignore` already excludes `.env` and `.streamlit/secrets.toml`.
@@ -27,7 +27,7 @@ python scripts/watsonx_smoke_test.py
 Expected result:
 
 - `configured: true`
-- `model_id: ibm/granite-3-8b-instruct`
+- `model_id: ibm/granite-4-h-small`
 - A short live response from watsonx.ai
 
 For a tiny end-to-end LLM-backed run:
@@ -49,10 +49,14 @@ streamlit run app.py
 In the sidebar:
 
 1. Select `watsonx`.
-2. Confirm the sidebar says `Real LLM ready: ibm/granite-3-8b-instruct`.
+2. Confirm the sidebar says `Real LLM ready: ibm/granite-4-h-small`.
 3. Run a small panel first, then increase respondents for the final demo.
 
 If the sidebar reports missing credentials, the app is not using the real IBM model yet.
+
+## Quota Troubleshooting
+
+If the smoke test returns `403 token_quota_reached`, the credentials and Project ID are valid but the IBM watsonx.ai Runtime quota for text generation is exhausted or set to zero. This is a platform/account issue, not an application bug. Ask the IBM course team to restore quota for the Group 28 Runtime, or confirm another supported runtime/model for the final real-model proof.
 
 ## Code Engine Proof
 
@@ -63,7 +67,7 @@ The public `/health` endpoint returns a safe status object:
 ```json
 {
   "watsonx_configured": true,
-  "watsonx_model_id": "ibm/granite-3-8b-instruct"
+  "watsonx_model_id": "ibm/granite-4-h-small"
 }
 ```
 
