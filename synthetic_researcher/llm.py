@@ -50,7 +50,11 @@ class MockLLM(BaseLLM):
                 continue
             text = re.sub(r"^\d+[\).:-]?\s*", "", line)
             text = re.sub(r"^Q\d+[\).:-]?\s*", "", text, flags=re.I).strip()
-            if re.match(r"^(?:scenario|context|background|instructions?|intro|stimulus)\s*:", text, flags=re.I):
+            if re.match(
+                r"^(?:scenario|context|background|instructions?|intro|stimulus|source|url|use in this demo)\s*:",
+                text,
+                flags=re.I,
+            ):
                 continue
             options = self._extract_choice_options(text)
             text = self._strip_inline_options(text)

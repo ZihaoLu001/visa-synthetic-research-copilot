@@ -220,8 +220,14 @@ def main() -> None:
                 "Question preset",
                 list(survey_presets.keys()),
                 help="Use a public-example-inspired stress test, or paste/upload your own survey below.",
+                key="question_preset_select",
             )
-            default_survey = survey_presets[preset_name]
+            if "survey_text_value" not in st.session_state:
+                st.session_state["survey_text_value"] = survey_presets[preset_name]
+            if uploaded_survey is None and st.session_state.get("last_question_preset") != preset_name:
+                st.session_state["survey_text_value"] = survey_presets[preset_name]
+                st.session_state["last_question_preset"] = preset_name
+            default_survey = st.session_state["survey_text_value"]
             input_metadata: dict[str, object] = {
                 "source": "preset",
                 "file_name": preset_name,
@@ -230,10 +236,16 @@ def main() -> None:
                 "extraction_notes": [f"Using app preset: {preset_name}."],
             }
             extracted_text: str | None = None
+            uploaded_just_loaded = False
             if uploaded_survey is not None:
                 try:
                     extracted = extract_survey_text(uploaded_survey.name, uploaded_survey.getvalue())
-                    default_survey = extracted.text
+                    upload_key = f"{uploaded_survey.name}:{uploaded_survey.size}"
+                    if st.session_state.get("last_uploaded_survey_key") != upload_key:
+                        st.session_state["survey_text_value"] = extracted.text
+                        st.session_state["last_uploaded_survey_key"] = upload_key
+                        uploaded_just_loaded = True
+                    default_survey = st.session_state["survey_text_value"]
                     extracted_text = extracted.text
                     input_metadata = extracted.metadata()
                     st.success(
@@ -253,13 +265,16 @@ def main() -> None:
                     }
             raw_survey = st.text_area(
                 "Paste survey questions",
-                value=default_survey,
+                key="survey_text_value",
                 height=224,
                 label_visibility="collapsed",
             )
             input_metadata = {**input_metadata, "char_count": len(raw_survey)}
+            survey_to_run = raw_survey
             if extracted_text is not None:
                 input_metadata["edited_after_extraction"] = raw_survey.strip() != extracted_text.strip()
+                if uploaded_just_loaded and raw_survey.strip() != extracted_text.strip():
+                    survey_to_run = extracted_text
             elif raw_survey.strip() != default_survey.strip():
                 input_metadata["source"] = "edited_preset_or_direct_text"
                 input_metadata["edited_after_extraction"] = True
@@ -276,7 +291,7 @@ def main() -> None:
         submitted = st.form_submit_button("Run synthetic survey", type="primary", width="stretch")
 
     if submitted:
-        run_synthetic_survey(provider, raw_survey, concepts, micro_n, consistency_runs, input_metadata)
+        run_synthetic_survey(provider, survey_to_run, concepts, micro_n, consistency_runs, input_metadata)
 
     run = st.session_state.get("last_run")
     if run:

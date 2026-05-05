@@ -1,0 +1,33 @@
+Source: Board of Governors of the Federal Reserve System, Survey of Consumers' Use of Mobile Financial Services 2014 -- Questionnaire.
+URL: https://www.federalreserve.gov/econresdata/mobile-devices/2015-appendix-2-survey-of-consumers-use-of-mobile-financial-services-2014-questionnaire.htm
+Use in this demo: Public payment/mobile-finance survey excerpt adapted for a Visa Swiss synthetic consumer test.
+
+1. Do you own or have regular access to a mobile phone?
+Options: yes; no
+
+2. How confident are you in your ability to understand and navigate the technology and features of your mobile phone?
+Options: very confident; somewhat confident; not confident
+
+3. Which of the following best describes how easy it is for you to access the internet on your mobile phone?
+Options: almost always available; available in convenient locations; requires extra effort; not available; no need
+
+4. Have you used mobile banking in the past 12 months?
+Options: yes; no; do not know
+
+5. What was the main reason you started using mobile banking?
+Options: got a smartphone; bank started offering it; no nearby branch or ATM; comfortable with security; convenience; fraud alerts; other
+
+6. Have you made a mobile payment in the past 12 months?
+Options: yes; no
+
+7. In the past month, how often have you used your mobile phone to make any type of mobile payment?
+
+8. Which mobile payment activity is most relevant to you?
+Options: transfer money to another person; pay in a store; pay for parking or transit; pay bills; text-message payment; loyalty or rewards app; online or in-app purchase
+
+9. Would fraud alerts and purchase protection increase your trust in a payment card linked to mobile payments?
+
+10. What concern would most prevent you from using a card that recommends the cheapest payment method at checkout?
+Options: privacy; wrong recommendation; loss of control; no clear savings; weak rewards; setup complexity; none
+
+11. What annual fee in CHF would feel acceptable for a card that combines mobile payment optimization, fraud alerts, and purchase protection?

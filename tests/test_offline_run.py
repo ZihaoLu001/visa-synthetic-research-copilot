@@ -63,6 +63,9 @@ def test_parser_extracts_external_concept_test_options():
     llm = MockLLM()
     questions = llm.generate_json(
         "Parse the raw survey into JSON.\nRAW_SURVEY:\n"
+        "Source: Public payment survey example.\n"
+        "URL: https://example.com/survey\n"
+        "Use in this demo: metadata only.\n"
         "Scenario: Early-stage Swiss card value proposition concept test.\n"
         "1. Which benefit would make you switch first? "
         "Options: cashback; travel insurance; purchase protection; mobile wallet; none\n"
