@@ -101,7 +101,7 @@ Keep `MODEL_PROVIDER=mock` available as the fallback for rehearsal and live demo
 9. Download CSV, Markdown, or JSON outputs for partner review.
 10. Change a fee or feature live, rerun, and compare the directional movement.
 
-The Slack-ready real-run video is in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment.
+The Slack-ready PDF operation manual is in `demo/manuals/visa_synthetic_research_copilot_operation_manual.pdf`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment, plus screenshots and reviewer instructions. The real-run video is retained in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`.
 
 Suggested live stress test:
 
@@ -122,6 +122,7 @@ demo/
   final_demo_survey.txt        Live-paste survey for the final demo
   api_smoke_payload.json       Cloud API smoke-test payload
   public_survey_uploads/       Public survey excerpt in TXT and PDF upload formats
+  manuals/                     PDF operation manual, HTML source, screenshots and Slack draft
   videos/                      Slack-ready real-run demo video and post draft
 data/
   swiss_archetypes.yaml        Swiss synthetic persona archetypes
@@ -144,6 +145,7 @@ orchestrate/
   agents/                      Minimal watsonx Orchestrate ADK agent specification
   openapi/                     OpenAPI contract for importing the API as a tool
 scripts/
+  build_operation_manual.py    Rebuilds the PDF operation manual from screenshots
   deploy_code_engine.ps1       IBM Code Engine deployment helper
   smoke_deployment.ps1         Verifies the deployed Streamlit and API apps
   run_external_survey_tests.ps1 Posts public-example-inspired surveys to the deployed API
