@@ -24,7 +24,8 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | API `/run` synthetic survey | HTTP 200, parsed 5 flexible questions |
 | API response volume | 24 respondents, 2 concepts, 5 questions, 2 consistency runs = 240 persona-question responses |
 | Validation evidence | Overall validation score returned by API |
-| Local regression tests | `8 passed` |
+| External survey API stress tests | 3 public-example-inspired surveys returned synthetic responses, validation evidence, and 100.0 JSON parse success |
+| Local regression tests | `10 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
 
 ## One-Command Smoke Test
@@ -62,14 +63,15 @@ Demo sequence:
 1. Open the Streamlit URL.
 2. Keep model provider set to `mock` for reliable live execution.
 3. Keep respondents at `96` for the main full-scale demo.
-4. Paste or upload the demo survey.
-5. Run the synthetic survey.
-6. Show `Consultant Summary`.
-7. Show `Question Parser` to prove flexible survey input.
-8. Show `Segment Explorer` for Swiss archetype differences.
-9. Show `Persona Responses` for individual traceability.
-10. Show `Validation` and `Scorecard` for benchmark, consistency, coverage, realism, and grading evidence.
-11. Switch the scenario to `Live sensitivity: lower Premium fee to CHF 60`, rerun, and explain directional movement.
+4. Use `Core Visa card survey`, or switch `Question preset` to one of the external stress tests.
+5. Paste/upload a different survey if Visa wants to test from their side.
+6. Run the synthetic survey.
+7. Show `Consultant Summary`.
+8. Show `Question Parser` to prove flexible survey input.
+9. Show `Segment Explorer` for Swiss archetype differences.
+10. Show `Persona Responses` for individual traceability.
+11. Show `Validation` and `Scorecard` for benchmark, consistency, coverage, realism, and grading evidence.
+12. Switch the scenario to `Live sensitivity: lower Premium fee to CHF 60`, rerun, and explain directional movement.
 
 ## What To Say
 

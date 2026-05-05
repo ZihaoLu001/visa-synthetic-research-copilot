@@ -15,6 +15,7 @@ from synthetic_researcher.schemas import Concept, SurveyRun
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
+DEMO_SURVEYS = ROOT / "demo" / "external_survey_tests"
 
 
 st.set_page_config(page_title="Visa Synthetic Research Copilot", layout="wide", page_icon="V")
@@ -214,12 +215,19 @@ def main() -> None:
 2. What annual fee in CHF would feel acceptable for this card?
 3. Which benefit or feature feels most valuable to you, and why?
 4. What is the main barrier that would prevent you from using this card?"""
+            survey_presets = load_survey_presets(default_survey)
+            preset_name = st.selectbox(
+                "Question preset",
+                list(survey_presets.keys()),
+                help="Use a public-example-inspired stress test, or paste/upload your own survey below.",
+            )
+            default_survey = survey_presets[preset_name]
             input_metadata: dict[str, object] = {
-                "source": "direct_text",
-                "file_name": None,
+                "source": "preset",
+                "file_name": preset_name,
                 "file_type": "text",
                 "char_count": len(default_survey),
-                "extraction_notes": ["Using pasted or default text from the app input."],
+                "extraction_notes": [f"Using app preset: {preset_name}."],
             }
             extracted_text: str | None = None
             if uploaded_survey is not None:
@@ -252,6 +260,9 @@ def main() -> None:
             input_metadata = {**input_metadata, "char_count": len(raw_survey)}
             if extracted_text is not None:
                 input_metadata["edited_after_extraction"] = raw_survey.strip() != extracted_text.strip()
+            elif raw_survey.strip() != default_survey.strip():
+                input_metadata["source"] = "edited_preset_or_direct_text"
+                input_metadata["edited_after_extraction"] = True
             st.markdown("#### Target Market")
             target_context = st.text_input(
                 "Target market",
@@ -323,6 +334,20 @@ def concept_editor(defaults: list[Concept], target_context: str) -> list[Concept
                 )
             )
     return concepts
+
+
+def load_survey_presets(default_survey: str) -> dict[str, str]:
+    presets = {"Core Visa card survey": default_survey}
+    if DEMO_SURVEYS.exists():
+        label_map = {
+            "concept_test_qualtrics_surveymonkey_style.txt": "External stress test: concept testing",
+            "payment_behavior_federal_reserve_style.txt": "External stress test: payment behavior",
+            "card_pricing_message_test.txt": "External stress test: pricing and message",
+        }
+        for path in sorted(DEMO_SURVEYS.glob("*.txt")):
+            label = label_map.get(path.name, f"External stress test: {path.stem.replace('_', ' ')}")
+            presets[label] = path.read_text(encoding="utf-8")
+    return presets
 
 
 def run_synthetic_survey(

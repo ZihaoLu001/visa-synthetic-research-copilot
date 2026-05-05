@@ -1,0 +1,10 @@
+Scenario: Payment behavior and mobile-payment trust interview guide.
+
+1. Which payment method do you use most often for in-person purchases? Options: cash; debit card; credit card; mobile wallet; other
+2. How often would you use a mobile wallet for everyday payments if this card made setup automatic?
+3. Would fraud alerts and purchase protection increase your trust in this card?
+4. Which payment pain point matters most to you? Options: fees; security or fraud; budgeting control; merchant acceptance; speed; privacy
+5. What concern would stop you from using an automatic cheapest-payment recommendation? Options: privacy; wrong recommendation; loss of control; no clear savings; none
+6. How likely would you be to use this card for online shopping?
+7. What annual fee in CHF would you accept for payment optimization and protection features?
+8. What would make this feel safer or more useful?

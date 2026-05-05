@@ -11,6 +11,7 @@ The app accepts flexible survey, interview, or card value proposition test quest
 - judge-style realism rubric and overall validation confidence
 - file ingestion audit for pasted text, TXT, MD, PDF, DOCX, CSV, and XLSX survey inputs
 - downloadable CSV responses, Markdown consultant report, and full run JSON
+- external survey stress-test set inspired by public concept-testing and payment-survey examples
 
 This is an early-stage hypothesis and survey-design tool. It does **not** claim to replace real customer research or Visa's final validation.
 
@@ -140,6 +141,7 @@ orchestrate/
 scripts/
   deploy_code_engine.ps1       IBM Code Engine deployment helper
   smoke_deployment.ps1         Verifies the deployed Streamlit and API apps
+  run_external_survey_tests.ps1 Posts public-example-inspired surveys to the deployed API
 docs/
   architecture.md              System design and extension notes
   demo_script.md               6-7 minute demo script
@@ -147,6 +149,7 @@ docs/
   evaluation_scorecard.md      Mapping to final presentation grading criteria
   final_demo_acceptance.md     Final deployed-demo acceptance checklist
   final_delivery_runbook.md     Group 28 final delivery checklist
+  external_survey_testing.md    Public-survey-inspired acceptance-test evidence
   final_presentation_plan.md   20-minute presentation structure
   partner_questions.md          Slack/Q&A messages for IBM and Visa alignment
   requirement_traceability.md  Email/lab/rubric/Visa requirement checklist
@@ -159,6 +162,7 @@ docs/
 
 - Running demo: paste survey -> parse -> simulate -> aggregate -> validate -> export.
 - Flexible input demo: uploaded marketing research survey files can be converted to survey text before parsing.
+- External survey proof: concept-test, payment-behavior, and pricing/message surveys in `demo/external_survey_tests/` run through the same pipeline.
 - Architecture: UI, parser, persona store, orchestrator, respondent agents, validator, analytics/export.
 - KPIs: time to insight, response count, JSON parse success, consistency, benchmark MAE, realism score.
 - Business value: early-stage concept screening and better real survey design, not final market research replacement.

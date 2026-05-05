@@ -41,19 +41,27 @@ class MockLLM(BaseLLM):
 
     def _parse_survey(self, prompt: str) -> list[dict[str, Any]]:
         raw = prompt.split("RAW_SURVEY:", 1)[-1]
-        lines = [x.strip(" -\t") for x in raw.splitlines() if x.strip()]
+        blocks = self._survey_blocks(raw)
         questions = []
         qid = 1
-        for line in lines:
+        for block in blocks:
+            line = " ".join(block)
             if len(line) < 8:
                 continue
             text = re.sub(r"^\d+[\).:-]?\s*", "", line)
+            text = re.sub(r"^Q\d+[\).:-]?\s*", "", text, flags=re.I).strip()
+            if re.match(r"^(?:scenario|context|background|instructions?|intro|stimulus)\s*:", text, flags=re.I):
+                continue
+            options = self._extract_choice_options(text)
+            text = self._strip_inline_options(text)
             lower = text.lower()
-            if re.search(r"\b(price|fee|fees|pay|chf|willingness)\b", lower):
+            if options:
+                qtype = "choice"
+            elif re.search(r"\b(price|fee|fees|pay|chf|willingness)\b", lower):
                 qtype = "price"
             elif ("feature" in lower or "benefit" in lower) and "why" in lower:
                 qtype = "open"
-            elif any(k in lower for k in ["choose", "select", "prefer"]):
+            elif any(k in lower for k in ["choose", "select", "prefer", "rank", "pick"]):
                 qtype = "choice"
             elif any(k in lower for k in ["likely", "likelihood", "adopt", "attractive", "relevant", "trust", "value"]):
                 qtype = "likert"
@@ -63,7 +71,7 @@ class MockLLM(BaseLLM):
                 "id": f"Q{qid}",
                 "text": text,
                 "type": qtype,
-                "options": ["Concept A", "Concept B", "Neither"] if qtype == "choice" else [],
+                "options": options or (["Concept A", "Concept B", "Neither"] if qtype == "choice" else []),
                 "measures": self._measure(lower),
             })
             qid += 1
@@ -72,13 +80,87 @@ class MockLLM(BaseLLM):
         return questions
 
     @staticmethod
+    def _survey_blocks(raw: str) -> list[list[str]]:
+        blocks: list[list[str]] = []
+        current: list[str] = []
+        for raw_line in raw.splitlines():
+            line = raw_line.strip()
+            if not line:
+                continue
+            is_numbered = bool(re.match(r"^(?:Q\d+|\d+)[\).:-]\s+", line, flags=re.I))
+            is_option = bool(re.match(r"^(?:[-*•]|[A-Ha-h][\).])\s+", line))
+            is_inline_options = bool(re.match(r"^(?:options?|choices?|answers?|response options?)\s*[:\-]", line, flags=re.I))
+            looks_like_new_question = bool(current and line.endswith("?") and len(line) >= 16 and not is_option and not is_inline_options)
+            if current and (is_numbered or looks_like_new_question):
+                blocks.append(current)
+                current = [line]
+            elif not current:
+                current = [line]
+            else:
+                current.append(line)
+        if current:
+            blocks.append(current)
+        return blocks
+
+    @classmethod
+    def _extract_choice_options(cls, text: str) -> list[str]:
+        option_texts: list[str] = []
+        for pattern in [
+            r"(?:options?|choices?|answers?|response options?)\s*[:\-]\s*(.+)$",
+            r"(?:choose one|select one|pick one|choose from|select from)\s*[:\-]\s*(.+)$",
+            r"(?:rank|rate|compare)\s+the\s+following(?:\s+\w+)?\s*[:\-]\s*(.+)$",
+            r"which\s+of\s+the\s+following.*?[:\-]\s*(.+)$",
+        ]:
+            match = re.search(pattern, text, flags=re.I)
+            if match:
+                option_texts.append(match.group(1))
+
+        parenthetical = re.search(r"\(([^()]{12,180})\)", text)
+        if parenthetical and re.search(r"[,;/|]|\bor\b", parenthetical.group(1), flags=re.I):
+            option_texts.append(parenthetical.group(1))
+
+        bullet_options = re.findall(r"(?:^|\s)(?:[-*•]|[A-Ha-h][\).])\s*([^;,.?]+)", text)
+        if len(bullet_options) >= 2:
+            option_texts.append("; ".join(bullet_options))
+
+        for option_text in option_texts:
+            options = cls._split_options(option_text)
+            if len(options) >= 2:
+                return options[:8]
+        return []
+
+    @staticmethod
+    def _split_options(option_text: str) -> list[str]:
+        cleaned = re.sub(r"\band why\b.*$", "", option_text, flags=re.I).strip()
+        cleaned = re.sub(r"\.$", "", cleaned)
+        parts = re.split(r"\s*(?:;|\||/|,)\s*", cleaned, flags=re.I)
+        options = []
+        for part in parts:
+            option = re.sub(r"^(?:[-*•]|[A-Ha-h][\).])\s*", "", part).strip(" .:;\"'")
+            if 1 < len(option) <= 60 and option.lower() not in {"why", "please specify", "other please specify"}:
+                options.append(option)
+        deduped: list[str] = []
+        for option in options:
+            if option.lower() not in {x.lower() for x in deduped}:
+                deduped.append(option)
+        return deduped
+
+    @staticmethod
+    def _strip_inline_options(text: str) -> str:
+        text = re.sub(r"\s*(?:options?|choices?|answers?|response options?)\s*[:\-].*$", "", text, flags=re.I)
+        text = re.sub(r"\s*(?:choose one|select one|pick one|choose from|select from)\s*[:\-].*$", "", text, flags=re.I)
+        text = re.sub(r"(\b(?:rank|rate|compare)\s+the\s+following(?:\s+\w+)?)\s*[:\-].*$", r"\1", text, flags=re.I)
+        text = re.sub(r"(\bwhich\s+of\s+the\s+following.*?)\s*[:\-].*$", r"\1", text, flags=re.I)
+        return text.strip()
+
+    @staticmethod
     def _measure(lower: str) -> str:
+        if "barrier" in lower or "concern" in lower or "prevent" in lower:
+            return "barriers"
         if re.search(r"\b(price|fee|fees|pay|chf|willingness)\b", lower):
             return "price sensitivity"
         if "feature" in lower or "benefit" in lower or "prefer" in lower:
             return "feature preference"
-        if "barrier" in lower or "concern" in lower or "prevent" in lower:
-            return "barriers"
         if "likely" in lower or "adopt" in lower or "trust" in lower or "value" in lower:
             return "adoption likelihood"
         return "general feedback"
@@ -87,6 +169,7 @@ class MockLLM(BaseLLM):
         persona_id = self._extract(prompt, r"Persona ([A-Z0-9_\-]+)") or "P"
         qtype = self._extract(prompt, r"Type: ([a-z]+)") or "open"
         question = self._extract(prompt, r"Text: (.*?)\nOptions:") or ""
+        options = self._extract_prompt_options(prompt)
         measures = self._extract(prompt, r"Measures: (.*?)(?:\n|$)") or ""
         fee = float(self._extract(prompt, r"Annual fee CHF: ([0-9.]+)") or 0)
         concept = self._extract(prompt, r"Name: (.*?)\nDescription:") or "concept"
@@ -105,11 +188,11 @@ class MockLLM(BaseLLM):
                 "confidence": 0.78,
             }
         if qtype == "choice":
-            label = "Concept A" if score >= 4.0 else "Concept B" if score >= 2.8 else "Neither"
+            label = self._choose_option(persona_id, concept, features, options, score)
             return {
                 "answer_value": score,
                 "answer_label": label,
-                "answer_text": f"I would lean toward {label} because it fits my payment habits and budget better.",
+                "answer_text": f"I would choose {label} because it fits my payment habits and budget better.",
                 "rationale": self._rationale(persona_id, concept, fee, features),
                 "confidence": 0.76,
             }
@@ -151,6 +234,17 @@ class MockLLM(BaseLLM):
     def _extract(text: str, pattern: str) -> str | None:
         match = re.search(pattern, text, re.S)
         return match.group(1).strip() if match else None
+
+    @classmethod
+    def _extract_prompt_options(cls, prompt: str) -> list[str]:
+        raw = cls._extract(prompt, r"Options: (.*?)\nMeasures:")
+        if not raw or raw.strip() in {"[]", "None"}:
+            return []
+        quoted = re.findall(r"'([^']+)'|\"([^\"]+)\"", raw)
+        options = [a or b for a, b in quoted]
+        if not options:
+            options = cls._split_options(raw.strip("[]"))
+        return [option for option in options if option]
 
     @staticmethod
     def _base_score(persona_id: str, concept: str, features: str, fee: float) -> float:
@@ -213,6 +307,34 @@ class MockLLM(BaseLLM):
             if len(cleaned) > 3 and cleaned.lower() not in {"features", "target context"}:
                 return cleaned
         return "clear, practical everyday value"
+
+    @classmethod
+    def _choose_option(cls, persona_id: str, concept: str, features: str, options: list[str], score: float) -> str:
+        if not options:
+            return "Concept A" if score >= 4.0 else "Concept B" if score >= 2.8 else "Neither"
+        persona_root = persona_id.split("_")[0]
+        lower_context = (concept + " " + features).lower()
+        option_scores: list[tuple[float, str]] = []
+        for option in options:
+            lower = option.lower()
+            option_score = 0.0
+            if persona_root in {"A2", "A4", "A6"}:
+                option_score += _contains_any(lower, ["travel", "insurance", "fx", "foreign", "lounge", "premium", "cross-border"]) * 3
+                option_score += _contains_any(lower, ["security", "protection", "fraud", "receipt"]) * 1
+            elif persona_root in {"A1", "A3", "A7"}:
+                option_score += _contains_any(lower, ["cashback", "grocery", "family", "discount", "mobile", "wallet", "protection"]) * 3
+                option_score += _contains_any(lower, ["simple", "fee", "transparent"]) * 1
+            elif persona_root == "A5":
+                option_score += _contains_any(lower, ["cash", "transparent", "control", "privacy", "security", "simple", "fraud"]) * 3
+                option_score -= _contains_any(lower, ["digital", "mobile", "wallet", "automatic"]) * 1
+            else:
+                option_score += _contains_any(lower, ["protection", "receipt", "fx", "business", "expense"]) * 3
+            option_score += _contains_any(lower_context, lower.split()) * 0.1
+            if score < 2.7 and any(k in lower for k in ["none", "neither", "would not", "no option"]):
+                option_score += 5
+            option_scores.append((option_score, option))
+        return max(option_scores, key=lambda item: item[0])[1]
+
 
     @staticmethod
     def _barrier_signal(persona_id: str, concept: str, fee: float, features: str) -> str:
@@ -285,3 +407,7 @@ def get_llm(provider: str | None = None) -> BaseLLM:
     if provider == "watsonx":
         return WatsonxLLM()
     return MockLLM()
+
+
+def _contains_any(text: str, needles: list[str]) -> int:
+    return int(any(needle and needle in text for needle in needles))

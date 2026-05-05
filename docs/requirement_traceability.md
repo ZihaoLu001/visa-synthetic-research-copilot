@@ -33,6 +33,7 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | Swiss persona design | `data/swiss_archetypes.yaml` defines weighted Swiss archetypes with age, region, language, income, household, education, lifestyle, payment profile, attitudes, and source notes. |
 | Public-data grounding | `data/benchmark_snb_2025.yaml` uses public Swiss payment behavior and demographic anchors. |
 | Flexible survey/interview input | `app.py` accepts pasted text and uploaded TXT, MD, PDF, DOCX, CSV, and XLSX files through `synthetic_researcher/ingestion.py`. |
+| "No limitation" survey handling from Visa/MS clarification | `demo/external_survey_tests/` contains public-example-inspired concept-test, payment-behavior, and pricing/message surveys; parser tests verify explicit options, ranking-style feature lists, and background-line filtering. |
 | High number of outputs | Slider supports 12-96 synthetic respondents across all questions and concepts. |
 | Aggregated and persona-level results | Consultant Summary, Segment Explorer, Persona Responses, CSV export, Markdown report, and JSON export. |
 | Realism, benchmark, and consistency validation | `synthetic_researcher/validation.py` includes benchmark alignment, repeated-run consistency, coverage, question coverage, and realism rubric. |
@@ -49,6 +50,16 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | Prompt Engineering | Structured outputs, model parameters, and prompt discipline matter. | Prompts require strict JSON, persona context, benchmark context, and consistency with prior answers. |
 | RAG / Tools / Parameters | Grounding and evaluation improve reliability. | Public benchmark grounding and validation dashboard are implemented; future RAG could ingest partner research docs. |
 | Open Source Technology | Consider Docling, BeeAI, LangChain/LangFlow for extraction, tools, and orchestration. | Current ingestion uses lightweight open-source parsers; future extension can replace PDF/DOCX parsing with Docling and orchestration with LangGraph/BeeAI. |
+
+## External Survey Stress-Test Results
+
+| Test | Local result with current code |
+| --- | --- |
+| Concept-test survey inspired by Qualtrics / SurveyMonkey patterns | 8 questions parsed, 384 responses generated at 24 respondents x 2 concepts x 8 questions, validation score 96.8, coverage score 100. |
+| Payment-behavior survey inspired by Federal Reserve payment questionnaire patterns | 8 questions parsed, 384 responses generated, validation score 94.5, coverage score 85. |
+| Card pricing and message test | 8 questions parsed, 384 responses generated, validation score 94.5, coverage score 85. |
+
+The deployed API was also smoke-tested with the same three files before forcing a Code Engine container restart and returned 432 responses per file, validation score 94.5, coverage score 85, and JSON parse success 100.0. The response count difference is expected because that deployed runtime still counted the leading scenario line as a question; the current code filters those background lines.
 
 ## Remaining Optional Enhancements
 
