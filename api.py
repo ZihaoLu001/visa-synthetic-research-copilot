@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import os
 from typing import Literal
 
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
+from synthetic_researcher.consulting import build_decision_brief, default_research_brief
 from synthetic_researcher.llm import get_llm, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.schemas import Concept
@@ -79,6 +81,12 @@ def run_research(request: ResearchRunRequest) -> dict[str, object]:
             "char_count": len(request.survey_text),
         },
     )
+    wx_status = watsonx_config_status()
+    provider_setting = os.getenv("MODEL_PROVIDER", "auto").lower()
+    active_provider = "watsonx" if provider_setting == "watsonx" or (provider_setting == "auto" and wx_status["configured"]) else "mock"
+    run.aggregate["provider"] = active_provider
+    run.aggregate["model_id"] = wx_status["model_id"] if active_provider == "watsonx" else "MockLLM"
+    run.aggregate["decision_brief"] = build_decision_brief(run, default_research_brief(), provider=active_provider)
     payload = run.asdict()
     if request.response_mode == "full":
         return payload

@@ -27,4 +27,7 @@ def test_run_endpoint_returns_summary_payload():
     assert payload["response_count"] > 0
     assert payload["questions"]
     assert payload["aggregate"]["runtime"]["provider_independent"] is True
+    assert payload["aggregate"]["provider"] in {"mock", "watsonx"}
+    assert payload["aggregate"]["model_id"]
+    assert payload["aggregate"]["decision_brief"]["consultant_quality_layer"]["decision_risk"]
     assert "overall" in payload["validation"]
