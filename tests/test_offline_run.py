@@ -1,7 +1,10 @@
 from pathlib import Path
+from zipfile import ZipFile
+import io
 
 from synthetic_researcher.consulting import build_decision_brief, default_research_brief, format_decision_brief_markdown
 from synthetic_researcher.agents import SurveyParserAgent
+from synthetic_researcher.delivery import build_consultant_delivery_pack, build_pilot_readiness_gate
 from synthetic_researcher.llm import BaseLLM, MockLLM, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.reporting import build_markdown_report
@@ -176,3 +179,43 @@ def test_watsonx_config_status_redacts_secret(monkeypatch):
     assert status["missing"] == []
     assert status["api_key_set"] is True
     assert "secret-value" not in str(status)
+
+
+def test_consultant_delivery_pack_contains_partner_artifacts():
+    orch = SyntheticResearchOrchestrator(
+        llm=MockLLM(),
+        persona_path=ROOT / "data" / "swiss_archetypes.yaml",
+        benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
+    )
+    run = orch.run(
+        survey_path=ROOT / "data" / "sample_survey_card.yaml",
+        concepts_path=ROOT / "data" / "sample_concepts.yaml",
+        micro_population_n=12,
+        consistency_runs=1,
+    )
+    brief = default_research_brief()
+    run.aggregate["provider"] = "mock"
+    run.aggregate["model_id"] = "MockLLM"
+    run.aggregate["research_brief"] = brief
+    run.aggregate["decision_brief"] = build_decision_brief(run, brief, provider="mock")
+
+    pack = build_consultant_delivery_pack(run)
+    readiness = build_pilot_readiness_gate(run)
+
+    assert any(row["check"] == "Real IBM model proof" for row in readiness)
+    with ZipFile(io.BytesIO(pack)) as bundle:
+        names = set(bundle.namelist())
+        assert {
+            "README.md",
+            "01_decision_brief.md",
+            "02_consultant_report.md",
+            "03_persona_responses.csv",
+            "04_validation.json",
+            "05_full_run.json",
+            "06_input_source_audit.json",
+            "07_methodology_and_governance.md",
+            "08_pilot_readiness_gate.json",
+        }.issubset(names)
+        csv_text = bundle.read("03_persona_responses.csv").decode("utf-8")
+        assert "persona_id" in csv_text
+        assert "secret-value" not in bundle.read("05_full_run.json").decode("utf-8")

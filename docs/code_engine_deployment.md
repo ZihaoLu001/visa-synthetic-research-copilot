@@ -12,18 +12,18 @@ Region: eu-de
 Resource group: group28
 Code Engine project: group28
 Public URL: https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
-Mode: APP_MODE=streamlit; can run MODEL_PROVIDER=mock for reliability or MODEL_PROVIDER=watsonx when Code Engine secrets are configured.
-Verification: HTTP 200 and an in-browser 96-respondent run completed successfully.
+Mode: APP_MODE=streamlit; MODEL_PROVIDER=watsonx with watsonx-runtime-env secret configured.
+Verification: HTTP 200 and an in-browser 96-respondent run completed successfully; real-model path is now configured for final proof.
 ```
 
-The real IBM watsonx.ai / Granite provider was verified locally on 2026-05-06 after IBM restored Group 28's text-generation quota. To make the Code Engine app run the same real-model path, add the watsonx.ai environment variables and store `WATSONX_APIKEY` as a secret as shown below.
+The real IBM watsonx.ai / Granite provider was verified locally on 2026-05-06 after IBM restored Group 28's text-generation quota. On the same day the Code Engine apps were updated with `MODEL_PROVIDER=watsonx` and a `watsonx-runtime-env` secret, so the cloud health check now reports `watsonx_configured: true`.
 
 The FastAPI integration endpoint is also deployed for watsonx Orchestrate/OpenAPI import:
 
 ```text
 Application: visa-synthetic-research-api
 Public URL: https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
-Verification: /health returned HTTP 200 and POST /run returned HTTP 200 with synthetic research JSON.
+Verification: /health returned HTTP 200 with `active_provider_if_auto=watsonx`, and POST /run returned HTTP 200 with synthetic research JSON from the real-model configuration.
 ```
 
 The deployment uses a temporary runtime-clone fallback from the public GitHub repository because the official Code Engine source-build path is currently blocked by IBM Container Registry policy assignment permissions in the course account. This is good enough for stakeholder demo access, but the cleaner final path is still a normal GitHub source build or a prebuilt image once IBM enables the required permissions.
@@ -113,7 +113,7 @@ Use the Frankfurt region (`eu-de`) as recommended in the Code Engine lab.
 ```bash
 ibmcloud login --sso
 ibmcloud target -r eu-de
-ibmcloud target -g watsonx_Challenge_2026_Students
+ibmcloud target -g group28
 
 ibmcloud ce project select --name <group-use-case-project>
 ibmcloud ce application create \
@@ -140,12 +140,15 @@ This helper is optional. It exists for repeatable deployment once the IBM Cloud 
 For watsonx.ai-backed runs, configure the same environment variables used locally. This is the recommended setting for the final real-model proof:
 
 ```bash
+ibmcloud ce secret create \
+  --name watsonx-runtime-env \
+  --format generic \
+  --from-env-file watsonx_code_engine.env
+
 ibmcloud ce application update \
   --name visa-synthetic-research-copilot \
   --env MODEL_PROVIDER=watsonx \
-  --env WATSONX_URL=https://eu-de.ml.cloud.ibm.com \
-  --env WATSONX_PROJECT_ID=<project-id> \
-  --env WATSONX_MODEL_ID=ibm/granite-4-h-small
+  --env-from-secret watsonx-runtime-env
 ```
 
 Store `WATSONX_APIKEY` as a Code Engine secret rather than committing it to the repository.
@@ -172,7 +175,8 @@ ibmcloud ce app create \
   --command /bin/sh \
   --argument=-c \
   --argument "$APP_SCRIPT" \
-  --env MODEL_PROVIDER=mock \
+  --env MODEL_PROVIDER=watsonx \
+  --env-from-secret watsonx-runtime-env \
   --env APP_MODE=streamlit \
   --cpu 1 \
   --memory 4G \
@@ -205,7 +209,8 @@ ibmcloud ce app create \
   --command /bin/sh \
   --argument=-c \
   --argument "$APP_SCRIPT" \
-  --env MODEL_PROVIDER=mock \
+  --env MODEL_PROVIDER=watsonx \
+  --env-from-secret watsonx-runtime-env \
   --env APP_MODE=api \
   --cpu 1 \
   --memory 4G \
@@ -237,4 +242,4 @@ The 2026-04-27 and 2026-05-02 Slack thread is the key risk signal: standalone Or
 - The verified Code Engine URL is the primary stakeholder-sharing path.
 - Local Streamlit remains the fallback if the course account hits quota or network issues.
 - The verified API Code Engine URL is the Orchestrate-tool path.
-- Keep `MODEL_PROVIDER=mock` available for rehearsal and fallback.
+- Keep `MODEL_PROVIDER=mock` available for rehearsal and fallback, but the current cloud apps are configured for `MODEL_PROVIDER=watsonx`.

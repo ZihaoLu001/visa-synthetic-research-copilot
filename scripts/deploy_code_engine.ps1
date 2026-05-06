@@ -1,7 +1,7 @@
 param(
     [string]$AppName = "visa-synthetic-research-copilot",
     [string]$ProjectName = "",
-    [string]$ResourceGroup = "watsonx_Challenge_2026_Students",
+    [string]$ResourceGroup = "group28",
     [string]$Region = "eu-de",
     [ValidateSet("streamlit", "api")]
     [string]$Mode = "streamlit",

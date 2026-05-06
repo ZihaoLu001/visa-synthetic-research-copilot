@@ -20,14 +20,15 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | Check | Result |
 | --- | --- |
 | Streamlit Code Engine app | HTTP 200 |
-| API `/health` | HTTP 200, `status=ok` |
+| API `/health` | HTTP 200, `status=ok`, `active_provider_if_auto=watsonx`, `watsonx_configured=true` |
 | API `/run` synthetic survey | HTTP 200, parsed 5 flexible questions |
 | API response volume | 24 respondents, 2 concepts, 5 questions, 2 consistency runs = 240 persona-question responses |
 | Validation evidence | Overall validation score returned by API |
+| Cloud watsonx.ai API proof | `POST /run` with a one-question card survey returned persona responses and validation under `MODEL_PROVIDER=watsonx` |
 | External survey API stress tests | 3 public-example-inspired surveys returned synthetic responses, validation evidence, and 100.0 JSON parse success |
 | Real watsonx.ai smoke test | `ibm/granite-4-h-small` returned a live response after IBM restored Group 28 quota |
 | Real watsonx.ai mini-run | End-to-end parser/persona/validation flow completed with provider `watsonx` |
-| Local regression tests | `18 passed` |
+| Local regression tests | `19 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
 
 ## One-Command Smoke Test
@@ -72,8 +73,9 @@ Demo sequence:
 8. Show `Question Parser` to prove flexible survey input.
 9. Show `Segment Explorer` for Swiss archetype differences.
 10. Show `Persona Responses` for individual traceability.
-11. Show `Validation` and `Scorecard` for benchmark, consistency, coverage, realism, and grading evidence.
-12. Switch the scenario to `Live sensitivity: lower Premium fee to CHF 60`, rerun, and explain directional movement.
+11. Show `Validation` and `Scorecard` for benchmark, consistency, coverage, realism, pilot readiness, and grading evidence.
+12. Download the Consultant Delivery Pack ZIP to show the partner-review artifact.
+13. Switch the scenario to `Live sensitivity: lower Premium fee to CHF 60`, rerun, and explain directional movement.
 
 ## What To Say
 
@@ -90,6 +92,6 @@ The final platform story is:
 - Code Engine hosts the stakeholder-facing Streamlit app.
 - Code Engine also hosts the FastAPI endpoint for OpenAPI import into watsonx Orchestrate or Agent Builder.
 - watsonx.ai is the real-model provider for the final proof when credentials and quota are available.
-- Mock mode is retained as a live-demo fallback because Slack reports show token-quota and Orchestrate custom Python dependency issues across several groups.
+- Mock mode is retained as a live-demo fallback because Slack reports show token-quota and Orchestrate custom Python dependency issues across several groups, but the current Code Engine apps are now configured with the watsonx secret for the final real-model proof.
 
 This is the strongest low-risk route for the final: impressive live demo first, IBM-platform integration proof second, and clear governance/limitations throughout.

@@ -35,7 +35,7 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | Flexible survey/interview input | `app.py` accepts pasted text and uploaded TXT, MD, PDF, DOCX, CSV, and XLSX files through `synthetic_researcher/ingestion.py`. |
 | "No limitation" survey handling from Visa/MS clarification | `demo/external_survey_tests/` contains public-example-inspired concept-test, payment-behavior, and pricing/message surveys; parser tests verify explicit options, ranking-style feature lists, and background-line filtering. |
 | High number of outputs | Slider supports 12-96 synthetic respondents across all questions and concepts. |
-| Aggregated and persona-level results | Consultant Summary, Segment Explorer, Persona Responses, CSV export, Markdown report, and JSON export. |
+| Aggregated and persona-level results | Consultant Summary, Segment Explorer, Persona Responses, CSV export, Markdown report, JSON export, and Consultant Delivery Pack. |
 | Consultant-style decision output | Decision Brief tab links the research objective, hypotheses, adoption/price/segment evidence, validation posture and next real-research actions. |
 | Realism, benchmark, and consistency validation | `synthetic_researcher/validation.py` includes benchmark alignment, repeated-run consistency, coverage, question coverage, and realism rubric. |
 | No Visa-internal data required | README and app guardrails state that only public or user-provided data is used. |
@@ -66,5 +66,5 @@ The deployed API was also smoke-tested with the same three files before forcing 
 
 - Import the deployed API OpenAPI contract into watsonx Orchestrate if the team wants a live IBM-platform tool proof.
 - Add Docling-based document extraction for richer table/form parsing.
-- Add PowerPoint/PDF report export for a consultant-grade deliverable.
+- Add native PowerPoint export if the team wants a slide-ready artifact; the current app already has a consultant delivery pack and PDF operation manual.
 - Add a calibration workflow where Visa can compare synthetic outputs against internal survey results.

@@ -43,7 +43,7 @@ Cover these tabs:
 - Persona Responses: individual responses with rationale and confidence.
 - Validation: benchmark alignment, consistency, coverage, construct coverage and realism rubric.
 - Scorecard: direct mapping to the final grading criteria and KPI evidence.
-- Downloads: CSV persona responses, Markdown consultant report and full run JSON for partner-side testing.
+- Downloads: Consultant Delivery Pack, CSV persona responses, Markdown consultant report and full run JSON for partner-side testing.
 
 ## 6. Live Sensitivity Test
 

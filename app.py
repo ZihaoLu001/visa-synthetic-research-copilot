@@ -13,6 +13,11 @@ from synthetic_researcher.consulting import (
     format_decision_brief_markdown,
     methodology_snapshot,
 )
+from synthetic_researcher.delivery import (
+    build_consultant_delivery_pack,
+    build_pilot_readiness_gate,
+    readiness_status_counts,
+)
 from synthetic_researcher.ingestion import SurveyExtractionError, extract_survey_text, supported_upload_types
 from synthetic_researcher.llm import LLMError, get_llm, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator, load_concepts
@@ -884,12 +889,23 @@ def render_decision_brief(run: SurveyRun) -> None:
             st.write(f"- {item}")
 
     decision_report = format_decision_brief_markdown(run)
-    st.download_button(
-        "Download Decision Brief",
-        data=decision_report.encode("utf-8"),
-        file_name=f"vca_decision_brief_{run.run_id}.md",
-        mime="text/markdown",
-    )
+    pack = build_consultant_delivery_pack(run)
+    d1, d2 = st.columns([0.42, 0.58])
+    with d1:
+        st.download_button(
+            "Download Decision Brief",
+            data=decision_report.encode("utf-8"),
+            file_name=f"vca_decision_brief_{run.run_id}.md",
+            mime="text/markdown",
+        )
+    with d2:
+        st.download_button(
+            "Download Consultant Delivery Pack",
+            data=pack,
+            file_name=f"vca_synthetic_research_delivery_pack_{run.run_id}.zip",
+            mime="application/zip",
+            help="ZIP with decision brief, consultant report, persona CSV, validation JSON, full run JSON, source audit and governance notes.",
+        )
 
 
 def render_summary(run: SurveyRun) -> None:
@@ -1118,6 +1134,17 @@ def render_validation(run: SurveyRun) -> None:
 
 
 def render_scorecard(run: SurveyRun) -> None:
+    readiness = build_pilot_readiness_gate(run)
+    status_counts = readiness_status_counts(readiness)
+    st.markdown("#### Pilot Readiness Gate")
+    r1, r2, r3 = st.columns(3)
+    r1.metric("Ready checks", status_counts.get("Ready", 0), "Partner-facing evidence")
+    r2.metric("Needs attention", status_counts.get("Needs attention", 0), "Resolve before final sign-off")
+    provider = str(run.aggregate.get("provider", "mock"))
+    provider_label = "Real IBM watsonx.ai" if provider == "watsonx" else "Fallback MockLLM"
+    r3.metric("Evidence mode", provider_label, str(run.aggregate.get("model_id", "n/a")))
+    st.dataframe(pd.DataFrame(readiness), width="stretch", hide_index=True)
+
     st.markdown("#### Final Evaluation Scorecard")
     runtime = run.aggregate.get("runtime", {})
     validation = run.validation
@@ -1144,7 +1171,7 @@ def render_scorecard(run: SurveyRun) -> None:
         },
         {
             "rubric area": "Next steps (2)",
-            "evidence in product": "Consultant next-test recommendations plus docs roadmap: watsonx Orchestrate, calibration, PPT/PDF export, Visa internal validation.",
+            "evidence in product": "Consultant next-test recommendations, downloadable delivery pack, and docs roadmap: watsonx Orchestrate, calibration, PPT export, Visa internal validation.",
             "status": "Ready",
         },
         {
@@ -1173,7 +1200,7 @@ UI (Streamlit consultant cockpit)
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark / Consistency / Coverage Validator
-  -> Consultant Report Export
+  -> VCA Decision Brief / Consultant Delivery Pack
         """.strip(),
         language="text",
     )
@@ -1186,6 +1213,7 @@ UI (Streamlit consultant cockpit)
     st.write("- Real-model path: IBM watsonx.ai through `ibm-watsonx-ai` `ModelInference`, default `ibm/granite-4-h-small` in `eu-de`.")
     st.write("- Fallback path: deterministic `MockLLM` for CI, rehearsal and classroom quota contingency only.")
     st.write("- Algorithms: PDF/DOCX/XLSX/CSV/TXT extraction, survey parsing, weighted Swiss micro-persona sampling, persona-conditioned agent responses, weighted analytics, benchmark/consistency/coverage/realism validation and VCA decision synthesis.")
+    st.write("- Delivery pack: ZIP export with decision brief, consultant report, persona CSV, validation JSON, full run JSON, input audit and governance notes.")
     st.markdown("#### KPIs")
     st.write("- Time to first synthetic insight: target under 2 minutes for quick real-model proof or full mock rehearsal.")
     st.write("- Synthetic responses per run: up to 96 personas across all questions and concepts.")

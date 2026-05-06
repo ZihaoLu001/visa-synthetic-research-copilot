@@ -37,7 +37,7 @@ Survey / concept input
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark + Consistency + Realism Validator
-  -> Consultant Report Export
+  -> VCA Decision Brief / Consultant Delivery Pack
 ```
 
 Explain that the orchestration is model-provider independent. The final real-model proof runs with watsonx.ai via `WatsonxLLM`; `MockLLM` stays available only as a reliability fallback for rehearsal, CI or quota issues.
@@ -72,7 +72,7 @@ Cover:
 - typed schemas and provider-independent `BaseLLM`
 - orchestrator loop across personas, concepts and questions
 - validation layer
-- CSV and Markdown export
+- Consultant Delivery Pack, CSV and Markdown export
 - FastAPI integration endpoint for Code Engine / watsonx Orchestrate
 - OpenAPI and ADK assets under `orchestrate/`
 
@@ -81,7 +81,7 @@ Call out extension points:
 - watsonx Orchestrate ADK for deployable agents
 - LangGraph for durable graph orchestration
 - more granular FSO calibration
-- PowerPoint/PDF report export for final consultant deliverables; current repo already includes Markdown/CSV/JSON exports and a PDF operation manual
+- Native PowerPoint export as an optional next step; current repo already includes Markdown/CSV/JSON exports, a Consultant Delivery Pack and a PDF operation manual
 - Visa internal validation once data is available
 
 ## 14:00-16:00 KPIs and Value
@@ -120,5 +120,5 @@ The strength of the PoC is not pretending to be perfect. The strength is showing
 2. Ask IBM to enable normal GitHub source-build / Container Registry permissions so the current runtime-clone Code Engine deployment can be replaced with a cleaner source-build deployment.
 3. Import the deployed API OpenAPI tool into watsonx Orchestrate if the team wants a live IBM-platform proof during Q&A.
 4. Calibrate persona weights with more FSO and payment benchmark slices.
-5. Add export to PowerPoint/PDF.
+5. Add native PowerPoint export if Visa wants a slide-ready artifact generated directly from each run.
 6. Compare synthetic results to Visa internal studies when available.

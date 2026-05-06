@@ -12,7 +12,7 @@ Evidence:
 - The app runs a weighted Swiss micro-population and returns persona-level responses.
 - Decision Brief, Consultant Summary, Segment Explorer, Persona Responses, Validation, Scorecard and Architecture tabs are all live.
 - The sidebar exposes the real IBM watsonx.ai / Granite provider and a quota-safe quick proof scope.
-- CSV, Markdown report and full JSON downloads make the result testable from the partner side.
+- CSV, Markdown report, full JSON and Consultant Delivery Pack downloads make the result testable from the partner side.
 - Sidebar demo scenarios support live fee/protection sensitivity reruns.
 
 ## Architecture - 3 Points
@@ -25,6 +25,7 @@ Evidence:
 - `synthetic_researcher/llm.py` isolates model provider choice behind `BaseLLM`.
 - `synthetic_researcher/validation.py` separates benchmark, consistency, coverage and realism validation.
 - `synthetic_researcher/reporting.py` exports consultant-readable Markdown.
+- `synthetic_researcher/delivery.py` exports a partner-review ZIP and readiness gate.
 
 ## KPIs - 2 Points
 
@@ -62,7 +63,7 @@ Roadmap:
 - extend the current watsonx.ai provider proof into watsonx Orchestrate ADK or Agent Builder when dependency deployment is stable
 - add more granular FSO / Swiss Payment Monitor calibration
 - add LLM-as-judge or human review on top of the transparent realism rubric
-- export final reports to PowerPoint/PDF; the current repository already includes a PDF operation manual with screenshots
+- export final reports to native PowerPoint if needed; the current repository already includes a consultant delivery pack and a PDF operation manual with screenshots
 - validate against Visa internal survey/customer insight data when available
 
 ## Presentation Quality - 3 Points

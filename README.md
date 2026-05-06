@@ -12,7 +12,7 @@ The app accepts flexible survey, interview, or card value proposition test quest
 - benchmark alignment, internal consistency, and coverage checks
 - judge-style realism rubric and overall validation confidence
 - file ingestion audit for pasted text, TXT, MD, PDF, DOCX, CSV, and XLSX survey inputs
-- downloadable CSV responses, Markdown consultant report, and full run JSON
+- downloadable consultant delivery pack with decision brief, report, persona CSV, validation JSON, full run JSON, source audit and governance notes
 - external survey stress-test set inspired by public concept-testing and payment-survey examples
 
 This is an early-stage hypothesis and survey-design tool. It does **not** claim to replace real customer research or Visa's final validation.
@@ -46,6 +46,7 @@ The main algorithms are transparent and replaceable:
 - Aggregation computes weighted adoption index, acceptable-fee signals, feature/barrier labels, segment fit and persona quotes.
 - Validation computes benchmark alignment MAE, repeated-run Likert variance, persona coverage, question construct coverage and judge-style realism flags.
 - Consulting synthesis builds a VCA Decision Brief: lead concept, evidence quality, decision posture, hypothesis readout, next tests and governance caveats.
+- Delivery packaging exports a partner-review ZIP so Visa can inspect the recommendation, persona rows, validation evidence and source audit outside the app.
 
 The `mock` provider is not presented as a real customer model. It is a reliability fallback. The final partner proof should run the same workflow with watsonx credentials and then calibrate persona weights/prompts against Visa internal research.
 
@@ -88,7 +89,7 @@ The course labs highlight Code Engine as a lightweight stakeholder demo path. A 
 https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 ```
 
-The verified deployment runs the Streamlit cockpit and successfully completed a 96-persona synthetic survey run in the browser. It can run in `MODEL_PROVIDER=mock` for reliability or `MODEL_PROVIDER=watsonx` when the Code Engine app is configured with the same watsonx.ai secrets used locally. The preferred long-term deployment path remains GitHub source build with the included `Dockerfile`, port `8080`, and `APP_MODE=streamlit`; the current IBM account still needs Container Registry/source-build permissions enabled for Group 28. See `docs/code_engine_deployment.md`.
+The verified deployment runs the Streamlit cockpit and successfully completed a 96-persona synthetic survey run in the browser. It is now configured with `MODEL_PROVIDER=watsonx` and a Code Engine secret for the final real-model proof; `MODEL_PROVIDER=mock` remains available only as a rehearsal/quota fallback. The preferred long-term deployment path remains GitHub source build with the included `Dockerfile`, port `8080`, and `APP_MODE=streamlit`; the current IBM account still needs Container Registry/source-build permissions enabled for Group 28. See `docs/code_engine_deployment.md`.
 
 The API integration endpoint for watsonx Orchestrate/OpenAPI tool import is also deployed:
 
@@ -96,7 +97,7 @@ The API integration endpoint for watsonx Orchestrate/OpenAPI tool import is also
 https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 ```
 
-Slack and lab review confirmed that the safest final platform story is **Code Engine as the primary stakeholder demo** plus **OpenAPI/FastAPI as the Orchestrate integration proof**. Several teams reported watsonx.ai quota, Container Registry, and Orchestrate custom Python dependency issues in Slack, so the deterministic mock provider and the deployed HTTP API remain intentional risk controls. IBM restored the Group 28 watsonx.ai text-generation quota on 2026-05-06; the live Granite smoke test and a small end-to-end run now succeed. See `docs/slack_platform_findings.md`.
+Slack and lab review confirmed that the safest final platform story is **Code Engine as the primary stakeholder demo** plus **OpenAPI/FastAPI as the Orchestrate integration proof**. Several teams reported watsonx.ai quota, Container Registry, and Orchestrate custom Python dependency issues in Slack, so the deterministic mock provider and the deployed HTTP API remain intentional risk controls. IBM restored the Group 28 watsonx.ai text-generation quota on 2026-05-06; the live Granite smoke test, a small end-to-end run, and the Code Engine API health/run proof now succeed with watsonx configured. See `docs/slack_platform_findings.md`.
 
 ## Real IBM watsonx.ai Setup
 
@@ -136,7 +137,7 @@ Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and q
 8. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
 9. Open segment and persona-level tables for traceability.
 10. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
-11. Download CSV, Markdown Decision Brief, full Markdown report, or JSON outputs for partner review.
+11. Download the Consultant Delivery Pack ZIP, CSV, Markdown Decision Brief, full Markdown report, or JSON outputs for partner review.
 12. Change a fee or feature live, rerun, and compare the directional movement.
 
 The Slack-ready PDF operation manual is in `demo/manuals/visa_synthetic_research_copilot_operation_manual.pdf`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment, the real IBM watsonx.ai / Granite model path, screenshots from a live quick run, and reviewer instructions. The real-run video is retained in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`.
@@ -172,6 +173,7 @@ synthetic_researcher/
   analytics.py                 Aggregation and scoring
   ingestion.py                 TXT/MD/PDF/DOCX/CSV/XLSX survey extraction
   consulting.py                VCA-style research brief and decision brief synthesis
+  delivery.py                  Consultant delivery pack and pilot readiness gate
   llm.py                       Mock + IBM watsonx providers
   orchestrator.py              End-to-end multi-agent run
   reporting.py                 Markdown consultant report
@@ -204,6 +206,7 @@ docs/
   research_notes.md            Framework and synthetic survey research notes
   slack_platform_findings.md   Slack-derived IBM platform and deployment decisions
   sources.md                   Public data sources
+  visa_requirement_audit_2026_05_06.md Current requirement and real-model readiness audit
 ```
 
 ## Full-Mark Scorecard Targets
@@ -214,7 +217,7 @@ docs/
 - Architecture: UI, parser, persona store, orchestrator, respondent agents, validator, analytics/export.
 - KPIs: time to insight, response count, JSON parse success, consistency, benchmark MAE, realism score.
 - Business value: early-stage concept screening and better real survey design, not final market research replacement.
-- Next steps: watsonx Orchestrate ADK, calibration, human/LLM judge, PPT/PDF export, Visa internal validation.
+- Next steps: watsonx Orchestrate ADK, calibration, human/LLM judge, PPT export, Visa internal validation.
 
 ## Public Data Anchors
 

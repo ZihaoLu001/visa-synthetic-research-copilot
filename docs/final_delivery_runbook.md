@@ -17,7 +17,7 @@ This is the practical checklist for Team 1 / Group 28.
 | --- | --- | --- |
 | Streamlit cockpit | Primary demo | Best for the 5-point working demo rubric: paste/upload survey, run agents, inspect insights, validation, and exports. |
 | Mock provider | Required fallback | Protects the live demo from quota, network, or platform issues. |
-| watsonx.ai provider | IBM model proof | Shows IBM ecosystem use when credentials and quota are available. |
+| watsonx.ai provider | IBM model proof | Shows IBM ecosystem use; locally and in Code Engine it is configured with `ibm/granite-4-h-small` after quota restoration. |
 | Code Engine URL | Verified deployment proof | Matches the Code Engine lab and lets stakeholders open the app without local setup. |
 | FastAPI `/run` | Integration proof | Lets Orchestrate or another IBM workflow trigger a synthetic research run. |
 | watsonx Orchestrate ADK | Extension proof | Useful for architecture and Q&A, but should not replace the reliable Streamlit demo unless deployment is confirmed. |
@@ -28,7 +28,7 @@ Verified cloud demo URL:
 https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 ```
 
-Verified on 2026-05-04 with HTTP 200 and a browser-run 96-persona synthetic survey producing 768 persona-question responses.
+Verified on 2026-05-04 with HTTP 200 and a browser-run 96-persona synthetic survey producing 768 persona-question responses. Updated on 2026-05-06 with `MODEL_PROVIDER=watsonx` and the `watsonx-runtime-env` Code Engine secret.
 
 Verified API / Orchestrate tool URL:
 
@@ -36,7 +36,7 @@ Verified API / Orchestrate tool URL:
 https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 ```
 
-Verified on 2026-05-04 with `/health` HTTP 200 and `POST /run` HTTP 200 returning synthetic research JSON.
+Verified on 2026-05-04 with `/health` HTTP 200 and `POST /run` HTTP 200 returning synthetic research JSON. Reverified on 2026-05-06 with `/health` reporting `watsonx_configured=true` and a one-question `POST /run` returning persona responses plus validation.
 
 ## Do Before The Next Q&A
 
@@ -81,6 +81,7 @@ Verified on 2026-05-04 with `/health` HTTP 200 and `POST /run` HTTP 200 returnin
    - Show Segment Explorer.
    - Show Persona Responses.
    - Show Validation and Scorecard.
+   - Download the Consultant Delivery Pack.
    - Change fee or protection messaging, rerun, and explain the movement.
 
 ## Code Engine Execution
@@ -127,14 +128,15 @@ Important: do not manually set an environment variable named `PORT`; Code Engine
 CLI path, only if the IBM Cloud CLI is installed:
 
 ```powershell
-ibmcloud login --sso
-.\scripts\deploy_code_engine.ps1 -ProjectName <group-28-visa-project-name> -Mode streamlit
+$env:IBMCLOUD_HOME="D:\Tools\IBMCloud\config"
+D:\Tools\IBMCloud\IBM_Cloud_CLI\ibmcloud.exe login --sso
+.\scripts\deploy_code_engine.ps1 -ProjectName group28 -Mode streamlit
 ```
 
 For Orchestrate/API integration:
 
 ```powershell
-.\scripts\deploy_code_engine.ps1 -ProjectName <group-28-visa-project-name> -Mode api
+.\scripts\deploy_code_engine.ps1 -ProjectName group28 -Mode api
 ```
 
 The OpenAPI contract in `orchestrate/openapi/visa_synthetic_research_api.yaml` already points at the deployed API Code Engine URL. Import that file into watsonx Orchestrate or Agent Builder if the team wants a live HTTP-tool proof.
@@ -142,7 +144,7 @@ The OpenAPI contract in `orchestrate/openapi/visa_synthetic_research_api.yaml` a
 ## Risk Controls
 
 - Keep local Streamlit ready even though Code Engine is already deployed, in case the public app cold-starts slowly or the course account hits quota.
-- Keep `MODEL_PROVIDER=mock` ready if watsonx.ai quota is exhausted, but present `watsonx` as the primary final-model path.
+- Keep `MODEL_PROVIDER=mock` ready if watsonx.ai quota is exhausted, but present `watsonx` as the primary final-model path. The current Code Engine apps are configured with `watsonx-runtime-env`; do not delete that secret before finals.
 - Keep the deployed FastAPI/OpenAPI route as the Orchestrate proof. Slack reports show custom Python tools with dependencies can fail during Orchestrate deployment, so this should not be the only demo path unless IBM confirms the issue is resolved.
 - Use HTTP services for Code Engine. Do not introduce a raw TCP database dependency for the final demo.
 - Do not commit `.env`, API keys, Slack codes, meeting passwords, or private Visa data.
