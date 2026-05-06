@@ -115,6 +115,10 @@ def main() -> None:
                 screenshot(page, "09_validation.png")
                 click_tab(page, "Scorecard")
                 screenshot(page, "10_scorecard.png")
+                click_tab(page, "Decision Brief")
+                page.get_by_role("button", name="Download Consultant Delivery").scroll_into_view_if_needed()
+                page.wait_for_timeout(700)
+                screenshot(page, "11_delivery_pack.png")
 
             browser.close()
     except PlaywrightTimeoutError as exc:

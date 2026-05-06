@@ -292,7 +292,7 @@
                   <li>Swiss public-data-grounded persona simulation.</li>
                   <li>Consultant-ready aggregation plus individual response traceability.</li>
                   <li>Benchmark, consistency, coverage and realism validation.</li>
-                  <li>Real-model proof path using IBM watsonx.ai / Granite 4 H Small.</li>
+                  <li>Real-model proof path using IBM watsonx.ai / Granite 4 H Small, configured locally and in Code Engine.</li>
                 </ul>
               </div>
               <div class="cover-card">
@@ -300,7 +300,7 @@
                 <p><strong>Application:</strong><br>https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud</p>
                 <p><strong>Repository:</strong><br>https://github.com/ZihaoLu001/visa-synthetic-research-copilot</p>
                 <p><strong>Sample PDF:</strong><br>Federal Reserve mobile-payments survey excerpt adapted for Visa demo use.</p>
-                <p><strong>Live model:</strong><br>IBM watsonx.ai in eu-de, default model ibm/granite-4-h-small.</p>
+                <p><strong>Live model:</strong><br>IBM watsonx.ai in eu-de, default model ibm/granite-4-h-small. Code Engine health reports watsonx_configured=true.</p>
                 <p class="cover-note">Public-data prototype. No Visa internal or client-sensitive data is used.</p>
               </div>
             </div>
@@ -383,6 +383,12 @@
             <div class="callout">
               <div class="callout-title">Core algorithm</div>
               <div>Extract survey text, parse structured questions, sample Swiss micro-personas, run one respondent agent per persona, aggregate weighted results, validate, and synthesize a VCA decision brief.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Consultant deliverable</div>
+              <div>Each run exports a delivery pack with a decision brief, consultant report, persona CSV, validation JSON, full run JSON, source audit and governance notes.</div>
             </div>
 
 
@@ -769,6 +775,18 @@
               <div class="callout-stack">
 
             <div class="callout">
+              <div class="callout-title">Pilot readiness gate</div>
+              <div>The top of the Scorecard tab shows which checks are ready for partner review and which need attention.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Real model status</div>
+              <div>For final proof, Evidence mode should show Real IBM watsonx.ai and ibm/granite-4-h-small.</div>
+            </div>
+
+
+            <div class="callout">
               <div class="callout-title">Demo</div>
               <div>Running app, PDF upload, parser, agents, results and validation are all live.</div>
             </div>
@@ -793,6 +811,51 @@
 
               </div>
               <div><img class="shot" src="assets/10_scorecard.png" alt="Scorecard tab mapped to grading criteria" /></div>
+            </div>
+
+      <div class="footer">
+        <span>Visa Synthetic Research Copilot - Group 28</span>
+        <span>Public-data demo guide</span>
+      </div>
+    </section>
+
+    <section class="page ">
+      <div class="page-top">
+        <div>
+          <div class="eyebrow">Portable partner artifact</div>
+          <h1>Export A Consultant Delivery Pack</h1>
+        </div>
+        <div class="brand">VISA</div>
+      </div>
+
+            <div class="grid-2">
+              <div class="callout-stack">
+
+            <div class="callout">
+              <div class="callout-title">Why this matters</div>
+              <div>VCA reviewers should not need to trust only the live screen. They can download a complete artifact and inspect the evidence offline.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Included files</div>
+              <div>The ZIP contains the decision brief, consultant report, persona-level CSV, validation JSON, full run JSON, input-source audit, methodology/governance notes and pilot-readiness gate.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Review workflow</div>
+              <div>Send the ZIP together with the app URL so IBM/Visa can check recommendation logic, persona traceability and validation evidence.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">No secrets</div>
+              <div>The delivery pack contains run evidence, not watsonx API keys or local credentials.</div>
+            </div>
+
+              </div>
+              <div><img class="shot" src="assets/11_delivery_pack.png" alt="Decision Brief tab showing Consultant Delivery Pack download" /></div>
             </div>
 
       <div class="footer">

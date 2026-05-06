@@ -343,7 +343,7 @@ def manual_html() -> str:
                   <li>Swiss public-data-grounded persona simulation.</li>
                   <li>Consultant-ready aggregation plus individual response traceability.</li>
                   <li>Benchmark, consistency, coverage and realism validation.</li>
-                  <li>Real-model proof path using IBM watsonx.ai / Granite 4 H Small.</li>
+                  <li>Real-model proof path using IBM watsonx.ai / Granite 4 H Small, configured locally and in Code Engine.</li>
                 </ul>
               </div>
               <div class="cover-card">
@@ -351,7 +351,7 @@ def manual_html() -> str:
                 <p><strong>Application:</strong><br>{APP_URL}</p>
                 <p><strong>Repository:</strong><br>{REPO_URL}</p>
                 <p><strong>Sample PDF:</strong><br>Federal Reserve mobile-payments survey excerpt adapted for Visa demo use.</p>
-                <p><strong>Live model:</strong><br>IBM watsonx.ai in eu-de, default model ibm/granite-4-h-small.</p>
+                <p><strong>Live model:</strong><br>IBM watsonx.ai in eu-de, default model ibm/granite-4-h-small. Code Engine health reports watsonx_configured=true.</p>
                 <p class="cover-note">Public-data prototype. No Visa internal or client-sensitive data is used.</p>
               </div>
             </div>
@@ -409,6 +409,7 @@ def manual_html() -> str:
                     ("Real LLM path", "IBM watsonx.ai is the primary provider. The app calls Granite through the ibm-watsonx-ai ModelInference abstraction, defaulting to ibm/granite-4-h-small in eu-de."),
                     ("Fallback path", "MockLLM is deterministic and exists only for CI, rehearsal and classroom quota contingency. It is not presented as real customer intelligence."),
                     ("Core algorithm", "Extract survey text, parse structured questions, sample Swiss micro-personas, run one respondent agent per persona, aggregate weighted results, validate, and synthesize a VCA decision brief."),
+                    ("Consultant deliverable", "Each run exports a delivery pack with a decision brief, consultant report, persona CSV, validation JSON, full run JSON, source audit and governance notes."),
                     ("Consulting guardrail", "Synthetic results are directional. They help screen concepts and design better real customer research; they do not replace final Visa validation."),
                 ])}
               </div>
@@ -586,6 +587,8 @@ def manual_html() -> str:
             <div class="grid-2">
               <div class="callout-stack">
                 {callouts([
+                    ("Pilot readiness gate", "The top of the Scorecard tab shows which checks are ready for partner review and which need attention."),
+                    ("Real model status", "For final proof, Evidence mode should show Real IBM watsonx.ai and ibm/granite-4-h-small."),
                     ("Demo", "Running app, PDF upload, parser, agents, results and validation are all live."),
                     ("Architecture", "UI, ingestion, parser, persona store, orchestrator, respondent agents, analytics and validator are visible."),
                     ("KPIs", "Runtime, response count, parse success, consistency and benchmark scores are quantified."),
@@ -593,6 +596,26 @@ def manual_html() -> str:
                 ])}
               </div>
               <div>{image("10_scorecard.png", "Scorecard tab mapped to grading criteria")}</div>
+            </div>
+            """,
+        )
+    )
+
+    pages.append(
+        page(
+            "Export A Consultant Delivery Pack",
+            "Portable partner artifact",
+            f"""
+            <div class="grid-2">
+              <div class="callout-stack">
+                {callouts([
+                    ("Why this matters", "VCA reviewers should not need to trust only the live screen. They can download a complete artifact and inspect the evidence offline."),
+                    ("Included files", "The ZIP contains the decision brief, consultant report, persona-level CSV, validation JSON, full run JSON, input-source audit, methodology/governance notes and pilot-readiness gate."),
+                    ("Review workflow", "Send the ZIP together with the app URL so IBM/Visa can check recommendation logic, persona traceability and validation evidence."),
+                    ("No secrets", "The delivery pack contains run evidence, not watsonx API keys or local credentials."),
+                ])}
+              </div>
+              <div>{image("11_delivery_pack.png", "Decision Brief tab showing Consultant Delivery Pack download")}</div>
             </div>
             """,
         )
