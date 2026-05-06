@@ -37,7 +37,7 @@ Survey / concept input
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark + Consistency + Realism Validator
-  -> VCA Decision Brief / Consultant Delivery Pack
+  -> VCA Decision Brief / PDF Report / Consultant Delivery Pack
 ```
 
 Explain that the orchestration is model-provider independent. The final real-model proof runs with watsonx.ai via `WatsonxLLM`; `MockLLM` stays available only as a reliability fallback for rehearsal, CI or quota issues.
@@ -61,7 +61,8 @@ IBM platform positioning:
 7. Open Segment Explorer for persona differences.
 8. Open Persona Responses for traceability.
 9. Open Validation for benchmark alignment, consistency, coverage and realism rubric.
-10. If quota/time allows, switch to Full survey and 96 respondents; otherwise explain this as the full-scale mode already supported by the same workflow.
+10. Download the PDF Report to show the consultant-grade artifact Visa can inspect after the live demo.
+11. If quota/time allows, switch to Full survey and 96 respondents; otherwise explain this as the full-scale mode already supported by the same workflow.
 
 ## 11:00-14:00 Architecture
 
@@ -72,7 +73,7 @@ Cover:
 - typed schemas and provider-independent `BaseLLM`
 - orchestrator loop across personas, concepts and questions
 - validation layer
-- Consultant Delivery Pack, CSV and Markdown export
+- PDF Report, Consultant Delivery Pack, CSV and Markdown export
 - FastAPI integration endpoint for Code Engine / watsonx Orchestrate
 - OpenAPI and ADK assets under `orchestrate/`
 
@@ -81,7 +82,7 @@ Call out extension points:
 - watsonx Orchestrate ADK for deployable agents
 - LangGraph for durable graph orchestration
 - more granular FSO calibration
-- Native PowerPoint export as an optional next step; current repo already includes Markdown/CSV/JSON exports, a Consultant Delivery Pack and a PDF operation manual
+- Native PowerPoint export as an optional next step; current repo already includes PDF/Markdown/CSV/JSON exports, a Consultant Delivery Pack and a PDF operation manual
 - Visa internal validation once data is available
 
 ## 14:00-16:00 KPIs and Value
@@ -120,5 +121,5 @@ The strength of the PoC is not pretending to be perfect. The strength is showing
 2. Ask IBM to enable normal GitHub source-build / Container Registry permissions so the current runtime-clone Code Engine deployment can be replaced with a cleaner source-build deployment.
 3. Import the deployed API OpenAPI tool into watsonx Orchestrate if the team wants a live IBM-platform proof during Q&A.
 4. Calibrate persona weights with more FSO and payment benchmark slices.
-5. Add native PowerPoint export if Visa wants a slide-ready artifact generated directly from each run.
+5. Add native PowerPoint export if Visa wants a slide-ready artifact generated directly from each run; the PDF report already covers the immediate consultant artifact need.
 6. Compare synthetic results to Visa internal studies when available.

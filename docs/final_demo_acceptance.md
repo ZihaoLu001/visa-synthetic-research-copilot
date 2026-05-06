@@ -28,8 +28,9 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | External survey API stress tests | 3 public-example-inspired surveys returned synthetic responses, validation evidence, and 100.0 JSON parse success |
 | Real watsonx.ai smoke test | `ibm/granite-4-h-small` returned a live response after IBM restored Group 28 quota |
 | Real watsonx.ai mini-run | End-to-end parser/persona/validation flow completed with provider `watsonx` |
-| Local regression tests | `19 passed` |
+| Local regression tests | `20 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
+| Slack-ready PDF report example | Public PDF survey input generated a watsonx/Granite consultant PDF report with 72 persona-question responses and validation score 85.0 |
 
 ## One-Command Smoke Test
 
@@ -74,8 +75,19 @@ Demo sequence:
 9. Show `Segment Explorer` for Swiss archetype differences.
 10. Show `Persona Responses` for individual traceability.
 11. Show `Validation` and `Scorecard` for benchmark, consistency, coverage, realism, pilot readiness, and grading evidence.
-12. Download the Consultant Delivery Pack ZIP to show the partner-review artifact.
+12. Download the PDF Report and Consultant Delivery Pack ZIP to show the partner-review artifact.
 13. Switch the scenario to `Live sensitivity: lower Premium fee to CHF 60`, rerun, and explain directional movement.
+
+## Partner Feedback Attachments
+
+If asking Visa whether the output format meets their expectation, attach both files:
+
+```text
+demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf
+demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf
+```
+
+The first file is the uploaded survey artifact. The second file is the generated consultant report from the same flow with real `watsonx / ibm/granite-4-h-small`, including executive answer, decision matrix, segment fit, persona evidence, validation and governance caveats.
 
 ## What To Say
 

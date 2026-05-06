@@ -7,6 +7,7 @@ from synthetic_researcher.agents import SurveyParserAgent
 from synthetic_researcher.delivery import build_consultant_delivery_pack, build_pilot_readiness_gate
 from synthetic_researcher.llm import BaseLLM, MockLLM, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
+from synthetic_researcher.pdf_report import build_consultant_pdf_report
 from synthetic_researcher.reporting import build_markdown_report
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -215,7 +216,33 @@ def test_consultant_delivery_pack_contains_partner_artifacts():
             "06_input_source_audit.json",
             "07_methodology_and_governance.md",
             "08_pilot_readiness_gate.json",
+            "09_consultant_report.pdf",
         }.issubset(names)
         csv_text = bundle.read("03_persona_responses.csv").decode("utf-8")
         assert "persona_id" in csv_text
         assert "secret-value" not in bundle.read("05_full_run.json").decode("utf-8")
+        assert bundle.read("09_consultant_report.pdf").startswith(b"%PDF")
+
+
+def test_consultant_pdf_report_is_valid_pdf():
+    orch = SyntheticResearchOrchestrator(
+        llm=MockLLM(),
+        persona_path=ROOT / "data" / "swiss_archetypes.yaml",
+        benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
+    )
+    run = orch.run(
+        survey_path=ROOT / "data" / "sample_survey_card.yaml",
+        concepts_path=ROOT / "data" / "sample_concepts.yaml",
+        micro_population_n=12,
+        consistency_runs=1,
+    )
+    brief = default_research_brief()
+    run.aggregate["provider"] = "mock"
+    run.aggregate["model_id"] = "MockLLM"
+    run.aggregate["research_brief"] = brief
+    run.aggregate["decision_brief"] = build_decision_brief(run, brief, provider="mock")
+
+    pdf = build_consultant_pdf_report(run)
+
+    assert pdf.startswith(b"%PDF")
+    assert len(pdf) > 10_000

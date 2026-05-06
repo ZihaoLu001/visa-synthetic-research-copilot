@@ -21,6 +21,7 @@ from synthetic_researcher.delivery import (
 from synthetic_researcher.ingestion import SurveyExtractionError, extract_survey_text, supported_upload_types
 from synthetic_researcher.llm import LLMError, get_llm, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator, load_concepts
+from synthetic_researcher.pdf_report import build_consultant_pdf_report
 from synthetic_researcher.reporting import build_markdown_report
 from synthetic_researcher.schemas import Concept, SurveyRun
 from synthetic_researcher.survey_scope import limit_survey_questions
@@ -889,8 +890,9 @@ def render_decision_brief(run: SurveyRun) -> None:
             st.write(f"- {item}")
 
     decision_report = format_decision_brief_markdown(run)
+    pdf_report = build_consultant_pdf_report(run)
     pack = build_consultant_delivery_pack(run)
-    d1, d2 = st.columns([0.42, 0.58])
+    d1, d2, d3 = st.columns([0.32, 0.34, 0.34])
     with d1:
         st.download_button(
             "Download Decision Brief",
@@ -899,6 +901,14 @@ def render_decision_brief(run: SurveyRun) -> None:
             mime="text/markdown",
         )
     with d2:
+        st.download_button(
+            "Download PDF Report",
+            data=pdf_report,
+            file_name=f"vca_synthetic_research_report_{run.run_id}.pdf",
+            mime="application/pdf",
+            help="Polished consultant-style PDF report generated from this run's synthetic responses, aggregation and validation evidence.",
+        )
+    with d3:
         st.download_button(
             "Download Consultant Delivery Pack",
             data=pack,
@@ -1213,7 +1223,7 @@ UI (Streamlit consultant cockpit)
     st.write("- Real-model path: IBM watsonx.ai through `ibm-watsonx-ai` `ModelInference`, default `ibm/granite-4-h-small` in `eu-de`.")
     st.write("- Fallback path: deterministic `MockLLM` for CI, rehearsal and classroom quota contingency only.")
     st.write("- Algorithms: PDF/DOCX/XLSX/CSV/TXT extraction, survey parsing, weighted Swiss micro-persona sampling, persona-conditioned agent responses, weighted analytics, benchmark/consistency/coverage/realism validation and VCA decision synthesis.")
-    st.write("- Delivery pack: ZIP export with decision brief, consultant report, persona CSV, validation JSON, full run JSON, input audit and governance notes.")
+    st.write("- PDF report and delivery pack: polished PDF report plus ZIP export with decision brief, consultant report, persona CSV, validation JSON, full run JSON, input audit and governance notes.")
     st.markdown("#### KPIs")
     st.write("- Time to first synthetic insight: target under 2 minutes for quick real-model proof or full mock rehearsal.")
     st.write("- Synthetic responses per run: up to 96 personas across all questions and concepts.")

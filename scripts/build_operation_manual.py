@@ -409,7 +409,7 @@ def manual_html() -> str:
                     ("Real LLM path", "IBM watsonx.ai is the primary provider. The app calls Granite through the ibm-watsonx-ai ModelInference abstraction, defaulting to ibm/granite-4-h-small in eu-de."),
                     ("Fallback path", "MockLLM is deterministic and exists only for CI, rehearsal and classroom quota contingency. It is not presented as real customer intelligence."),
                     ("Core algorithm", "Extract survey text, parse structured questions, sample Swiss micro-personas, run one respondent agent per persona, aggregate weighted results, validate, and synthesize a VCA decision brief."),
-                    ("Consultant deliverable", "Each run exports a delivery pack with a decision brief, consultant report, persona CSV, validation JSON, full run JSON, source audit and governance notes."),
+                    ("Consultant deliverable", "Each run exports a polished PDF report and a delivery pack with a decision brief, consultant report, persona CSV, validation JSON, full run JSON, source audit and governance notes."),
                     ("Consulting guardrail", "Synthetic results are directional. They help screen concepts and design better real customer research; they do not replace final Visa validation."),
                 ])}
               </div>
@@ -603,19 +603,20 @@ def manual_html() -> str:
 
     pages.append(
         page(
-            "Export A Consultant Delivery Pack",
+            "Export PDF Report And Delivery Pack",
             "Portable partner artifact",
             f"""
             <div class="grid-2">
               <div class="callout-stack">
                 {callouts([
-                    ("Why this matters", "VCA reviewers should not need to trust only the live screen. They can download a complete artifact and inspect the evidence offline."),
-                    ("Included files", "The ZIP contains the decision brief, consultant report, persona-level CSV, validation JSON, full run JSON, input-source audit, methodology/governance notes and pilot-readiness gate."),
-                    ("Review workflow", "Send the ZIP together with the app URL so IBM/Visa can check recommendation logic, persona traceability and validation evidence."),
+                    ("Why this matters", "VCA reviewers should not need to trust only the live screen. They can download a consultant-style PDF report and inspect the evidence offline."),
+                    ("PDF report", "The report includes executive answer, decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations."),
+                    ("Included files", "The ZIP contains the PDF report, decision brief, consultant report, persona-level CSV, validation JSON, full run JSON, input-source audit, methodology/governance notes and pilot-readiness gate."),
+                    ("Review workflow", "Send the input PDF survey plus output PDF report together with the app URL so IBM/Visa can check recommendation logic, persona traceability and validation evidence."),
                     ("No secrets", "The delivery pack contains run evidence, not watsonx API keys or local credentials."),
                 ])}
               </div>
-              <div>{image("11_delivery_pack.png", "Decision Brief tab showing Consultant Delivery Pack download")}</div>
+              <div>{image("11_delivery_pack.png", "Decision Brief tab showing PDF Report and Consultant Delivery Pack downloads")}</div>
             </div>
             """,
         )
@@ -630,7 +631,8 @@ def manual_html() -> str:
               <div class="box blue">
                 <h2>Message draft</h2>
                 <p>Hi Visa / IBM team,</p>
-                <p>We prepared a short operation manual for the current prototype. It shows a real PDF survey upload, dynamic parsing, IBM watsonx/Granite model path, Swiss synthetic persona responses, aggregated consultant insights, and validation checks.</p>
+                <p>We prepared a short operation manual and a sample input/output pair for the current prototype. It shows a real PDF survey upload, dynamic parsing, IBM watsonx/Granite model path, Swiss synthetic persona responses, aggregated consultant insights, validation checks, and a generated consultant PDF report.</p>
+                <p>Attached are the input PDF survey and the generated output PDF report from the same flow.</p>
                 <p>Could you please let us know whether this matches your expected direction for the final Visa use case?</p>
                 <ol class="question-list">
                   <li>Is the flexible PDF survey/interview upload flow aligned with your expectation?</li>

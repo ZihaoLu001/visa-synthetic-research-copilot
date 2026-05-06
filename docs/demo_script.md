@@ -43,7 +43,9 @@ Cover these tabs:
 - Persona Responses: individual responses with rationale and confidence.
 - Validation: benchmark alignment, consistency, coverage, construct coverage and realism rubric.
 - Scorecard: direct mapping to the final grading criteria and KPI evidence.
-- Downloads: Consultant Delivery Pack, CSV persona responses, Markdown consultant report and full run JSON for partner-side testing.
+- Downloads: polished PDF Report, Consultant Delivery Pack, CSV persona responses, Markdown consultant report and full run JSON for partner-side testing.
+
+For Slack partner feedback before the final presentation, attach `demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf` and `demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf`. The second file is a real watsonx/Granite-generated report from the uploaded PDF flow, so it demonstrates the product output without asking the partner to run the app immediately.
 
 ## 6. Live Sensitivity Test
 

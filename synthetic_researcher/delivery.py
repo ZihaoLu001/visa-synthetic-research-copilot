@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from .consulting import format_decision_brief_markdown
+from .pdf_report import build_consultant_pdf_report
 from .reporting import build_markdown_report
 from .schemas import SurveyRun
 
@@ -25,6 +26,7 @@ def build_consultant_delivery_pack(run: SurveyRun) -> bytes:
         bundle.writestr("06_input_source_audit.json", _safe_json(run.aggregate.get("input_source", {})))
         bundle.writestr("07_methodology_and_governance.md", _methodology_and_governance(run))
         bundle.writestr("08_pilot_readiness_gate.json", _safe_json(build_pilot_readiness_gate(run)))
+        bundle.writestr("09_consultant_report.pdf", build_consultant_pdf_report(run))
     return buffer.getvalue()
 
 
@@ -85,9 +87,9 @@ def build_pilot_readiness_gate(run: SurveyRun) -> list[dict[str, str]]:
             "Add or update public benchmark anchors before using claims about Swiss market behavior.",
         ),
         _gate_row(
-            "Consultant export pack",
+            "Consultant export pack and PDF report",
             True,
-            "ZIP pack includes decision brief, report, CSV responses, full JSON, validation and governance notes.",
+            "ZIP pack includes decision brief, PDF report, Markdown report, CSV responses, full JSON, validation and governance notes.",
             "No action needed.",
         ),
         _gate_row(
@@ -178,6 +180,7 @@ def _delivery_readme(run: SurveyRun) -> str:
             "- `06_input_source_audit.json`: survey upload/extraction audit.",
             "- `07_methodology_and_governance.md`: model, algorithm, limitation and human-review notes.",
             "- `08_pilot_readiness_gate.json`: readiness checklist for partner review.",
+            "- `09_consultant_report.pdf`: polished PDF report for partner sharing.",
             "",
             "## Guardrail",
             "",

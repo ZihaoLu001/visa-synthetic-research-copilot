@@ -12,7 +12,8 @@ The app accepts flexible survey, interview, or card value proposition test quest
 - benchmark alignment, internal consistency, and coverage checks
 - judge-style realism rubric and overall validation confidence
 - file ingestion audit for pasted text, TXT, MD, PDF, DOCX, CSV, and XLSX survey inputs
-- downloadable consultant delivery pack with decision brief, report, persona CSV, validation JSON, full run JSON, source audit and governance notes
+- downloadable VCA-style PDF report generated from the exact run evidence
+- downloadable consultant delivery pack with decision brief, PDF report, Markdown report, persona CSV, validation JSON, full run JSON, source audit and governance notes
 - external survey stress-test set inspired by public concept-testing and payment-survey examples
 
 This is an early-stage hypothesis and survey-design tool. It does **not** claim to replace real customer research or Visa's final validation.
@@ -46,7 +47,8 @@ The main algorithms are transparent and replaceable:
 - Aggregation computes weighted adoption index, acceptable-fee signals, feature/barrier labels, segment fit and persona quotes.
 - Validation computes benchmark alignment MAE, repeated-run Likert variance, persona coverage, question construct coverage and judge-style realism flags.
 - Consulting synthesis builds a VCA Decision Brief: lead concept, evidence quality, decision posture, hypothesis readout, next tests and governance caveats.
-- Delivery packaging exports a partner-review ZIP so Visa can inspect the recommendation, persona rows, validation evidence and source audit outside the app.
+- PDF reporting renders a consultant-style report with executive answer, decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations.
+- Delivery packaging exports a partner-review ZIP so Visa can inspect the recommendation, PDF report, persona rows, validation evidence and source audit outside the app.
 
 The `mock` provider is not presented as a real customer model. It is a reliability fallback. The final partner proof should run the same workflow with watsonx credentials and then calibrate persona weights/prompts against Visa internal research.
 
@@ -137,10 +139,19 @@ Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and q
 8. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
 9. Open segment and persona-level tables for traceability.
 10. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
-11. Download the Consultant Delivery Pack ZIP, CSV, Markdown Decision Brief, full Markdown report, or JSON outputs for partner review.
+11. Download the polished PDF Report, Consultant Delivery Pack ZIP, CSV, Markdown Decision Brief, full Markdown report, or JSON outputs for partner review.
 12. Change a fee or feature live, rerun, and compare the directional movement.
 
 The Slack-ready PDF operation manual is in `demo/manuals/visa_synthetic_research_copilot_operation_manual.pdf`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment, the real IBM watsonx.ai / Granite model path, screenshots from a live quick run, and reviewer instructions. The real-run video is retained in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`.
+
+Slack-ready example attachments are also included:
+
+```text
+demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf
+demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf
+```
+
+The output report was generated from the input PDF flow with `MODEL_PROVIDER=watsonx`, `ibm/granite-4-h-small`, 12 Swiss synthetic respondents, payment/card-relevant survey questions, 72 persona-question responses, and validation score 85.0/100.
 
 Suggested live stress test:
 
@@ -162,6 +173,7 @@ demo/
   api_smoke_payload.json       Cloud API smoke-test payload
   public_survey_uploads/       Public survey excerpt in TXT and PDF upload formats
   manuals/                     PDF operation manual, HTML source, screenshots and Slack draft
+  partner_examples/            Slack-ready input PDF survey and output watsonx PDF report
   videos/                      Slack-ready real-run demo video and post draft
 data/
   swiss_archetypes.yaml        Swiss synthetic persona archetypes
@@ -176,6 +188,7 @@ synthetic_researcher/
   delivery.py                  Consultant delivery pack and pilot readiness gate
   llm.py                       Mock + IBM watsonx providers
   orchestrator.py              End-to-end multi-agent run
+  pdf_report.py                VCA-style PDF report renderer
   reporting.py                 Markdown consultant report
   sampler.py                   Weighted micro-population expansion
   schemas.py                   Typed dataclasses

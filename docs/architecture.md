@@ -16,7 +16,7 @@ Consultant UI
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark / Consistency / Coverage / Realism Validator
-  -> VCA Decision Brief / Consultant Delivery Pack
+  -> VCA Decision Brief / PDF Report / Consultant Delivery Pack
 ```
 
 ## Components
@@ -46,7 +46,10 @@ Consultant UI
 : Sits above the analyst summary. It answers the business question first, then links the recommendation to adoption, price, segment fit, validation score and the user's stated hypotheses. This is the layer that makes the prototype read like a consulting workbench instead of a generic synthetic respondent table.
 
 `delivery.py`
-: Packages the run into a partner-review ZIP containing the decision brief, consultant report, persona-level CSV, validation JSON, full run JSON, input audit, methodology/governance notes, and a pilot readiness gate. This gives Visa a portable artifact they can inspect outside Streamlit.
+: Packages the run into a partner-review ZIP containing the decision brief, PDF report, consultant report, persona-level CSV, validation JSON, full run JSON, input audit, methodology/governance notes, and a pilot readiness gate. This gives Visa a portable artifact they can inspect outside Streamlit.
+
+`pdf_report.py`
+: Renders a VCA-style PDF report from the exact run data: executive answer, KPI strip, research brief, concept decision matrix, signal/barrier tables, segment fit, persona-level evidence, validation confidence, methodology and limitations. This turns the demo into a concrete consultant artifact rather than only an on-screen dashboard.
 
 `validation.py`
 : Runs benchmark alignment, internal consistency, persona coverage, survey construct coverage, judge-style realism checks and an overall validation confidence score.
@@ -95,5 +98,5 @@ The app also records an input-source audit in every run: source type, uploaded f
 - Add authenticated project storage, run history, reviewer approval and audit logs for a true enterprise pilot.
 - Add LangGraph or watsonx Orchestrate ADK for durable multi-agent orchestration.
 - Add calibrated weights from more granular FSO tables.
-- Add PowerPoint export if the final team wants a native deck artifact; the current app already exports a portable consultant delivery pack and a PDF operation manual.
+- Add PowerPoint export if the final team wants a native deck artifact; the current app already exports a PDF report, portable consultant delivery pack and a PDF operation manual.
 - Add human review loop for Visa benchmark calibration.
