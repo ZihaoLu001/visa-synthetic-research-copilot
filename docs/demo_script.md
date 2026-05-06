@@ -30,13 +30,14 @@ Use the default concepts:
 
 ## 4. Run Synthetic Respondents
 
-Run 48 or 96 respondents in watsonx mode for the final real-model proof. Point out that the respondents are expanded from high-quality Swiss archetypes rather than hardcoded one-off answers. Keep mock mode ready only as a fallback if classroom quota is exhausted.
+For the real-model proof, use `watsonx`, `12` respondents, `1` consistency run, and `Quick real-model proof (first 2 questions)`. This demonstrates the live IBM Granite path without wasting classroom quota. For the full presentation run, switch to `Full survey` and `96` respondents if quota/time allows. Point out that the respondents are expanded from high-quality Swiss archetypes rather than hardcoded one-off answers. Keep mock mode ready only as a fallback if classroom quota is exhausted.
 
 ## 5. Show Outputs
 
 Cover these tabs:
 
 - Consultant Summary: adoption index, acceptable fee, top signals, recommendation.
+- Decision Brief: lead concept, decision posture, hypothesis readout, VCA "so what" and next real-research actions.
 - Question Parser: parsed question types, measured constructs and input-source audit.
 - Segment Explorer: which Swiss archetypes fit each concept.
 - Persona Responses: individual responses with rationale and confidence.

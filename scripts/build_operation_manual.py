@@ -326,12 +326,13 @@ def manual_html() -> str:
     pages = []
     pages.append(
         page(
-            "Visa Synthetic Research Copilot",
+            "VCA Synthetic Research Workbench",
             "PDF operation manual",
             f"""
             <div class="subtitle">
-              How a Visa/VCA reviewer can upload a real survey PDF, run Swiss synthetic persona agents,
-              and interpret aggregate insights, persona-level responses and validation checks.
+              How a Visa/VCA reviewer can upload a real survey PDF, run Swiss synthetic persona agents
+              with IBM watsonx.ai / Granite, and interpret aggregate insights, persona-level responses,
+              validation checks and a consultant decision brief.
             </div>
             <div class="cover-grid">
               <div class="cover-card">
@@ -342,6 +343,7 @@ def manual_html() -> str:
                   <li>Swiss public-data-grounded persona simulation.</li>
                   <li>Consultant-ready aggregation plus individual response traceability.</li>
                   <li>Benchmark, consistency, coverage and realism validation.</li>
+                  <li>Real-model proof path using IBM watsonx.ai / Granite 4 H Small.</li>
                 </ul>
               </div>
               <div class="cover-card">
@@ -349,6 +351,7 @@ def manual_html() -> str:
                 <p><strong>Application:</strong><br>{APP_URL}</p>
                 <p><strong>Repository:</strong><br>{REPO_URL}</p>
                 <p><strong>Sample PDF:</strong><br>Federal Reserve mobile-payments survey excerpt adapted for Visa demo use.</p>
+                <p><strong>Live model:</strong><br>IBM watsonx.ai in eu-de, default model ibm/granite-4-h-small.</p>
                 <p class="cover-note">Public-data prototype. No Visa internal or client-sensitive data is used.</p>
               </div>
             </div>
@@ -367,10 +370,10 @@ def manual_html() -> str:
                 <h2>Who should use this?</h2>
                 <p>Visa Consulting & Analytics reviewers, IBM mentors, or student evaluators who want to test the prototype with a survey/interview artifact instead of a hardcoded prompt.</p>
                 <div class="metric-row">
-                  <div class="metric"><div class="num">96</div><div class="label">Synthetic respondents</div></div>
-                  <div class="metric"><div class="num">11</div><div class="label">Questions parsed from PDF sample</div></div>
-                  <div class="metric"><div class="num">2,112</div><div class="label">Persona-question responses</div></div>
-                  <div class="metric"><div class="num">96.8</div><div class="label">Validation confidence in demo run</div></div>
+                  <div class="metric"><div class="num">12</div><div class="label">Default live Granite proof respondents</div></div>
+                  <div class="metric"><div class="num">96</div><div class="label">Full presentation panel available</div></div>
+                  <div class="metric"><div class="num">PDF</div><div class="label">Recommended partner upload format</div></div>
+                  <div class="metric"><div class="num">4</div><div class="label">Validation layers in the cockpit</div></div>
                 </div>
                 <div class="box green">
                   <h3>Positioning</h3>
@@ -387,9 +390,29 @@ def manual_html() -> str:
                 </div>
                 <div class="box blue" style="margin-top:5mm;">
                   <h3>Recommended reviewer setting</h3>
-                  <p>Use <strong>Model provider = watsonx</strong> for the final real-model proof once credentials are configured. Keep <strong>mock</strong> only as a fallback for rehearsal or quota issues. Use <strong>respondents = 96</strong> and <strong>consistency runs = 2</strong> for the full partner walkthrough.</p>
+                  <p>Use <strong>Model provider = watsonx</strong> for the final real-model proof. Keep <strong>mock</strong> only as a fallback for rehearsal or quota issues. Use <strong>Quick real-model proof</strong> for a fast live run, then move to <strong>Full survey</strong> and <strong>96 respondents</strong> when quota/time allows.</p>
                 </div>
               </div>
+            </div>
+            """,
+        )
+    )
+
+    pages.append(
+        page(
+            "Model, Algorithm And Delivery Stack",
+            "Not a toy demo",
+            f"""
+            <div class="grid-2">
+              <div class="callout-stack">
+                {callouts([
+                    ("Real LLM path", "IBM watsonx.ai is the primary provider. The app calls Granite through the ibm-watsonx-ai ModelInference abstraction, defaulting to ibm/granite-4-h-small in eu-de."),
+                    ("Fallback path", "MockLLM is deterministic and exists only for CI, rehearsal and classroom quota contingency. It is not presented as real customer intelligence."),
+                    ("Core algorithm", "Extract survey text, parse structured questions, sample Swiss micro-personas, run one respondent agent per persona, aggregate weighted results, validate, and synthesize a VCA decision brief."),
+                    ("Consulting guardrail", "Synthetic results are directional. They help screen concepts and design better real customer research; they do not replace final Visa validation."),
+                ])}
+              </div>
+              <div>{image("01_start.png", "Workbench start screen showing real-model workflow controls")}</div>
             </div>
             """,
         )
@@ -446,8 +469,8 @@ def manual_html() -> str:
                 {callouts([
                     ("Concept testing", "Use the default Premium Travel Card and Everyday Cashback Card, or paste a new proposition."),
                     ("Live sensitivity", "Change the annual fee or protection messaging, rerun, and compare movement in segment fit and adoption index."),
-                    ("Panel scale", "The default 96-persona run expands seven Swiss archetypes into a weighted micro-population."),
-                    ("Run button", "The button launches survey parsing, persona respondent agents, analytics and validation in one workflow."),
+                    ("Panel scale", "The quick watsonx proof starts small to conserve quota. The full 96-persona run expands seven Swiss archetypes into a weighted micro-population."),
+                    ("Run button", "The button launches survey parsing, persona respondent agents, analytics, validation and decision-brief synthesis in one workflow."),
                 ])}
               </div>
               <div>{image("04_run_complete_kpis.png", "Run complete with KPI cards")}</div>
@@ -584,7 +607,7 @@ def manual_html() -> str:
               <div class="box blue">
                 <h2>Message draft</h2>
                 <p>Hi Visa / IBM team,</p>
-                <p>We prepared a short operation manual for the current prototype. It shows a real PDF survey upload, dynamic parsing, Swiss synthetic persona responses, aggregated consultant insights, and validation checks.</p>
+                <p>We prepared a short operation manual for the current prototype. It shows a real PDF survey upload, dynamic parsing, IBM watsonx/Granite model path, Swiss synthetic persona responses, aggregated consultant insights, and validation checks.</p>
                 <p>Could you please let us know whether this matches your expected direction for the final Visa use case?</p>
                 <ol class="question-list">
                   <li>Is the flexible PDF survey/interview upload flow aligned with your expectation?</li>
@@ -628,7 +651,8 @@ def manual_html() -> str:
 
 def build_html() -> None:
     MANUAL_DIR.mkdir(parents=True, exist_ok=True)
-    HTML_PATH.write_text(manual_html(), encoding="utf-8")
+    html_text = "\n".join(line.rstrip() for line in manual_html().splitlines()) + "\n"
+    HTML_PATH.write_text(html_text, encoding="utf-8")
 
 
 def build_pdf() -> None:

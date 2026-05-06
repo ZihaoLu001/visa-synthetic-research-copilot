@@ -10,7 +10,8 @@ Evidence:
 - Survey input is editable and supports uploaded `.txt`, `.md`, `.pdf`, `.docx`, `.csv`, and `.xlsx` guides.
 - The Question Parser tab shows parsed question type, construct and input-source audit.
 - The app runs a weighted Swiss micro-population and returns persona-level responses.
-- Consultant Summary, Segment Explorer, Persona Responses, Validation, Scorecard and Architecture tabs are all live.
+- Decision Brief, Consultant Summary, Segment Explorer, Persona Responses, Validation, Scorecard and Architecture tabs are all live.
+- The sidebar exposes the real IBM watsonx.ai / Granite provider and a quota-safe quick proof scope.
 - CSV, Markdown report and full JSON downloads make the result testable from the partner side.
 - Sidebar demo scenarios support live fee/protection sensitivity reruns.
 
@@ -58,10 +59,10 @@ Evidence:
 
 Roadmap:
 
-- connect selected agents to watsonx.ai and watsonx Orchestrate ADK
+- extend the current watsonx.ai provider proof into watsonx Orchestrate ADK or Agent Builder when dependency deployment is stable
 - add more granular FSO / Swiss Payment Monitor calibration
 - add LLM-as-judge or human review on top of the transparent realism rubric
-- export final reports to PowerPoint/PDF
+- export final reports to PowerPoint/PDF; the current repository already includes a PDF operation manual with screenshots
 - validate against Visa internal survey/customer insight data when available
 
 ## Presentation Quality - 3 Points

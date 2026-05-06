@@ -88,7 +88,7 @@ The course labs highlight Code Engine as a lightweight stakeholder demo path. A 
 https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 ```
 
-The verified deployment runs the Streamlit cockpit in `MODEL_PROVIDER=mock` mode and successfully completed a 96-persona synthetic survey run in the browser. The preferred long-term deployment path remains GitHub source build with the included `Dockerfile`, port `8080`, and `APP_MODE=streamlit`; the current IBM account still needs Container Registry/source-build permissions enabled for Group 28. See `docs/code_engine_deployment.md`.
+The verified deployment runs the Streamlit cockpit and successfully completed a 96-persona synthetic survey run in the browser. It can run in `MODEL_PROVIDER=mock` for reliability or `MODEL_PROVIDER=watsonx` when the Code Engine app is configured with the same watsonx.ai secrets used locally. The preferred long-term deployment path remains GitHub source build with the included `Dockerfile`, port `8080`, and `APP_MODE=streamlit`; the current IBM account still needs Container Registry/source-build permissions enabled for Group 28. See `docs/code_engine_deployment.md`.
 
 The API integration endpoint for watsonx Orchestrate/OpenAPI tool import is also deployed:
 
@@ -96,7 +96,7 @@ The API integration endpoint for watsonx Orchestrate/OpenAPI tool import is also
 https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
 ```
 
-Slack and lab review on 2026-05-05 confirmed that the safest final platform story is **Code Engine as the primary stakeholder demo** plus **OpenAPI/FastAPI as the Orchestrate integration proof**. Several teams reported watsonx.ai quota, Container Registry, and Orchestrate custom Python dependency issues in Slack, so the deterministic mock provider and the deployed HTTP API remain intentional risk controls. See `docs/slack_platform_findings.md`.
+Slack and lab review confirmed that the safest final platform story is **Code Engine as the primary stakeholder demo** plus **OpenAPI/FastAPI as the Orchestrate integration proof**. Several teams reported watsonx.ai quota, Container Registry, and Orchestrate custom Python dependency issues in Slack, so the deterministic mock provider and the deployed HTTP API remain intentional risk controls. IBM restored the Group 28 watsonx.ai text-generation quota on 2026-05-06; the live Granite smoke test and a small end-to-end run now succeed. See `docs/slack_platform_findings.md`.
 
 ## Real IBM watsonx.ai Setup
 
@@ -122,7 +122,7 @@ For a tiny end-to-end LLM-backed run, use:
 python scripts/watsonx_smoke_test.py --mini-run
 ```
 
-Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and quota issues. In the Streamlit app, select **watsonx** for the final real-model proof.
+Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and quota issues. In the Streamlit app, select **watsonx** for the final real-model proof. The app defaults to a quota-safe **Quick real-model proof** scope when watsonx credentials are present; switch to **Full survey** and 96 respondents when quota/time allows.
 
 ## Demo Flow
 
@@ -130,7 +130,7 @@ Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and q
 2. Upload a PDF survey/interview guide, or use TXT, MD, DOCX, CSV, or XLSX when that is what the client has.
 3. Review the extracted survey text and adjust questions if needed.
 4. Set the Swiss target market and tune the two default card concepts and fees.
-5. Run 48 or 96 synthetic respondents.
+5. Run a quick live watsonx proof with 12 respondents and the first 2 uploaded questions, or switch to a full survey run with up to 96 respondents.
 6. Open Decision Brief for lead concept, decision posture, hypothesis readout, caveats and recommended real research.
 7. Review adoption index, acceptable fee, feature and barrier signals.
 8. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
@@ -139,7 +139,7 @@ Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and q
 11. Download CSV, Markdown Decision Brief, full Markdown report, or JSON outputs for partner review.
 12. Change a fee or feature live, rerun, and compare the directional movement.
 
-The Slack-ready PDF operation manual is in `demo/manuals/visa_synthetic_research_copilot_operation_manual.pdf`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment, plus screenshots and reviewer instructions. The real-run video is retained in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`.
+The Slack-ready PDF operation manual is in `demo/manuals/visa_synthetic_research_copilot_operation_manual.pdf`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment, the real IBM watsonx.ai / Granite model path, screenshots from a live quick run, and reviewer instructions. The real-run video is retained in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`.
 
 Suggested live stress test:
 

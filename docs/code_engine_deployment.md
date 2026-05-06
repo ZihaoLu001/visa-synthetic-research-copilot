@@ -12,9 +12,11 @@ Region: eu-de
 Resource group: group28
 Code Engine project: group28
 Public URL: https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud
-Mode: MODEL_PROVIDER=mock, APP_MODE=streamlit
+Mode: APP_MODE=streamlit; can run MODEL_PROVIDER=mock for reliability or MODEL_PROVIDER=watsonx when Code Engine secrets are configured.
 Verification: HTTP 200 and an in-browser 96-respondent run completed successfully.
 ```
+
+The real IBM watsonx.ai / Granite provider was verified locally on 2026-05-06 after IBM restored Group 28's text-generation quota. To make the Code Engine app run the same real-model path, add the watsonx.ai environment variables and store `WATSONX_APIKEY` as a secret as shown below.
 
 The FastAPI integration endpoint is also deployed for watsonx Orchestrate/OpenAPI import:
 

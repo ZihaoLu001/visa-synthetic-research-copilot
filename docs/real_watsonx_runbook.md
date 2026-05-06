@@ -55,7 +55,8 @@ In the sidebar:
 
 1. Select `watsonx`.
 2. Confirm the sidebar says `Real LLM ready: ibm/granite-4-h-small`.
-3. Run a small panel first, then increase respondents for the final demo.
+3. Keep the default `Quick real-model proof (first 2 questions)`, `12` respondents and `1` consistency run for the first live proof.
+4. Increase to `Full survey`, `96` respondents and `2` consistency runs only when quota/time allows.
 
 If the sidebar reports missing credentials, the app is not using the real IBM model yet.
 

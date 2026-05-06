@@ -268,19 +268,20 @@
     </style>
       </head>
       <body>
-        
+
     <section class="page cover">
       <div class="page-top">
         <div>
           <div class="eyebrow">PDF operation manual</div>
-          <h1>Visa Synthetic Research Copilot</h1>
+          <h1>VCA Synthetic Research Workbench</h1>
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="subtitle">
-              How a Visa/VCA reviewer can upload a real survey PDF, run Swiss synthetic persona agents,
-              and interpret aggregate insights, persona-level responses and validation checks.
+              How a Visa/VCA reviewer can upload a real survey PDF, run Swiss synthetic persona agents
+              with IBM watsonx.ai / Granite, and interpret aggregate insights, persona-level responses,
+              validation checks and a consultant decision brief.
             </div>
             <div class="cover-grid">
               <div class="cover-card">
@@ -291,6 +292,7 @@
                   <li>Swiss public-data-grounded persona simulation.</li>
                   <li>Consultant-ready aggregation plus individual response traceability.</li>
                   <li>Benchmark, consistency, coverage and realism validation.</li>
+                  <li>Real-model proof path using IBM watsonx.ai / Granite 4 H Small.</li>
                 </ul>
               </div>
               <div class="cover-card">
@@ -298,16 +300,17 @@
                 <p><strong>Application:</strong><br>https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud</p>
                 <p><strong>Repository:</strong><br>https://github.com/ZihaoLu001/visa-synthetic-research-copilot</p>
                 <p><strong>Sample PDF:</strong><br>Federal Reserve mobile-payments survey excerpt adapted for Visa demo use.</p>
+                <p><strong>Live model:</strong><br>IBM watsonx.ai in eu-de, default model ibm/granite-4-h-small.</p>
                 <p class="cover-note">Public-data prototype. No Visa internal or client-sensitive data is used.</p>
               </div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -316,16 +319,16 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2 even">
               <div>
                 <h2>Who should use this?</h2>
                 <p>Visa Consulting & Analytics reviewers, IBM mentors, or student evaluators who want to test the prototype with a survey/interview artifact instead of a hardcoded prompt.</p>
                 <div class="metric-row">
-                  <div class="metric"><div class="num">96</div><div class="label">Synthetic respondents</div></div>
-                  <div class="metric"><div class="num">11</div><div class="label">Questions parsed from PDF sample</div></div>
-                  <div class="metric"><div class="num">2,112</div><div class="label">Persona-question responses</div></div>
-                  <div class="metric"><div class="num">96.8</div><div class="label">Validation confidence in demo run</div></div>
+                  <div class="metric"><div class="num">12</div><div class="label">Default live Granite proof respondents</div></div>
+                  <div class="metric"><div class="num">96</div><div class="label">Full presentation panel available</div></div>
+                  <div class="metric"><div class="num">PDF</div><div class="label">Recommended partner upload format</div></div>
+                  <div class="metric"><div class="num">4</div><div class="label">Validation layers in the cockpit</div></div>
                 </div>
                 <div class="box green">
                   <h3>Positioning</h3>
@@ -342,17 +345,62 @@
                 </div>
                 <div class="box blue" style="margin-top:5mm;">
                   <h3>Recommended reviewer setting</h3>
-                  <p>Use <strong>Model provider = watsonx</strong> for the final real-model proof once credentials are configured. Keep <strong>mock</strong> only as a fallback for rehearsal or quota issues. Use <strong>respondents = 96</strong> and <strong>consistency runs = 2</strong> for the full partner walkthrough.</p>
+                  <p>Use <strong>Model provider = watsonx</strong> for the final real-model proof. Keep <strong>mock</strong> only as a fallback for rehearsal or quota issues. Use <strong>Quick real-model proof</strong> for a fast live run, then move to <strong>Full survey</strong> and <strong>96 respondents</strong> when quota/time allows.</p>
                 </div>
               </div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
+    <section class="page ">
+      <div class="page-top">
+        <div>
+          <div class="eyebrow">Not a toy demo</div>
+          <h1>Model, Algorithm And Delivery Stack</h1>
+        </div>
+        <div class="brand">VISA</div>
+      </div>
+
+            <div class="grid-2">
+              <div class="callout-stack">
+
+            <div class="callout">
+              <div class="callout-title">Real LLM path</div>
+              <div>IBM watsonx.ai is the primary provider. The app calls Granite through the ibm-watsonx-ai ModelInference abstraction, defaulting to ibm/granite-4-h-small in eu-de.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Fallback path</div>
+              <div>MockLLM is deterministic and exists only for CI, rehearsal and classroom quota contingency. It is not presented as real customer intelligence.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Core algorithm</div>
+              <div>Extract survey text, parse structured questions, sample Swiss micro-personas, run one respondent agent per persona, aggregate weighted results, validate, and synthesize a VCA decision brief.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Consulting guardrail</div>
+              <div>Synthetic results are directional. They help screen concepts and design better real customer research; they do not replace final Visa validation.</div>
+            </div>
+
+              </div>
+              <div><img class="shot" src="assets/01_start.png" alt="Workbench start screen showing real-model workflow controls" /></div>
+            </div>
+
+      <div class="footer">
+        <span>Visa Synthetic Research Copilot - Group 28</span>
+        <span>Public-data demo guide</span>
+      </div>
+    </section>
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -361,44 +409,44 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2">
               <div class="callout-stack">
-                
+
             <div class="callout">
               <div class="callout-title">Preferred format</div>
               <div>Use PDF for partner review because it matches how survey decks and interview guides are usually shared.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Sample file</div>
               <div>The right panel lets reviewers download the included public PDF survey excerpt and upload it immediately.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Extraction proof</div>
               <div>After upload, the app shows file name, file type and extracted character count before any agent run.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Data guardrail</div>
               <div>The sample comes from a public Federal Reserve questionnaire; no Visa internal data is required.</div>
             </div>
-            
+
                 <div class="source">Public source: https://www.federalreserve.gov/econresdata/mobile-devices/2015-appendix-2-survey-of-consumers-use-of-mobile-financial-services-2014-questionnaire.htm</div>
               </div>
               <div><img class="shot" src="assets/02_upload_pdf.png" alt="PDF upload step with extraction confirmation" /></div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -407,43 +455,43 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2">
               <div class="callout-stack">
-                
+
             <div class="callout">
               <div class="callout-title">Editable extracted text</div>
               <div>The textarea is the exact survey text sent to the parser agent. Reviewers can leave it unchanged or edit wording.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Why this matters</div>
               <div>This directly addresses the Visa clarification that the system should answer survey questions without a fixed limitation.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Supported artifacts</div>
               <div>The same ingestion layer accepts PDF, DOCX, XLSX, CSV, TXT and Markdown.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Audit trail</div>
               <div>If the extracted text is edited, the run records that fact in the Question Parser tab.</div>
             </div>
-            
+
               </div>
               <div><img class="shot" src="assets/03_review_questions.png" alt="Review extracted survey questions" /></div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -452,43 +500,43 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2">
               <div class="callout-stack">
-                
+
             <div class="callout">
               <div class="callout-title">Concept testing</div>
               <div>Use the default Premium Travel Card and Everyday Cashback Card, or paste a new proposition.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Live sensitivity</div>
               <div>Change the annual fee or protection messaging, rerun, and compare movement in segment fit and adoption index.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Panel scale</div>
-              <div>The default 96-persona run expands seven Swiss archetypes into a weighted micro-population.</div>
+              <div>The quick watsonx proof starts small to conserve quota. The full 96-persona run expands seven Swiss archetypes into a weighted micro-population.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Run button</div>
-              <div>The button launches survey parsing, persona respondent agents, analytics and validation in one workflow.</div>
+              <div>The button launches survey parsing, persona respondent agents, analytics, validation and decision-brief synthesis in one workflow.</div>
             </div>
-            
+
               </div>
               <div><img class="shot" src="assets/04_run_complete_kpis.png" alt="Run complete with KPI cards" /></div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -497,43 +545,43 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2">
               <div class="callout-stack">
-                
+
             <div class="callout">
               <div class="callout-title">Recommendation</div>
               <div>The first tab summarizes the leading concept and the reason behind the result.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Adoption index</div>
               <div>The bar chart compares concept fit across the synthetic Swiss panel.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Pricing signal</div>
               <div>Acceptable fee ranges help frame a real customer price-sensitivity test.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Feature and barrier signals</div>
               <div>Top labels surface recurring needs, trust drivers and objections.</div>
             </div>
-            
+
               </div>
               <div><img class="shot" src="assets/05_consultant_summary.png" alt="Consultant summary with adoption and pricing output" /></div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -542,43 +590,43 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2">
               <div class="callout-stack">
-                
+
             <div class="callout">
               <div class="callout-title">Input Source Audit</div>
               <div>Shows Source = uploaded_file, File type = pdf, character count and extraction notes.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">No hardcoding</div>
               <div>The parsed table lists question id, type, construct and options generated from the uploaded survey.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Demo expectation</div>
               <div>Open this tab during review to prove the app can accept a new survey artifact.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Quality fix</div>
               <div>The parser handles PDF line wrapping so wrapped questions stay together.</div>
             </div>
-            
+
               </div>
               <div><img class="shot" src="assets/06_question_parser_pdf_audit.png" alt="Question Parser tab showing uploaded PDF audit" /></div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -587,37 +635,37 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2">
               <div class="callout-stack">
-                
+
             <div class="callout">
               <div class="callout-title">Why segments matter</div>
               <div>Visa asked for different personas or demographic groups, not one generic customer.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">What to look for</div>
               <div>Compare how students, family budget parents, travelers, retirees and SME owners respond differently.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Consultant use</div>
               <div>Segment variation helps decide which customer group deserves real follow-up research.</div>
             </div>
-            
+
               </div>
               <div><img class="shot" src="assets/07_segment_explorer.png" alt="Segment Explorer tab" /></div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -626,43 +674,43 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2">
               <div class="callout-stack">
-                
+
             <div class="callout">
               <div class="callout-title">Individual responses</div>
               <div>Every row stores persona id, persona name, concept, question, answer, rationale and confidence.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Filter workflow</div>
               <div>Filter by concept, archetype or question to inspect why a segment is driving the aggregate result.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Reviewer value</div>
               <div>This satisfies the Visa request for both aggregated insights and persona-level survey responses.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Export</div>
               <div>Download the filtered response table as CSV for analysis or appendix material.</div>
             </div>
-            
+
               </div>
               <div><img class="shot" src="assets/08_persona_responses.png" alt="Persona Responses table" /></div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -671,43 +719,43 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2">
               <div class="callout-stack">
-                
+
             <div class="callout">
               <div class="callout-title">Benchmark alignment</div>
               <div>Compares synthetic payment behavior mix against public Swiss payment survey anchors.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Internal consistency</div>
               <div>Checks repeated persona runs for response variance.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Coverage</div>
               <div>Confirms the panel covers the Swiss archetypes and the survey covers key constructs.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Interpretation</div>
               <div>This is directional evidence, not a claim that synthetic respondents replace real Visa validation.</div>
             </div>
-            
+
               </div>
               <div><img class="shot" src="assets/09_validation.png" alt="Validation tab with benchmark and consistency checks" /></div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -716,43 +764,43 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2">
               <div class="callout-stack">
-                
+
             <div class="callout">
               <div class="callout-title">Demo</div>
               <div>Running app, PDF upload, parser, agents, results and validation are all live.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Architecture</div>
               <div>UI, ingestion, parser, persona store, orchestrator, respondent agents, analytics and validator are visible.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">KPIs</div>
               <div>Runtime, response count, parse success, consistency and benchmark scores are quantified.</div>
             </div>
-            
+
 
             <div class="callout">
               <div class="callout-title">Business value</div>
               <div>Position the system as early-stage concept screening and better real-survey design.</div>
             </div>
-            
+
               </div>
               <div><img class="shot" src="assets/10_scorecard.png" alt="Scorecard tab mapped to grading criteria" /></div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
     <section class="page ">
       <div class="page-top">
         <div>
@@ -761,12 +809,12 @@
         </div>
         <div class="brand">VISA</div>
       </div>
-      
+
             <div class="grid-2 even">
               <div class="box blue">
                 <h2>Message draft</h2>
                 <p>Hi Visa / IBM team,</p>
-                <p>We prepared a short operation manual for the current prototype. It shows a real PDF survey upload, dynamic parsing, Swiss synthetic persona responses, aggregated consultant insights, and validation checks.</p>
+                <p>We prepared a short operation manual for the current prototype. It shows a real PDF survey upload, dynamic parsing, IBM watsonx/Granite model path, Swiss synthetic persona responses, aggregated consultant insights, and validation checks.</p>
                 <p>Could you please let us know whether this matches your expected direction for the final Visa use case?</p>
                 <ol class="question-list">
                   <li>Is the flexible PDF survey/interview upload flow aligned with your expectation?</li>
@@ -790,13 +838,13 @@
                 </div>
               </div>
             </div>
-            
+
       <div class="footer">
         <span>Visa Synthetic Research Copilot - Group 28</span>
         <span>Public-data demo guide</span>
       </div>
     </section>
-    
+
       </body>
     </html>
-    
+

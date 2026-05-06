@@ -40,26 +40,28 @@ Survey / concept input
   -> Consultant Report Export
 ```
 
-Explain that the orchestration is model-provider independent. The demo can run with `MockLLM` for reliability, or with watsonx.ai via `WatsonxLLM` when credentials are available.
+Explain that the orchestration is model-provider independent. The final real-model proof runs with watsonx.ai via `WatsonxLLM`; `MockLLM` stays available only as a reliability fallback for rehearsal, CI or quota issues.
 
 IBM platform positioning:
 
 - Primary final demo: Streamlit consultant cockpit, because the rubric rewards a working solution.
 - IBM deployment proof: Code Engine is already running the Streamlit cockpit for Group 28.
 - Integration proof: a second Code Engine app exposes FastAPI `/health` and `/run`; the OpenAPI contract points to that deployed API and can be imported as a watsonx Orchestrate tool.
+- IBM model proof: Group 28's watsonx.ai / Granite path was verified after quota restoration on 2026-05-06.
 - Orchestrate narrative: Orchestrate is the production coordinator for intake, tool calls, analyst review, and follow-up workflows, while the current repo remains the reliable demo runtime.
 
 ## 5:00-11:00 Live Demo
 
-1. Paste the default four-question card survey.
-2. Show Concept A and Concept B.
-3. Run 96 synthetic respondents.
-4. Open the Question Parser tab to prove the survey is parsed dynamically.
-5. Open Consultant Summary for adoption index, acceptable fee and signals.
-6. Open Segment Explorer for persona differences.
-7. Open Persona Responses for traceability.
-8. Open Validation for benchmark alignment, consistency, coverage and realism rubric.
-9. Use the sidebar sensitivity scenario to lower Concept A fee or add protection messaging, then rerun.
+1. Confirm the sidebar shows `watsonx` and `Real LLM ready: ibm/granite-4-h-small`.
+2. Upload the public sample PDF survey or paste the default card survey.
+3. Run the quick real-model proof with 12 respondents and the first 2 questions.
+4. Open Decision Brief for lead concept, decision posture, hypothesis readout and next real research.
+5. Open the Question Parser tab to prove the survey is parsed dynamically from the uploaded file.
+6. Open Consultant Summary for adoption index, acceptable fee and signals.
+7. Open Segment Explorer for persona differences.
+8. Open Persona Responses for traceability.
+9. Open Validation for benchmark alignment, consistency, coverage and realism rubric.
+10. If quota/time allows, switch to Full survey and 96 respondents; otherwise explain this as the full-scale mode already supported by the same workflow.
 
 ## 11:00-14:00 Architecture
 
@@ -79,7 +81,7 @@ Call out extension points:
 - watsonx Orchestrate ADK for deployable agents
 - LangGraph for durable graph orchestration
 - more granular FSO calibration
-- PPT/PDF export for consultant deliverables
+- PowerPoint/PDF report export for final consultant deliverables; current repo already includes Markdown/CSV/JSON exports and a PDF operation manual
 - Visa internal validation once data is available
 
 ## 14:00-16:00 KPIs and Value

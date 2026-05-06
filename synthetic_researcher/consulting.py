@@ -64,6 +64,19 @@ def build_decision_brief(run: SurveyRun, research_brief: dict[str, str], provide
     executive_answer = _executive_answer(lead_concept, lead_summary, adoption_gap, validation_band)
     so_what = _so_what(lead_id, aggregate)
     hypotheses = _hypothesis_readout(research_brief.get("hypotheses", ""), aggregate, validation)
+    limitations = [
+        "Synthetic output is directional and should not be used as final market-size or revenue evidence.",
+        "Public Swiss benchmarks ground population/payment behavior, but Visa internal calibration is still required.",
+        "A human consultant should review the extracted survey text, parsed question types and any unusual persona answers before sharing insights externally.",
+    ]
+    if provider == "watsonx":
+        limitations.append(
+            "This run uses IBM watsonx.ai / Granite, but model output still requires benchmark checks and human review."
+        )
+    else:
+        limitations.append(
+            "This run uses the deterministic MockLLM fallback; switch to MODEL_PROVIDER=watsonx for a real IBM Granite proof."
+        )
 
     return {
         "executive_answer": executive_answer,
@@ -78,12 +91,7 @@ def build_decision_brief(run: SurveyRun, research_brief: dict[str, str], provide
         "hypothesis_readout": hypotheses,
         "recommended_real_research": _recommended_real_research(lead_id, aggregate),
         "methodology": methodology_snapshot(provider),
-        "limitations": [
-            "Synthetic output is directional and should not be used as final market-size or revenue evidence.",
-            "Public Swiss benchmarks ground population/payment behavior, but Visa internal calibration is still required.",
-            "The offline mock provider is deterministic for demo reliability; watsonx mode should be used for a stronger pilot run when credentials/quota are available.",
-            "A human consultant should review the extracted survey text, parsed question types and any unusual persona answers before sharing insights externally.",
-        ],
+        "limitations": limitations,
     }
 
 

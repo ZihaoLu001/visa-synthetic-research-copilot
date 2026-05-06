@@ -1,13 +1,15 @@
 Hi Visa / IBM team,
 
-We prepared a short PDF operation manual for our current Visa Synthetic Research Copilot prototype.
+We prepared a short PDF operation manual for our current VCA Synthetic Research Workbench prototype.
 
 The manual shows the full reviewer workflow:
 
 - upload a public Federal Reserve mobile-payments survey excerpt as a PDF attachment,
 - review the extracted survey text,
+- confirm the real IBM watsonx.ai / Granite model path,
 - configure the Swiss target market and card propositions,
 - run the synthetic respondent agents,
+- review the VCA-style decision brief,
 - inspect aggregated consultant insights,
 - inspect persona-level responses,
 - verify the Question Parser PDF audit and validation scorecard.

@@ -15,7 +15,7 @@ API health:
 https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud/health
 ```
 
-## Verified On 2026-05-05
+## Verified On 2026-05-06
 
 | Check | Result |
 | --- | --- |
@@ -25,7 +25,9 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | API response volume | 24 respondents, 2 concepts, 5 questions, 2 consistency runs = 240 persona-question responses |
 | Validation evidence | Overall validation score returned by API |
 | External survey API stress tests | 3 public-example-inspired surveys returned synthetic responses, validation evidence, and 100.0 JSON parse success |
-| Local regression tests | `11 passed` |
+| Real watsonx.ai smoke test | `ibm/granite-4-h-small` returned a live response after IBM restored Group 28 quota |
+| Real watsonx.ai mini-run | End-to-end parser/persona/validation flow completed with provider `watsonx` |
+| Local regression tests | `18 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
 
 ## One-Command Smoke Test
@@ -62,10 +64,10 @@ Demo sequence:
 
 1. Open the Streamlit URL.
 2. For the final real-model proof, set model provider to `watsonx` and confirm the sidebar shows `Real LLM ready`. Keep `mock` available only as a fallback for rehearsal or quota issues.
-3. Keep respondents at `96` for the main full-scale demo.
-4. Use `Core Visa card survey`, or switch `Question preset` to one of the external stress tests.
-5. Paste/upload a different survey if Visa wants to test from their side.
-6. Run the synthetic survey.
+3. For a real-model proof, keep the default quick setting: `12` respondents, `1` consistency run, and `Quick real-model proof (first 2 questions)`. This conserves watsonx classroom quota while proving the live model path.
+4. For the full-scale presentation run, switch to `Full survey`, move respondents to `96`, and use mock only if quota/time becomes a risk.
+5. Use `Core Visa card survey`, upload the public sample PDF, or paste/upload a different survey if Visa wants to test from their side.
+6. Run the synthetic survey and confirm the KPI cards show parsed questions, runtime, validation and response count.
 7. Show `Consultant Summary`.
 8. Show `Question Parser` to prove flexible survey input.
 9. Show `Segment Explorer` for Swiss archetype differences.
@@ -87,7 +89,7 @@ The final platform story is:
 
 - Code Engine hosts the stakeholder-facing Streamlit app.
 - Code Engine also hosts the FastAPI endpoint for OpenAPI import into watsonx Orchestrate or Agent Builder.
-- watsonx.ai is supported as a model provider when credentials and quota are available.
+- watsonx.ai is the real-model provider for the final proof when credentials and quota are available.
 - Mock mode is retained as a live-demo fallback because Slack reports show token-quota and Orchestrate custom Python dependency issues across several groups.
 
 This is the strongest low-risk route for the final: impressive live demo first, IBM-platform integration proof second, and clear governance/limitations throughout.

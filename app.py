@@ -18,6 +18,7 @@ from synthetic_researcher.llm import LLMError, get_llm, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator, load_concepts
 from synthetic_researcher.reporting import build_markdown_report
 from synthetic_researcher.schemas import Concept, SurveyRun
+from synthetic_researcher.survey_scope import limit_survey_questions
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
@@ -233,6 +234,42 @@ st.markdown(
       font-size: 15px;
       line-height: 1.5;
     }
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .proof-card {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.94);
+      border-radius: 8px;
+      padding: 14px 15px;
+      min-height: 112px;
+    }
+    .proof-card strong {
+      display: block;
+      color: var(--visa-blue);
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    .proof-card span {
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.4;
+    }
+    .proof-card.green {
+      border-color: #bfe3cf;
+      background: #f4fbf7;
+    }
+    .proof-card.amber {
+      border-color: #f1d38a;
+      background: #fffaf0;
+    }
+    @media (max-width: 900px) {
+      .proof-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .visa-head { flex-direction: column; }
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -247,11 +284,11 @@ def main() -> None:
         <div class="visa-shell">
           <div class="visa-head">
             <div>
-              <h1 class="visa-title">Synthetic Research Copilot</h1>
+              <h1 class="visa-title">VCA Synthetic Research Workbench</h1>
               <div class="visa-subtitle">
-                Multi-agent Swiss persona simulation for early-stage card value proposition research.
-                Paste a survey, tune concepts, run synthetic respondents, then review persona-level
-                answers, aggregate insights and validation checks.
+                A consultant-grade copilot for early-stage value proposition screening. Upload a survey or
+                interview guide, define the client decision, run Swiss synthetic persona agents, and export
+                persona-level evidence, aggregate insights, validation checks and a decision brief.
               </div>
             </div>
             <div class="visa-logo">VISA</div>
@@ -278,8 +315,35 @@ def main() -> None:
             st.error("watsonx selected but credentials are missing: " + ", ".join(wx_status["missing"]))
         else:
             st.warning("Mock fallback selected. Use watsonx for the final real-model proof.")
-        micro_n = st.slider("Synthetic respondents", min_value=12, max_value=96, value=96, step=12)
-        consistency_runs = st.slider("Repeated consistency runs", min_value=1, max_value=3, value=2, step=1)
+        micro_n = st.slider(
+            "Synthetic respondents",
+            min_value=12,
+            max_value=96,
+            value=12 if wx_status["configured"] else 96,
+            step=12,
+            help="Use 12 for a quick live Granite proof; move to 96 for the full presentation run.",
+        )
+        consistency_runs = st.slider(
+            "Repeated consistency runs",
+            min_value=1,
+            max_value=3,
+            value=1 if wx_status["configured"] else 2,
+            step=1,
+            help="Use 1 for a fast live-model proof; use 2-3 when presenting internal-consistency evidence.",
+        )
+        run_scope = st.selectbox(
+            "Run scope",
+            [
+                "Quick real-model proof (first 2 questions)",
+                "Focused consultant test (first 4 questions)",
+                "Full survey",
+            ],
+            index=0 if wx_status["configured"] else 2,
+            help=(
+                "Use a smaller scoped run when proving the live watsonx model to conserve classroom quota. "
+                "Full survey remains available for the complete synthetic-research run."
+            ),
+        )
         scenario = st.selectbox(
             "Demo scenario",
             [
@@ -293,6 +357,7 @@ def main() -> None:
         st.write("Directional early-stage research only. Final validation remains with Visa and real customer data.")
 
     defaults = apply_demo_scenario(defaults, scenario)
+    render_model_and_delivery_proof(wx_status, provider, run_scope)
     research_brief = render_research_brief()
 
     default_survey = """1. How likely would you be to adopt this card if it were offered by your bank?
@@ -406,7 +471,6 @@ def main() -> None:
                 help="You can keep the extracted PDF text as-is or edit it before running the synthetic respondents.",
             )
             input_metadata = {**input_metadata, "char_count": len(raw_survey)}
-            survey_to_run = raw_survey
             if extracted_text is not None:
                 input_metadata["edited_after_extraction"] = raw_survey.strip() != extracted_text.strip()
                 if input_metadata["edited_after_extraction"]:
@@ -414,6 +478,7 @@ def main() -> None:
             elif raw_survey.strip() != default_survey.strip():
                 input_metadata["source"] = "edited_preset_or_direct_text"
                 input_metadata["edited_after_extraction"] = True
+            survey_to_run = scoped_survey_for_run(raw_survey, input_metadata, run_scope)
             st.markdown("#### Target Market")
             target_context = st.text_input(
                 "Target market",
@@ -502,6 +567,63 @@ def render_research_brief() -> dict[str, str]:
         "decision_rule": decision_rule,
         "stakeholder_output": stakeholder_output,
     }
+
+
+def render_model_and_delivery_proof(wx_status: dict[str, object], provider: str, run_scope: str) -> None:
+    if provider == "watsonx" and wx_status.get("configured"):
+        model_class = "green"
+        model_text = f"Real IBM watsonx.ai / Granite ready: {wx_status.get('model_id')}"
+    elif provider == "watsonx":
+        model_class = "amber"
+        model_text = "watsonx selected but credentials are incomplete; add the missing values before final proof."
+    else:
+        model_class = "amber"
+        model_text = "Deterministic mock fallback selected for rehearsal, CI or quota contingency."
+    st.markdown(
+        f"""
+        <div class="proof-grid">
+          <div class="proof-card {model_class}">
+            <strong>1. Model Proof</strong>
+            <span>{model_text}</span>
+          </div>
+          <div class="proof-card">
+            <strong>2. Research Workflow</strong>
+            <span>Decision brief -> survey upload -> persona agents -> validation -> consultant output.</span>
+          </div>
+          <div class="proof-card">
+            <strong>3. Run Scope</strong>
+            <span>{run_scope}. This lets reviewers upload a full survey while controlling live-model quota.</span>
+          </div>
+          <div class="proof-card">
+            <strong>4. Governance</strong>
+            <span>Public Swiss benchmarks only; synthetic output is directional and still requires real validation.</span>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def scoped_survey_for_run(raw_survey: str, metadata: dict[str, object], run_scope: str) -> str:
+    scope_limits = {
+        "Quick real-model proof (first 2 questions)": 2,
+        "Focused consultant test (first 4 questions)": 4,
+        "Full survey": None,
+    }
+    limit = scope_limits.get(run_scope)
+    scoped = limit_survey_questions(raw_survey, limit)
+    metadata["run_scope"] = run_scope
+    metadata["question_limit"] = limit or "all"
+    metadata["original_char_count"] = len(raw_survey)
+    metadata["char_count"] = len(scoped)
+    if scoped != raw_survey:
+        notes = list(metadata.get("extraction_notes", []))
+        notes.append(
+            f"Run scope applied: first {limit} numbered questions were sent to the parser to conserve live-model quota."
+        )
+        metadata["extraction_notes"] = notes
+        metadata["source"] = f"{metadata.get('source', 'survey')}_scoped"
+    return scoped
 
 
 def apply_demo_scenario(defaults: list[Concept], scenario: str) -> list[Concept]:
@@ -612,6 +734,7 @@ def run_synthetic_survey(
                 input_source=input_metadata,
             )
             run.aggregate["provider"] = provider
+            run.aggregate["model_id"] = watsonx_config_status()["model_id"] if provider == "watsonx" else "MockLLM"
             run.aggregate["research_brief"] = research_brief
             run.aggregate["decision_brief"] = build_decision_brief(run, research_brief, provider=provider)
             st.session_state["last_run"] = run
@@ -702,7 +825,7 @@ def render_decision_brief(run: SurveyRun) -> None:
     c1.metric("Lead concept", decision.get("lead_concept_name") or decision.get("lead_concept_id") or "-")
     c2.metric("Adoption gap", f"{decision.get('adoption_gap_vs_next', '-')}", "vs next concept")
     c3.metric("Validation", decision.get("validation_score", "-"), decision.get("validation_band", ""))
-    c4.metric("Evidence mode", str(aggregate.get("provider", "mock")), "provider abstraction")
+    c4.metric("Evidence mode", str(aggregate.get("provider", "mock")), str(aggregate.get("model_id", "provider abstraction")))
 
     with st.expander("Research brief used for this run", expanded=True):
         r1, r2 = st.columns(2, gap="large")
@@ -843,11 +966,14 @@ def render_summary(run: SurveyRun) -> None:
 def render_question_parser(run: SurveyRun) -> None:
     input_source = run.aggregate.get("input_source", {})
     with st.expander("Input Source Audit", expanded=True):
-        s1, s2, s3, s4 = st.columns(4)
+        s1, s2, s3, s4, s5 = st.columns(5)
         s1.metric("Source", input_source.get("source", "unknown"))
         s2.metric("File type", input_source.get("file_type", "text"))
-        s3.metric("Characters", input_source.get("char_count", 0))
+        s3.metric("Run characters", input_source.get("char_count", 0))
         s4.metric("Edited after extraction", str(input_source.get("edited_after_extraction", False)))
+        s5.metric("Run scope", input_source.get("question_limit", "all"))
+        if input_source.get("original_char_count") and input_source.get("original_char_count") != input_source.get("char_count"):
+            st.caption(f"Original extracted characters: {input_source.get('original_char_count')}")
         notes = input_source.get("extraction_notes", [])
         if notes:
             st.write("Extraction notes: " + " ".join(str(note) for note in notes))
@@ -1056,8 +1182,12 @@ UI (Streamlit consultant cockpit)
         "Personas are grounded in public Swiss demographic and payment behavior anchors from FSO/BFS, "
         "Swiss Payment Monitor, and the SNB Payment Methods Survey. No Visa internal or client-sensitive data is used."
     )
+    st.markdown("#### Model and Algorithm Stack")
+    st.write("- Real-model path: IBM watsonx.ai through `ibm-watsonx-ai` `ModelInference`, default `ibm/granite-4-h-small` in `eu-de`.")
+    st.write("- Fallback path: deterministic `MockLLM` for CI, rehearsal and classroom quota contingency only.")
+    st.write("- Algorithms: PDF/DOCX/XLSX/CSV/TXT extraction, survey parsing, weighted Swiss micro-persona sampling, persona-conditioned agent responses, weighted analytics, benchmark/consistency/coverage/realism validation and VCA decision synthesis.")
     st.markdown("#### KPIs")
-    st.write("- Time to first synthetic insight: target under 2 minutes in mock mode.")
+    st.write("- Time to first synthetic insight: target under 2 minutes for quick real-model proof or full mock rehearsal.")
     st.write("- Synthetic responses per run: up to 96 personas across all questions and concepts.")
     st.write("- JSON parse success rate: target above 95 percent with watsonx structured prompts.")
     st.write("- Internal consistency: repeated-run Likert standard deviation target below 0.5.")
