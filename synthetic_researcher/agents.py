@@ -14,18 +14,28 @@ class SurveyParserAgent:
 
     def parse(self, raw_survey: str) -> list[SurveyQuestion]:
         rows = self.llm.generate_json(survey_parser_prompt(raw_survey))
+        if isinstance(rows, dict):
+            rows = rows.get("questions") or rows.get("items") or []
         questions: list[SurveyQuestion] = []
         for i, row in enumerate(rows, start=1):
-            qtype = row.get("type", "open")
-            if qtype not in {"likert", "choice", "open", "price"}:
-                qtype = "open"
+            if not isinstance(row, dict):
+                continue
+            qtype = _normalise_question_type(row.get("type", "open"), row.get("text", ""))
+            qid = str(row.get("id") or f"Q{i}")
+            if qid.isdigit():
+                qid = f"Q{qid}"
+            text = str(row.get("text") or "").strip()
+            if not text:
+                continue
             questions.append(SurveyQuestion(
-                id=row.get("id") or f"Q{i}",
-                text=row.get("text") or "",
+                id=qid,
+                text=text,
                 type=qtype,
                 options=row.get("options") or [],
                 measures=row.get("measures") or "general feedback",
             ))
+        if not questions and raw_survey.strip():
+            questions.append(SurveyQuestion(id="Q1", text=raw_survey.strip(), type="open", measures="general feedback"))
         return questions
 
 
@@ -110,3 +120,21 @@ def _to_float_or_none(value: Any) -> float | None:
         return float(value)
     except (TypeError, ValueError):
         return None
+
+
+def _normalise_question_type(raw_type: Any, text: Any = "") -> str:
+    qtype = str(raw_type or "open").strip().lower().replace("-", "_")
+    question_text = str(text or "").lower()
+    if qtype in {"likert", "scale", "rating", "ordinal"}:
+        return "likert"
+    if qtype in {"price", "numeric", "number", "currency", "willingness_to_pay"}:
+        return "price"
+    if qtype in {"choice", "multiple_choice", "single_choice", "select", "categorical"}:
+        return "choice"
+    if qtype in {"open", "open_text", "free_text", "text"}:
+        return "open"
+    if any(token in question_text for token in ["fee", "chf", "price", "willingness to pay", "pay per year"]):
+        return "price"
+    if any(token in question_text for token in ["likely", "trust", "relevant", "satisfied", "appealing", "rate"]):
+        return "likert"
+    return "open"

@@ -27,30 +27,33 @@ class BaseLLM(ABC):
         raise NotImplementedError
 
     def generate_json(self, prompt: str) -> Any:
-        text = self.generate_text(prompt)
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            match = re.search(r"(\{.*\}|\[.*\])", text, flags=re.S)
-            if not match:
-                raise LLMError(f"Model did not return JSON: {text[:500]}")
-            return json.loads(match.group(1))
+        last_text = ""
+        for attempt in range(2):
+            active_prompt = prompt if attempt == 0 else _json_repair_prompt(prompt, last_text)
+            text = self.generate_text(active_prompt)
+            last_text = text
+            try:
+                return _loads_json_from_text(text)
+            except json.JSONDecodeError:
+                continue
+        raise LLMError(f"Model did not return JSON: {last_text[:500]}")
 
 
 class MockLLM(BaseLLM):
     """Deterministic offline provider for rehearsal and fallback demos."""
 
     def generate_text(self, prompt: str) -> str:
-        if "Parse the raw survey" in prompt:
-            return json.dumps(self._parse_survey(prompt), ensure_ascii=False)
         if "synthetic survey respondent" in prompt:
             return json.dumps(self._persona_answer(prompt), ensure_ascii=False)
         if "Visa Consulting & Analytics insight analyst" in prompt:
             return json.dumps(self._analyst_summary(), ensure_ascii=False)
+        if "Parse the raw survey" in prompt or "<raw_survey>" in prompt or "JSON extraction engine" in prompt:
+            return json.dumps(self._parse_survey(prompt), ensure_ascii=False)
         return json.dumps({"message": "MockLLM fallback"})
 
     def _parse_survey(self, prompt: str) -> list[dict[str, Any]]:
-        raw = prompt.split("RAW_SURVEY:", 1)[-1]
+        raw_matches = re.findall(r"^\s*<raw_survey>\s*(.*?)\s*^\s*</raw_survey>", prompt, flags=re.S | re.I | re.M)
+        raw = raw_matches[-1] if raw_matches else prompt.split("RAW_SURVEY:", 1)[-1]
         blocks = self._survey_blocks(raw)
         questions = []
         qid = 1
@@ -452,30 +455,37 @@ class WatsonxLLM(BaseLLM):
 
         self.model_id = model_id
         self.url = url
+        self.chat_params = {"temperature": 0.1, "max_tokens": 900}
+        self.text_params = {"decoding_method": "greedy", "max_new_tokens": 900}
         credentials = Credentials(url=url, api_key=api_key)
         self.model = ModelInference(
             model_id=model_id,
             credentials=credentials,
             project_id=project_id,
-            params={"decoding_method": "sample", "temperature": 0.25, "max_new_tokens": 900, "top_p": 0.9},
+            params=self.text_params,
         )
 
     def generate_text(self, prompt: str) -> str:  # pragma: no cover - cloud call
         try:
-            return self.model.generate_text(prompt=prompt)
+            chat_response = self.model.chat(
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are an enterprise assistant for a Visa Consulting & Analytics PoC. "
+                            "Follow the requested output format exactly. If JSON is requested, return valid JSON only."
+                        ),
+                    },
+                    {"role": "user", "content": prompt},
+                ],
+                params=self.chat_params,
+            )
+            return chat_response["choices"][0]["message"]["content"]
         except Exception as exc:
-            message = str(exc)
-            if "token_quota_reached" in message:
-                raise LLMError(
-                    "watsonx.ai authentication succeeded, but the IBM Runtime token quota is exhausted for this account/project. "
-                    "Ask IBM to restore or increase quota, or switch to the deterministic mock provider only for rehearsal."
-                ) from exc
-            if "not supported for this environment" in message or "model_no_support" in message:
-                raise LLMError(
-                    f"watsonx.ai model '{self.model_id}' is not available for the current Frankfurt project. "
-                    "Set WATSONX_MODEL_ID to a model listed as supported in this environment."
-                ) from exc
-            raise LLMError(f"watsonx.ai generation failed: {message}") from exc
+            try:
+                return self.model.generate_text(prompt=prompt, params=self.text_params)
+            except Exception as text_exc:
+                raise _watsonx_error(self.model_id, text_exc) from text_exc
 
 
 def watsonx_config_status() -> dict[str, Any]:
@@ -501,3 +511,73 @@ def get_llm(provider: str | None = None) -> BaseLLM:
 
 def _contains_any(text: str, needles: list[str]) -> int:
     return int(any(needle and needle in text for needle in needles))
+
+
+def _json_repair_prompt(original_prompt: str, bad_text: str) -> str:
+    return (
+        "The previous response was not valid JSON. Return only the JSON required by the original task. "
+        "Do not include explanations, markdown fences, commentary, or extra generated questions.\n\n"
+        f"ORIGINAL_TASK:\n{original_prompt}\n\n"
+        f"PREVIOUS_RESPONSE:\n{bad_text[:1200]}\n\n"
+        "VALID_JSON_ONLY:"
+    )
+
+
+def _loads_json_from_text(text: str) -> Any:
+    cleaned = text.strip()
+    if not cleaned:
+        raise json.JSONDecodeError("empty response", text, 0)
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError:
+        payload = _extract_json_payload(cleaned)
+        if payload is None:
+            raise
+        return json.loads(payload)
+
+
+def _extract_json_payload(text: str) -> str | None:
+    fence = re.search(r"```(?:json)?\s*([\s\S]*?)```", text, flags=re.I)
+    if fence:
+        text = fence.group(1).strip()
+
+    for start, open_char, close_char in ((text.find("["), "[", "]"), (text.find("{"), "{", "}")):
+        if start < 0:
+            continue
+        depth = 0
+        in_string = False
+        escape = False
+        for idx in range(start, len(text)):
+            char = text[idx]
+            if in_string:
+                if escape:
+                    escape = False
+                elif char == "\\":
+                    escape = True
+                elif char == '"':
+                    in_string = False
+                continue
+            if char == '"':
+                in_string = True
+            elif char == open_char:
+                depth += 1
+            elif char == close_char:
+                depth -= 1
+                if depth == 0:
+                    return text[start:idx + 1]
+    return None
+
+
+def _watsonx_error(model_id: str, exc: Exception) -> LLMError:
+    message = str(exc)
+    if "token_quota_reached" in message:
+        return LLMError(
+            "watsonx.ai authentication succeeded, but the IBM Runtime token quota is exhausted for this account/project. "
+            "Ask IBM to restore or increase quota, or switch to the deterministic mock provider only for rehearsal."
+        )
+    if "not supported for this environment" in message or "model_no_support" in message:
+        return LLMError(
+            f"watsonx.ai model '{model_id}' is not available for the current Frankfurt project. "
+            "Set WATSONX_MODEL_ID to a model listed as supported in this environment."
+        )
+    return LLMError(f"watsonx.ai generation failed: {message}")

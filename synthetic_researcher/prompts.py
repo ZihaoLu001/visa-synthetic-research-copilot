@@ -5,16 +5,30 @@ from .schemas import Concept, Persona, SurveyQuestion
 
 def survey_parser_prompt(raw_survey: str) -> str:
     return f"""
-You are a survey design assistant for a Visa Consulting & Analytics synthetic research PoC.
-Parse the raw survey/interview text into a JSON array of questions.
-Each question must have: id, text, type, options, measures.
-Allowed types: likert, choice, open, price.
-Use likert for adoption likelihood, relevance, value, trust, ease, satisfaction.
-Use price for acceptable fee or willingness-to-pay questions.
-Return JSON only.
+You are a strict JSON extraction engine for a Visa Consulting & Analytics synthetic research PoC.
+Convert only the survey/interview questions inside the raw survey block into a JSON array.
 
-RAW_SURVEY:
+Rules:
+- Do not answer the survey.
+- Do not continue the survey or invent additional questions.
+- Do not include explanations, markdown, or text outside JSON.
+- Each item must have: id, text, type, options, measures.
+- Allowed type values: likert, choice, open, price.
+- Use likert for adoption likelihood, relevance, value, trust, ease, satisfaction, appeal, frequency.
+- Use price for acceptable fee, CHF, price, willingness-to-pay, subscription or annual-fee questions.
+- Use choice only when explicit answer options are present.
+- Use open for qualitative why/what/how feedback without fixed options.
+- The JSON must start with [ and end with ].
+
+Example output:
+[
+  {{"id": "Q1", "text": "How likely would you be to adopt this card?", "type": "likert", "options": [], "measures": "adoption likelihood"}},
+  {{"id": "Q2", "text": "What annual fee in CHF would feel acceptable?", "type": "price", "options": [], "measures": "price sensitivity"}}
+]
+
+<raw_survey>
 {raw_survey}
+</raw_survey>
 """.strip()
 
 

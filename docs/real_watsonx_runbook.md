@@ -38,6 +38,11 @@ python scripts/watsonx_smoke_test.py --mini-run
 
 This uses the same survey parser and persona respondent stack as the app, but with only a small panel to avoid unnecessary quota usage.
 
+Verified Group 28 status on 2026-05-06:
+
+- `python scripts/watsonx_smoke_test.py` returned a live IBM Granite response.
+- `python scripts/watsonx_smoke_test.py --mini-run` completed an end-to-end run with `provider: watsonx`, 2 parsed questions, 12 synthetic responses, aggregate concept summary, and validation output.
+
 ## Streamlit App Proof
 
 Start:
@@ -57,6 +62,8 @@ If the sidebar reports missing credentials, the app is not using the real IBM mo
 ## Quota Troubleshooting
 
 If the smoke test returns `403 token_quota_reached`, the credentials and Project ID are valid but the IBM watsonx.ai Runtime quota for text generation is exhausted or set to zero. This is a platform/account issue, not an application bug. Ask the IBM course team to restore quota for the Group 28 Runtime, or confirm another supported runtime/model for the final real-model proof.
+
+Group 28 hit this issue on 2026-05-06. IBM restored/upgraded the runtime quota, after which the same configuration succeeded without code or credential changes.
 
 ## Code Engine Proof
 

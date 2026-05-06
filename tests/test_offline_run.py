@@ -1,7 +1,8 @@
 from pathlib import Path
 
 from synthetic_researcher.consulting import build_decision_brief, default_research_brief, format_decision_brief_markdown
-from synthetic_researcher.llm import MockLLM, watsonx_config_status
+from synthetic_researcher.agents import SurveyParserAgent
+from synthetic_researcher.llm import BaseLLM, MockLLM, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.reporting import build_markdown_report
 
@@ -135,6 +136,32 @@ Measures: feature preference
 
     assert answer["answer_label"] in {"travel insurance", "purchase protection"}
     assert answer["answer_label"] not in {"Concept A", "Concept B", "Neither"}
+
+
+def test_generate_json_extracts_payload_from_model_commentary():
+    class MessyJSONLLM(BaseLLM):
+        def generate_text(self, prompt: str) -> str:
+            return 'Sure, here is the JSON:\n```json\n{"answer_value": 4, "answer_label": "4/5"}\n```'
+
+    data = MessyJSONLLM().generate_json("Return JSON")
+
+    assert data == {"answer_value": 4, "answer_label": "4/5"}
+
+
+def test_survey_parser_normalises_real_model_type_labels():
+    class CapitalisedTypeLLM(BaseLLM):
+        def generate_text(self, prompt: str) -> str:
+            return """
+            [
+              {"id": "1", "text": "How likely would you be to adopt it?", "type": "Likert", "options": null, "measures": null},
+              {"id": "2", "text": "What annual fee in CHF is acceptable?", "type": "Numeric", "options": null, "measures": null}
+            ]
+            """
+
+    questions = SurveyParserAgent(CapitalisedTypeLLM()).parse("ignored")
+
+    assert [question.id for question in questions] == ["Q1", "Q2"]
+    assert [question.type for question in questions] == ["likert", "price"]
 
 
 def test_watsonx_config_status_redacts_secret(monkeypatch):
