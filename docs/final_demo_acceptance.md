@@ -30,7 +30,7 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | Real watsonx.ai mini-run | End-to-end parser/persona/validation flow completed with provider `watsonx` |
 | Local regression tests | `21 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
-| Slack-ready PDF report example | Public PDF survey input generated a watsonx/Granite consultant PDF report with 72 persona-question responses, validation score 89.5, question coverage 100.0 and Consultant Quality evidence grade C because the concept lead is narrow |
+| Slack-ready PDF report example | Public PDF survey input generated a watsonx/Granite consultant PDF report with 72 persona-question responses, validation score 88.0, question coverage 100.0 and Consultant Quality evidence grade C because the concept lead is narrow |
 
 ## One-Command Smoke Test
 

@@ -15,12 +15,13 @@ VCA consultants and product teams need early customer input when designing card 
 
 ## 1:30-3:00 Use-Case Understanding
 
-The PoC is not a fixed FAQ bot. It is a flexible synthetic survey researcher:
+The PoC is not a fixed FAQ bot and not merely a survey parser. It is a synthetic customer lab for VCA value proposition decisions:
 
-- consultant pastes a survey, interview guide or proposition test
+- consultant defines a card/product proposition and the decision to support
+- consultant uploads a survey, interview guide or proposition test as the input artifact
 - the system parses the questions at runtime
 - Swiss synthetic persona agents answer independently
-- the output includes both persona-level traces and aggregate consultant insights
+- the output includes a synthetic customer board, persona-level traces, aggregate consultant insights, validation and a real-customer bridge
 
 Positioning sentence:
 
@@ -37,6 +38,7 @@ Survey / concept input
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark + Consistency + Realism Validator
+  -> Synthetic Customer Lens
   -> Consultant Quality Layer
   -> VCA Decision Brief / PDF Report / Consultant Delivery Pack
 ```
@@ -56,7 +58,7 @@ IBM platform positioning:
 1. Confirm the sidebar shows `watsonx` and `Real LLM ready: ibm/granite-4-h-small`.
 2. Upload the public sample PDF survey or paste the default card survey.
 3. Run the quick real-model proof with 12 respondents and the first 2 questions.
-4. Open Decision Brief for lead concept, decision posture, Consultant Quality Layer, hypothesis readout and next real research.
+4. Open Decision Brief for lead concept, Synthetic Customer Lens, Bain-style use-case fit, synthetic customer board, scenario-planning moves, decision posture, Consultant Quality Layer, hypothesis readout and next real research.
 5. Open the Question Parser tab to prove the survey is parsed dynamically from the uploaded file.
 6. Open Consultant Summary for adoption index, acceptable fee and signals.
 7. Open Segment Explorer for persona differences.
@@ -75,6 +77,7 @@ Cover:
 - orchestrator loop across personas, concepts and questions
 - validation layer
 - consultant evidence quality layer
+- synthetic customer board and real-customer bridge
 - PDF Report, Consultant Delivery Pack, CSV and Markdown export
 - FastAPI integration endpoint for Code Engine / watsonx Orchestrate
 - OpenAPI and ADK assets under `orchestrate/`

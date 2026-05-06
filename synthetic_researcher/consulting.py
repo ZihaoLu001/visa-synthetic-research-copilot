@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from .customer_lens import build_synthetic_customer_lens
 from .insight_quality import build_consultant_quality_layer
 from .schemas import Concept, SurveyRun
 
@@ -94,6 +95,7 @@ def build_decision_brief(run: SurveyRun, research_brief: dict[str, str], provide
         "methodology": methodology_snapshot(provider),
         "limitations": limitations,
     }
+    decision_payload["synthetic_customer_lens"] = build_synthetic_customer_lens(run, decision_payload)
     decision_payload["consultant_quality_layer"] = build_consultant_quality_layer(run, decision_payload)
     return decision_payload
 
@@ -151,6 +153,31 @@ def format_decision_brief_markdown(run: SurveyRun) -> str:
     lines.extend(["", "## Hypothesis Readout", ""])
     for item in brief.get("hypothesis_readout", []):
         lines.append(f"- {item.get('hypothesis')}: {item.get('status')} - {item.get('evidence')}")
+    lens = brief.get("synthetic_customer_lens", {})
+    if lens:
+        lines.extend(["", "## Synthetic Customer Lens", ""])
+        lines.append(f"- Positioning: {lens.get('positioning')}")
+        lines.extend(["", "### Value Proposition Questions", ""])
+        lines.extend(f"- {item}" for item in lens.get("value_proposition_questions", []))
+        lines.extend(["", "### Synthetic Customer Use-Case Fit", ""])
+        for item in lens.get("use_case_fit", []):
+            lines.append(
+                f"- {item.get('use_case')}: {item.get('fit')} - {item.get('how_this_run_supports_it')}"
+            )
+        lines.extend(["", "### Synthetic Customer Board", ""])
+        for item in lens.get("synthetic_customer_board", [])[:5]:
+            lines.append(
+                f"- {item.get('segment')}: best fit={item.get('likely_best_fit')}; "
+                f"need={item.get('need_state')}; message={item.get('message_to_test')}"
+            )
+        lines.extend(["", "### Scenario Planning Moves", ""])
+        for item in lens.get("scenario_planning_moves", []):
+            lines.append(
+                f"- {item.get('move')}: {item.get('what_to_change_next')} Why it matters: {item.get('why_it_matters')}"
+            )
+        lines.extend(["", "### Real Customer Bridge", ""])
+        for item in lens.get("real_customer_bridge", []):
+            lines.append(f"- {item.get('stage')}: {item.get('purpose')} Evidence: {item.get('evidence')}")
     quality = brief.get("consultant_quality_layer", {})
     lines.extend(["", "## Consultant Quality Layer", ""])
     if quality:

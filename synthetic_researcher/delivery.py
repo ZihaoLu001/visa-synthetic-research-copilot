@@ -28,6 +28,7 @@ def build_consultant_delivery_pack(run: SurveyRun) -> bytes:
         bundle.writestr("08_pilot_readiness_gate.json", _safe_json(build_pilot_readiness_gate(run)))
         bundle.writestr("09_consultant_report.pdf", build_consultant_pdf_report(run))
         bundle.writestr("10_consultant_quality_layer.json", _safe_json((run.aggregate.get("decision_brief") or {}).get("consultant_quality_layer", {})))
+        bundle.writestr("11_synthetic_customer_lens.json", _safe_json((run.aggregate.get("decision_brief") or {}).get("synthetic_customer_lens", {})))
     return buffer.getvalue()
 
 
@@ -173,7 +174,7 @@ def _delivery_readme(run: SurveyRun) -> str:
             "",
             "## Files",
             "",
-            "- `01_decision_brief.md`: executive answer, decision posture, hypotheses, next real research.",
+            "- `01_decision_brief.md`: executive answer, synthetic customer readout, decision posture, hypotheses, next real research.",
             "- `02_consultant_report.md`: longer consultant-readable report with KPI and validation evidence.",
             "- `03_persona_responses.csv`: traceable persona-level answers for appendix analysis.",
             "- `04_validation.json`: benchmark, consistency, coverage and realism checks.",
@@ -183,6 +184,7 @@ def _delivery_readme(run: SurveyRun) -> str:
             "- `08_pilot_readiness_gate.json`: readiness checklist for partner review.",
             "- `09_consultant_report.pdf`: polished PDF report for partner sharing.",
             "- `10_consultant_quality_layer.json`: evidence grade, decision risk, survey repair plan and calibration thresholds.",
+            "- `11_synthetic_customer_lens.json`: Bain-style use-case fit, scenario checks, synthetic customer board, scenario moves, decision drivers, time/cost advantage and real-customer bridge.",
             "",
             "## Guardrail",
             "",

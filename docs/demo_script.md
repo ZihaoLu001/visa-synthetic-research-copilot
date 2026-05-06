@@ -19,7 +19,7 @@ Paste a short survey:
 
 Then say the stronger version can also accept a real research artifact from Visa: TXT, MD, PDF, DOCX, CSV, or XLSX. Open the Question Parser tab after a run and show the input-source audit: file name, type, extracted character count, extraction notes, and whether the text was edited before execution.
 
-Explain that the system is not limited to predefined questions. It ingests survey files or pasted survey/interview text, parses the content at runtime, and then routes the parsed questions to persona agents.
+Explain that the system is not limited to predefined questions. It ingests survey files or pasted survey/interview text, parses the content at runtime, and then routes the parsed questions to persona agents. The stronger framing is: the survey is the input artifact, but the product is a synthetic customer lab for value proposition decisions.
 
 ## 3. Show Concepts
 
@@ -37,7 +37,7 @@ For the real-model proof, use `watsonx`, `12` respondents, `1` consistency run, 
 Cover these tabs:
 
 - Consultant Summary: adoption index, acceptable fee, top signals, recommendation.
-- Decision Brief: lead concept, decision posture, Consultant Quality Layer, hypothesis readout, VCA "so what" and next real-research actions.
+- Decision Brief: lead concept, Synthetic Customer Lens, Bain-style use-case fit, synthetic customer board, scenario-planning moves, decision posture, Consultant Quality Layer, hypothesis readout, VCA "so what" and next real-research actions.
 - Question Parser: parsed question types, measured constructs and input-source audit.
 - Segment Explorer: which Swiss archetypes fit each concept.
 - Persona Responses: individual responses with rationale and confidence.
@@ -49,6 +49,12 @@ In the Consultant Quality Layer, say:
 
 ```text
 This is the consulting control layer: it tells us whether the synthetic evidence is strong enough to use directionally, what could be wrong, how the survey should be repaired, and what real-customer validation should happen next.
+```
+
+In the Synthetic Customer Lens, say:
+
+```text
+This is the Bain-style part of the prototype: it shows which customer-learning use cases the run supports, which customer perspectives we simulated, what each segment needs, what objections to probe, which message to test, which scenario moves to try next, and how the synthetic run bridges into real customer validation.
 ```
 
 For Slack partner feedback before the final presentation, attach `demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf` and `demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf`. The second file is a real watsonx/Granite-generated report from the uploaded PDF flow, so it demonstrates the product output without asking the partner to run the app immediately.

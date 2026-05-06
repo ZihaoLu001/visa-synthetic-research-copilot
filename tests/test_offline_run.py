@@ -36,7 +36,7 @@ def test_offline_run_completes():
     assert run.aggregate["price_summary"]
     assert run.aggregate["runtime"]["json_parse_success_rate"] == 100.0
     report = build_markdown_report(run)
-    assert report.startswith("# Visa Synthetic Research Copilot Report")
+    assert report.startswith("# Visa Synthetic Customer Lab Report")
     assert "## Input Source" in report
     assert "## KPI Evidence" in report
 
@@ -219,6 +219,7 @@ def test_consultant_delivery_pack_contains_partner_artifacts():
             "08_pilot_readiness_gate.json",
             "09_consultant_report.pdf",
             "10_consultant_quality_layer.json",
+            "11_synthetic_customer_lens.json",
         }.issubset(names)
         csv_text = bundle.read("03_persona_responses.csv").decode("utf-8")
         assert "persona_id" in csv_text
@@ -227,6 +228,9 @@ def test_consultant_delivery_pack_contains_partner_artifacts():
         quality = json.loads(bundle.read("10_consultant_quality_layer.json").decode("utf-8"))
         assert "survey_repair_plan" in quality
         assert "decision_risk" in quality
+        lens = json.loads(bundle.read("11_synthetic_customer_lens.json").decode("utf-8"))
+        assert lens["synthetic_customer_board"]
+        assert lens["real_customer_bridge"]
 
 
 def test_consultant_pdf_report_is_valid_pdf():
@@ -268,7 +272,13 @@ def test_decision_brief_includes_consultant_quality_layer():
     brief = default_research_brief()
     decision = build_decision_brief(run, brief, provider="mock")
     quality = decision["consultant_quality_layer"]
+    lens = decision["synthetic_customer_lens"]
 
     assert quality["evidence_grade"] in {"A", "B", "C", "D"}
     assert quality["survey_repair_plan"]
     assert quality["recommended_validation_plan"]
+    assert lens["synthetic_customer_board"]
+    assert lens["use_case_fit"]
+    assert lens["scenario_design_check"]
+    assert lens["scenario_planning_moves"]
+    assert lens["time_cost_advantage"]

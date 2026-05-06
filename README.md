@@ -1,10 +1,11 @@
 # Visa Synthetic Research Copilot
 
-Running PoC for the IBM watsonx / Visa Consulting & Analytics **Multi-Agent Synthetic Researcher** case study.
+Running PoC for the IBM watsonx / Visa Consulting & Analytics **Multi-Agent Synthetic Customer Researcher** case study.
 
-The app accepts flexible survey, interview, or card value proposition test questions, runs a panel of public-data-grounded Swiss synthetic consumer personas, and returns:
+The app accepts a product concept plus flexible survey, interview, or card value proposition test questions, runs a panel of public-data-grounded Swiss synthetic customers, and returns:
 
 - a consultant research brief with objective, decision rule, hypotheses and expected stakeholder output
+- a Bain-style synthetic customer lens: use-case fit, scenario-design checks, customer board, need states, objections, message tests, scenario moves, time/cost advantage and real-customer bridge
 - a decision brief that translates synthetic evidence into VCA-style recommendation, action, caveats and next real-research steps
 - persona-level survey responses
 - aggregated adoption, pricing, feature, and barrier signals
@@ -29,7 +30,9 @@ The kickoff deck asks for three layers:
 
 This repo implements that flow in a small, demo-friendly Streamlit application with a deterministic mock provider and optional watsonx.ai provider.
 
-The product is intentionally framed as a **consultant-grade pilot workbench**, not a generic chatbot. A user starts with the business decision and hypotheses, uploads or pastes a survey, then reviews a Decision Brief that links the output back to actionability, validation posture and next real customer research.
+The product is intentionally framed as a **consultant-grade synthetic customer lab**, not a generic chatbot and not merely a survey parser. A user starts with the business decision and hypotheses, uploads or pastes a survey/interview artifact, then reviews synthetic customer perspectives, decision drivers, evidence quality and the real-customer validation plan.
+
+The Bain article linked in the Visa brief frames synthetic customers as a way to bring companies closer to real customer perspectives faster, while still requiring validation. This repo now follows that framing explicitly: the survey is the input artifact, but the output is a synthetic customer learning loop for value proposition design.
 
 ## Algorithm and Model Stack
 
@@ -48,6 +51,7 @@ The main algorithms are transparent and replaceable:
 - Persona response generation asks one persona agent at a time, using concept context, public benchmark context and prior answers for consistency.
 - Aggregation computes weighted adoption index, acceptable-fee signals, feature/barrier labels, segment fit and persona quotes.
 - Validation computes benchmark alignment MAE, repeated-run Likert variance, persona coverage, question construct coverage and judge-style realism flags.
+- Synthetic customer synthesis builds use-case fit, scenario-design checks, a customer board with need states, likely proposition fit, objections to probe, message tests and scenario-planning moves for each Swiss segment.
 - Consulting synthesis builds a VCA Decision Brief: lead concept, evidence quality, decision posture, hypothesis readout, next tests and governance caveats.
 - Consultant quality scoring adds an explicit evidence grade, decision risk, risk flags, survey repair plan and real-customer validation plan so VCA can decide what is strong enough to use and what still needs real customer proof.
 - PDF reporting renders a consultant-style report with executive answer, decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations.
@@ -137,7 +141,7 @@ Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and q
 3. Review the extracted survey text and adjust questions if needed.
 4. Set the Swiss target market and tune the two default card concepts and fees.
 5. Run a quick live watsonx proof with 12 respondents and the first 2 uploaded questions, or switch to a full survey run with up to 96 respondents.
-6. Open Decision Brief for lead concept, decision posture, Consultant Quality Layer, hypothesis readout, caveats and recommended real research.
+6. Open Decision Brief for lead concept, Synthetic Customer Lens, Bain-style use-case fit, synthetic customer board, scenario-planning moves, decision posture, Consultant Quality Layer, hypothesis readout, caveats and recommended real research.
 7. Review adoption index, acceptable fee, feature and barrier signals.
 8. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
 9. Open segment and persona-level tables for traceability.
@@ -154,7 +158,7 @@ demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf
 demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf
 ```
 
-The output report was generated from the input PDF flow with `MODEL_PROVIDER=watsonx`, `ibm/granite-4-h-small`, 12 Swiss synthetic respondents, payment/card-relevant survey questions, 72 persona-question responses, validation score 89.5/100, question coverage 100.0/100, and Consultant Quality evidence grade C. The grade is intentionally conservative because the lead is narrow; the report recommends using the result as directional evidence and validating both concepts with real Swiss customers.
+The output report was generated from the input PDF flow with `MODEL_PROVIDER=watsonx`, `ibm/granite-4-h-small`, 12 Swiss synthetic respondents, payment/card-relevant survey questions, 72 persona-question responses, validation score 88.0/100, question coverage 100.0/100, and Consultant Quality evidence grade C. The grade is intentionally conservative because the lead is narrow; the report recommends using the result as directional evidence and validating both concepts with real Swiss customers.
 
 Suggested live stress test:
 
@@ -189,6 +193,7 @@ synthetic_researcher/
   ingestion.py                 TXT/MD/PDF/DOCX/CSV/XLSX survey extraction
   consulting.py                VCA-style research brief and decision brief synthesis
   delivery.py                  Consultant delivery pack and pilot readiness gate
+  customer_lens.py             Bain-style use-case fit, customer board, scenario moves and real-customer bridge
   insight_quality.py           Evidence grade, decision risk, survey repair plan and validation plan
   llm.py                       Mock + IBM watsonx providers
   orchestrator.py              End-to-end multi-agent run

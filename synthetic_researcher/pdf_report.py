@@ -42,7 +42,7 @@ def build_consultant_pdf_report(run: SurveyRun) -> bytes:
         leftMargin=16 * mm,
         topMargin=16 * mm,
         bottomMargin=14 * mm,
-        title=f"VCA Synthetic Research Report {run.run_id}",
+        title=f"VCA Synthetic Customer Report {run.run_id}",
         author="Visa Synthetic Research Copilot",
     )
     styles = _styles()
@@ -52,6 +52,8 @@ def build_consultant_pdf_report(run: SurveyRun) -> bytes:
     story.append(PageBreak())
     story.extend(_executive_summary(run, styles))
     story.extend(_quality_layer(run, styles))
+    story.extend(_synthetic_customer_use_cases(run, styles))
+    story.extend(_synthetic_customer_board(run, styles))
     story.extend(_concept_matrix(run, styles))
     story.extend(_signals_and_segments(run, styles))
     story.append(PageBreak())
@@ -73,9 +75,9 @@ def _cover(run: SurveyRun, styles: dict[str, ParagraphStyle]) -> list[Any]:
         Spacer(1, 34 * mm),
         Paragraph("VISA", styles["brand"]),
         Spacer(1, 18 * mm),
-        Paragraph("VCA Synthetic Research Report", styles["cover_title"]),
+        Paragraph("VCA Synthetic Customer Report", styles["cover_title"]),
         Spacer(1, 4 * mm),
-        Paragraph("Multi-agent synthetic survey researcher for early-stage card proposition decisions", styles["cover_subtitle"]),
+        Paragraph("Multi-agent synthetic customers for early-stage card proposition and value design decisions", styles["cover_subtitle"]),
         Spacer(1, 14 * mm),
         _info_table(
             [
@@ -112,6 +114,29 @@ def _executive_summary(run: SurveyRun, styles: dict[str, ParagraphStyle]) -> lis
         _bullet("Objective", research.get("project_objective", "n/a"), styles),
         _bullet("Client decision", research.get("client_decision", "n/a"), styles),
         _bullet("Decision rule", research.get("decision_rule", "n/a"), styles),
+        Spacer(1, 5 * mm),
+        Paragraph("Synthetic Customer Lens", styles["h2"]),
+        Paragraph(_clean((decision.get("synthetic_customer_lens") or {}).get("positioning", "Synthetic customers provide directional early-stage customer intuition.")), styles["body"]),
+        Spacer(1, 2.5 * mm),
+        _table(
+            [
+                ["Value proposition questions", "Time/cost advantage", "Real customer bridge"],
+                [
+                    _para(_join_lines((decision.get("synthetic_customer_lens") or {}).get("value_proposition_questions", [])), styles),
+                    _para(_join_lines((decision.get("synthetic_customer_lens") or {}).get("time_cost_advantage", {}).values()), styles),
+                    _para(_join_lines([f"{item.get('stage')}: {item.get('purpose')}" for item in (decision.get("synthetic_customer_lens") or {}).get("real_customer_bridge", [])]), styles),
+                ],
+            ],
+            [62 * mm, 62 * mm, 62 * mm],
+            font_size=7.4,
+        ),
+        Spacer(1, 5 * mm),
+        Paragraph("Why This Matches Synthetic Customer Research", styles["h2"]),
+        Paragraph(
+            "The survey or interview guide is treated as the scenario artifact. The product output is the synthetic customer layer: "
+            "segment perspectives, need states, objections, messages to test, use-case fit, validation checks and the bridge to real research.",
+            styles["body"],
+        ),
         Spacer(1, 5 * mm),
         Paragraph("So What For VCA", styles["h2"]),
     ]
@@ -171,6 +196,76 @@ def _quality_layer(run: SurveyRun, styles: dict[str, ParagraphStyle]) -> list[An
         repair_rows.append([item.get("priority", "n/a"), _para(item.get("module", "n/a"), styles), _para(item.get("suggested_question", "n/a"), styles)])
     story.extend([Spacer(1, 4 * mm), Paragraph("Survey Repair Plan", styles["h2"]), _table(repair_rows, [24 * mm, 43 * mm, 118 * mm], font_size=7.4)])
     return story
+
+
+def _synthetic_customer_use_cases(run: SurveyRun, styles: dict[str, ParagraphStyle]) -> list[Any]:
+    lens = _decision(run).get("synthetic_customer_lens", {})
+    fit_rows = [["Use case", "Fit", "How this run supports it"]]
+    for item in lens.get("use_case_fit", [])[:6]:
+        fit_rows.append([
+            _para(item.get("use_case", "n/a"), styles),
+            _para(item.get("fit", "n/a"), styles),
+            _para(item.get("how_this_run_supports_it", "n/a"), styles),
+        ])
+    if len(fit_rows) == 1:
+        fit_rows.append(["n/a", "n/a", "n/a"])
+
+    check_rows = [["Scenario principle", "Status", "Evidence"]]
+    for item in lens.get("scenario_design_check", [])[:5]:
+        check_rows.append([
+            _para(item.get("principle", "n/a"), styles),
+            _para(item.get("status", "n/a"), styles),
+            _para(item.get("evidence", "n/a"), styles),
+        ])
+    if len(check_rows) == 1:
+        check_rows.append(["n/a", "n/a", "n/a"])
+
+    return [
+        Spacer(1, 7 * mm),
+        Paragraph("Synthetic Customer Use-Case Fit", styles["h1"]),
+        Paragraph(
+            "This section reframes the run around customer-learning jobs, not only survey outputs.",
+            styles["small"],
+        ),
+        Spacer(1, 3 * mm),
+        _table(fit_rows, [42 * mm, 30 * mm, 113 * mm], font_size=7.5),
+        Spacer(1, 5 * mm),
+        Paragraph("Scenario Design Checks", styles["h2"]),
+        _table(check_rows, [46 * mm, 25 * mm, 114 * mm], font_size=7.3),
+    ]
+
+
+def _synthetic_customer_board(run: SurveyRun, styles: dict[str, ParagraphStyle]) -> list[Any]:
+    lens = _decision(run).get("synthetic_customer_lens", {})
+    rows = [["Segment", "Likely best fit", "Need state", "Objections to probe", "Message to test"]]
+    for item in lens.get("synthetic_customer_board", [])[:7]:
+        rows.append([
+            _para(item.get("segment", "n/a"), styles),
+            _para(item.get("likely_best_fit", "n/a"), styles),
+            _para(item.get("need_state", "n/a"), styles),
+            _para(", ".join(item.get("objections_to_probe", [])), styles),
+            _para(item.get("message_to_test", "n/a"), styles),
+        ])
+    if len(rows) == 1:
+        rows.append(["n/a", "n/a", "n/a", "n/a", "n/a"])
+    move_rows = [["Move", "What to change next", "Why it matters"]]
+    for item in lens.get("scenario_planning_moves", [])[:4]:
+        move_rows.append([
+            _para(item.get("move", "n/a"), styles),
+            _para(item.get("what_to_change_next", "n/a"), styles),
+            _para(item.get("why_it_matters", "n/a"), styles),
+        ])
+    if len(move_rows) == 1:
+        move_rows.append(["n/a", "n/a", "n/a"])
+    return [
+        Spacer(1, 7 * mm),
+        Paragraph("Synthetic Customer Board", styles["h1"]),
+        _table(rows, [34 * mm, 32 * mm, 45 * mm, 37 * mm, 37 * mm], font_size=7.2),
+        Spacer(1, 5 * mm),
+        Paragraph("Scenario Planning Moves", styles["h2"]),
+        _table(move_rows, [38 * mm, 82 * mm, 65 * mm], font_size=7.3),
+    ]
+
 
 
 def _signals_and_segments(run: SurveyRun, styles: dict[str, ParagraphStyle]) -> list[Any]:
@@ -370,6 +465,10 @@ def _clean(value: Any) -> str:
         return "n/a"
     text = str(value).replace("\n", " ").strip()
     return text if text else "n/a"
+
+
+def _join_lines(items: list[Any]) -> str:
+    return " | ".join(f"- {str(item)}" for item in items) if items else "n/a"
 
 
 def _escape(value: str) -> str:

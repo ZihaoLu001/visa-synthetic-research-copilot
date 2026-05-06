@@ -8,6 +8,8 @@ The current repository is no longer a toy demo. It is a consultant-grade pilot w
 
 The strongest recent addition is the Consultant Quality Layer. It gives every run an evidence grade, decision-risk rating, lead-margin interpretation, risk flags, survey repair plan and real-customer validation plan. This makes the system more VCA-like because it does not merely generate synthetic answers; it tells consultants how much to trust the evidence and what to test next.
 
+After reviewing the Visa slide wording and the Bain "synthetic customers" reference, the product framing was updated from a survey-processing cockpit to a Synthetic Customer Lab. Survey and interview files remain supported, but they are now positioned as input artifacts for simulating customer perspectives, identifying decision drivers, designing messages and bridging into real validation.
+
 It is still a pilot, not a production Visa system. Production use would require Visa-owned authentication, run storage, internal benchmark calibration, legal review and operating controls.
 
 ## Real Model Status
@@ -18,7 +20,7 @@ It is still a pilot, not a production Visa system. Production use would require 
 | Local watsonx.ai mini synthetic run | Passed on 2026-05-06 with provider `watsonx`, parsed survey questions, persona responses and validation. |
 | Code Engine API health | Passed on 2026-05-06 with `active_provider_if_auto=watsonx` and `watsonx_configured=true`. |
 | Code Engine `/run` proof | Passed on 2026-05-06 with a one-question survey, 6 persona responses and validation output. |
-| Slack-ready watsonx PDF report | Passed on 2026-05-06 with 72 persona-question responses, validation score 89.5, question coverage 100.0 and Consultant Quality evidence grade C because the concept lead is narrow. |
+| Slack-ready watsonx PDF report | Passed on 2026-05-06 with 72 persona-question responses, validation score 88.0, question coverage 100.0 and Consultant Quality evidence grade C because the concept lead is narrow. |
 | CI and regression tests | Mock-backed by design so automated tests do not burn course quota or require secrets. |
 
 ## Requirement Trace
@@ -26,6 +28,7 @@ It is still a pilot, not a production Visa system. Production use would require 
 | Visa ask | Evidence in product | Status |
 | --- | --- | --- |
 | Design a concept for a multi-agent synthetic survey researcher | Streamlit VCA workbench, `SyntheticResearchOrchestrator`, parser, persona agents, analyst and validator. | Met |
+| Explore synthetic customers for early product/value proposition decisions | Synthetic Customer Lens creates Bain-style use-case fit, scenario-design checks, a customer board with segment need states, best-fit concept, objections, message tests, scenario moves, time/cost advantage and real-customer bridge. | Met |
 | Represent different customer personas | `data/swiss_archetypes.yaml` includes Swiss archetypes with demographics, household, income, language region, lifestyle, payment profile and attitudes. | Met |
 | Use public Swiss data and payment behavior | `data/benchmark_snb_2025.yaml`, sources notes and validation profiles reference BFS/FSO, Swiss Payment Monitor and SNB anchors. | Met |
 | Answer flexible survey/interview questions | File ingestion accepts pasted text, PDF, DOCX, XLSX, CSV, TXT and Markdown; parser tests cover unseen survey phrasing and options. | Met |

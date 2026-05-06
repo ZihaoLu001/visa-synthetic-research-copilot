@@ -45,6 +45,7 @@ Slide takeaway:
 The latest product layer borrows the useful pattern from persona-simulation projects without copying their scope:
 
 - Stanford's Generative Agents paper motivates memory, reflection and consistency as core design patterns for believable agent behavior. In this repo, persona context plus prior answers gives each respondent a stable point of view across the survey.
+- Bain's synthetic-customer framing is the closest business reference for the Visa brief: the aim is not to automate a questionnaire for its own sake, but to move product teams closer to real customer perspectives earlier in proposition design. In this repo, that maps to the Synthetic Customer Lens, Bain-style use-case fit, scenario-design checks, customer board, need states, objections, message tests, scenario moves, time/cost advantage and real-customer bridge.
 - Microsoft's TinyTroupe shows that LLM-powered persona simulation can be useful for business insight work, but also highlights the importance of empirical validation against real survey data. In this repo, that maps to benchmark alignment, realism review and the new real-customer validation plan.
 - OASIS / Open Agentic Survey Interview System is a useful reference for structured survey protocols and searchable transcripts. In this repo, the equivalent product surface is uploaded survey ingestion, parsed question audit, persona-level response tables and exportable evidence.
 - The 2026 reliability paper is the most important caveat: persona-conditioned LLMs can introduce subgroup distortion. That is why the product now includes a Consultant Quality Layer with evidence grade, decision risk, risk flags and survey repair recommendations instead of pretending every synthetic run is decision-ready.
@@ -52,6 +53,7 @@ The latest product layer borrows the useful pattern from persona-simulation proj
 Useful sources:
 
 - Generative Agents, arXiv 2304.03442: <https://arxiv.org/abs/2304.03442>
+- Bain, "How Synthetic Customers Bring Companies Closer to the Real Ones": <https://www.bain.com/insights/how-synthetic-customers-bring-companies-closer-to-the-real-ones/>
 - Microsoft TinyTroupe: <https://github.com/microsoft/TinyTroupe>
 - OASIS, Open Agentic Survey Interview System: <https://oasis-surveys.github.io/>
 - Assessing the Reliability of Persona-Conditioned LLMs as Synthetic Survey Respondents, arXiv 2602.18462: <https://arxiv.org/abs/2602.18462>

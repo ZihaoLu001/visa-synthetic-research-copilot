@@ -2,7 +2,7 @@
 
 ## Product Intent
 
-Visa Synthetic Research Copilot helps VCA consultants pressure-test early card, payment, or banking value propositions before commissioning real customer research. It accepts flexible survey/interview input instead of a fixed question list.
+Visa Synthetic Research Copilot helps VCA consultants pressure-test early card, payment, or banking value propositions before commissioning real customer research. The core product is a synthetic customer lab: flexible survey/interview input is one artifact used to simulate customer perspectives, decision drivers and follow-up validation needs.
 
 ## Flow
 
@@ -16,6 +16,7 @@ Consultant UI
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark / Consistency / Coverage / Realism Validator
+  -> Synthetic Customer Lens
   -> Consultant Quality Layer
   -> VCA Decision Brief / PDF Report / Consultant Delivery Pack
 ```
@@ -45,6 +46,9 @@ Consultant UI
 
 `Decision Brief`
 : Sits above the analyst summary. It answers the business question first, then links the recommendation to adoption, price, segment fit, validation score and the user's stated hypotheses. This is the layer that makes the prototype read like a consulting workbench instead of a generic synthetic respondent table.
+
+`customer_lens.py`
+: Reframes the run as a synthetic customer learning loop inspired by the Bain "synthetic customers" framing. It generates Bain-style use-case fit, scenario-design checks, the synthetic customer board, segment need states, likely best-fit concept, objections to probe, message tests, scenario-planning moves, decision drivers, time/cost advantage and real-customer bridge.
 
 `insight_quality.py`
 : Adds the consultant evidence lens: evidence grade, decision risk, lead-margin interpretation, segment differentiation, risk flags, survey repair plan, validation plan and calibration thresholds. This makes the output more defensible because VCA sees not only the answer, but also how strong the synthetic evidence is and what must be tested with real customers next.
@@ -91,6 +95,8 @@ Internal consistency repeats the same run and measures Likert standard deviation
 Coverage checks whether the synthetic panel spans the core Visa-requested dimensions: age, income, household, language region, and persona archetype count.
 
 Question coverage checks whether the input survey includes the consultant constructs most relevant for card proposition testing: adoption, price sensitivity, feature preference and barriers.
+
+The Synthetic Customer Lens answers the Bain-style product question: what customer perspectives did we simulate, what customer-learning use cases does this run support, what decision drivers emerged, what scenario moves should be tried next, where does this create time/cost advantage, and which assumptions still need real customer proof.
 
 The Consultant Quality Layer converts validation output into an explicit actionability signal. A strong validation score can still be marked as medium decision risk if the concept lead is narrow, segment spread is weak or the survey lacks a key construct. Conversely, it can recommend a smaller real-customer validation plan when synthetic evidence is directionally strong.
 

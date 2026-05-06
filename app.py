@@ -290,11 +290,11 @@ def main() -> None:
         <div class="visa-shell">
           <div class="visa-head">
             <div>
-              <h1 class="visa-title">VCA Synthetic Research Workbench</h1>
+              <h1 class="visa-title">VCA Synthetic Customer Lab</h1>
               <div class="visa-subtitle">
-                A consultant-grade copilot for early-stage value proposition screening. Upload a survey or
-                interview guide, define the client decision, run Swiss synthetic persona agents, and export
-                persona-level evidence, aggregate insights, validation checks and a decision brief.
+                A consultant-grade copilot for early-stage value proposition screening. Upload a survey,
+                interview guide or proposition test, run Swiss synthetic customer agents, and export
+                persona-level evidence, aggregate insights, validation checks and a VCA decision brief.
               </div>
             </div>
             <div class="visa-logo">VISA</div>
@@ -593,8 +593,8 @@ def render_model_and_delivery_proof(wx_status: dict[str, object], provider: str,
             <span>{model_text}</span>
           </div>
           <div class="proof-card">
-            <strong>2. Research Workflow</strong>
-            <span>Decision brief -> survey upload -> persona agents -> validation -> consultant output.</span>
+            <strong>2. Synthetic Customer Loop</strong>
+            <span>Concept -> survey/interview artifact -> synthetic customers -> validation -> real research plan.</span>
           </div>
           <div class="proof-card">
             <strong>3. Run Scope</strong>
@@ -602,7 +602,7 @@ def render_model_and_delivery_proof(wx_status: dict[str, object], provider: str,
           </div>
           <div class="proof-card">
             <strong>4. Governance</strong>
-            <span>Public Swiss benchmarks only; synthetic output is directional and still requires real validation.</span>
+            <span>Designed to move closer to customer intuition early; final decisions still require real validation.</span>
           </div>
         </div>
         """,
@@ -880,6 +880,48 @@ def render_decision_brief(run: SurveyRun) -> None:
         st.dataframe(hypotheses, width="stretch", hide_index=True)
     else:
         st.info("No hypotheses were provided.")
+
+    lens = decision.get("synthetic_customer_lens", {})
+    if lens:
+        st.markdown("#### Synthetic Customer Lens")
+        st.caption(lens.get("positioning", "Synthetic customers provide directional early-stage customer intuition."))
+        st.markdown("**Value proposition questions this run can inform**")
+        for item in lens.get("value_proposition_questions", []):
+            st.write(f"- {item}")
+        use_case_fit = pd.DataFrame(lens.get("use_case_fit", []))
+        if not use_case_fit.empty:
+            st.markdown("**Bain-style synthetic customer use-case fit**")
+            st.dataframe(use_case_fit, width="stretch", hide_index=True)
+
+        r1, r2, r3 = st.columns(3, gap="large")
+        with r1:
+            st.markdown("**Decision drivers**")
+            drivers = pd.DataFrame(lens.get("decision_drivers", []))
+            if not drivers.empty:
+                st.dataframe(drivers, width="stretch", hide_index=True)
+        with r2:
+            st.markdown("**Time/cost advantage**")
+            for _, item in (lens.get("time_cost_advantage") or {}).items():
+                st.write(f"- {item}")
+        with r3:
+            st.markdown("**Real-customer bridge**")
+            for item in lens.get("real_customer_bridge", []):
+                st.write(f"- **{item.get('stage')}**: {item.get('purpose')}")
+
+        board = pd.DataFrame(lens.get("synthetic_customer_board", []))
+        if not board.empty:
+            st.markdown("**Synthetic customer board**")
+            st.dataframe(board, width="stretch", hide_index=True)
+
+        scenario_moves = pd.DataFrame(lens.get("scenario_planning_moves", []))
+        if not scenario_moves.empty:
+            st.markdown("**Scenario planning moves for the next iteration**")
+            st.dataframe(scenario_moves, width="stretch", hide_index=True)
+
+        checks = pd.DataFrame(lens.get("scenario_design_check", []))
+        if not checks.empty:
+            with st.expander("Synthetic customer scenario design checks", expanded=False):
+                st.dataframe(checks, width="stretch", hide_index=True)
 
     quality = decision.get("consultant_quality_layer", {})
     if quality:
