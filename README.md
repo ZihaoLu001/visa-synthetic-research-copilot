@@ -11,6 +11,7 @@ The app accepts flexible survey, interview, or card value proposition test quest
 - segment-level fit by Swiss persona archetype
 - benchmark alignment, internal consistency, and coverage checks
 - judge-style realism rubric and overall validation confidence
+- consultant quality layer with evidence grade, decision risk, lead-margin interpretation, survey repair plan and real-customer validation plan
 - file ingestion audit for pasted text, TXT, MD, PDF, DOCX, CSV, and XLSX survey inputs
 - downloadable VCA-style PDF report generated from the exact run evidence
 - downloadable consultant delivery pack with decision brief, PDF report, Markdown report, persona CSV, validation JSON, full run JSON, source audit and governance notes
@@ -42,11 +43,13 @@ The main algorithms are transparent and replaceable:
 
 - File ingestion extracts text from PDF, DOCX, XLSX, CSV, TXT or pasted survey content and stores an audit trail.
 - Survey parsing turns arbitrary research questions into structured question objects: Likert, choice, price or open text.
+- Deterministic construct normalization cross-checks model output so adoption, price, feature and barrier signals remain stable even when an uploaded survey uses unfamiliar wording.
 - Persona sampling expands Swiss public-data-grounded archetypes into a weighted synthetic micro-population.
 - Persona response generation asks one persona agent at a time, using concept context, public benchmark context and prior answers for consistency.
 - Aggregation computes weighted adoption index, acceptable-fee signals, feature/barrier labels, segment fit and persona quotes.
 - Validation computes benchmark alignment MAE, repeated-run Likert variance, persona coverage, question construct coverage and judge-style realism flags.
 - Consulting synthesis builds a VCA Decision Brief: lead concept, evidence quality, decision posture, hypothesis readout, next tests and governance caveats.
+- Consultant quality scoring adds an explicit evidence grade, decision risk, risk flags, survey repair plan and real-customer validation plan so VCA can decide what is strong enough to use and what still needs real customer proof.
 - PDF reporting renders a consultant-style report with executive answer, decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations.
 - Delivery packaging exports a partner-review ZIP so Visa can inspect the recommendation, PDF report, persona rows, validation evidence and source audit outside the app.
 
@@ -134,7 +137,7 @@ Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and q
 3. Review the extracted survey text and adjust questions if needed.
 4. Set the Swiss target market and tune the two default card concepts and fees.
 5. Run a quick live watsonx proof with 12 respondents and the first 2 uploaded questions, or switch to a full survey run with up to 96 respondents.
-6. Open Decision Brief for lead concept, decision posture, hypothesis readout, caveats and recommended real research.
+6. Open Decision Brief for lead concept, decision posture, Consultant Quality Layer, hypothesis readout, caveats and recommended real research.
 7. Review adoption index, acceptable fee, feature and barrier signals.
 8. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
 9. Open segment and persona-level tables for traceability.
@@ -151,7 +154,7 @@ demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf
 demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf
 ```
 
-The output report was generated from the input PDF flow with `MODEL_PROVIDER=watsonx`, `ibm/granite-4-h-small`, 12 Swiss synthetic respondents, payment/card-relevant survey questions, 72 persona-question responses, and validation score 85.0/100.
+The output report was generated from the input PDF flow with `MODEL_PROVIDER=watsonx`, `ibm/granite-4-h-small`, 12 Swiss synthetic respondents, payment/card-relevant survey questions, 72 persona-question responses, validation score 89.5/100, question coverage 100.0/100, and Consultant Quality evidence grade C. The grade is intentionally conservative because the lead is narrow; the report recommends using the result as directional evidence and validating both concepts with real Swiss customers.
 
 Suggested live stress test:
 
@@ -186,6 +189,7 @@ synthetic_researcher/
   ingestion.py                 TXT/MD/PDF/DOCX/CSV/XLSX survey extraction
   consulting.py                VCA-style research brief and decision brief synthesis
   delivery.py                  Consultant delivery pack and pilot readiness gate
+  insight_quality.py           Evidence grade, decision risk, survey repair plan and validation plan
   llm.py                       Mock + IBM watsonx providers
   orchestrator.py              End-to-end multi-agent run
   pdf_report.py                VCA-style PDF report renderer

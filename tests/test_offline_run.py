@@ -1,6 +1,7 @@
 from pathlib import Path
 from zipfile import ZipFile
 import io
+import json
 
 from synthetic_researcher.consulting import build_decision_brief, default_research_brief, format_decision_brief_markdown
 from synthetic_researcher.agents import SurveyParserAgent
@@ -217,11 +218,15 @@ def test_consultant_delivery_pack_contains_partner_artifacts():
             "07_methodology_and_governance.md",
             "08_pilot_readiness_gate.json",
             "09_consultant_report.pdf",
+            "10_consultant_quality_layer.json",
         }.issubset(names)
         csv_text = bundle.read("03_persona_responses.csv").decode("utf-8")
         assert "persona_id" in csv_text
         assert "secret-value" not in bundle.read("05_full_run.json").decode("utf-8")
         assert bundle.read("09_consultant_report.pdf").startswith(b"%PDF")
+        quality = json.loads(bundle.read("10_consultant_quality_layer.json").decode("utf-8"))
+        assert "survey_repair_plan" in quality
+        assert "decision_risk" in quality
 
 
 def test_consultant_pdf_report_is_valid_pdf():
@@ -246,3 +251,24 @@ def test_consultant_pdf_report_is_valid_pdf():
 
     assert pdf.startswith(b"%PDF")
     assert len(pdf) > 10_000
+
+
+def test_decision_brief_includes_consultant_quality_layer():
+    orch = SyntheticResearchOrchestrator(
+        llm=MockLLM(),
+        persona_path=ROOT / "data" / "swiss_archetypes.yaml",
+        benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
+    )
+    run = orch.run(
+        survey_path=ROOT / "data" / "sample_survey_card.yaml",
+        concepts_path=ROOT / "data" / "sample_concepts.yaml",
+        micro_population_n=12,
+        consistency_runs=1,
+    )
+    brief = default_research_brief()
+    decision = build_decision_brief(run, brief, provider="mock")
+    quality = decision["consultant_quality_layer"]
+
+    assert quality["evidence_grade"] in {"A", "B", "C", "D"}
+    assert quality["survey_repair_plan"]
+    assert quality["recommended_validation_plan"]

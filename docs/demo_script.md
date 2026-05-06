@@ -37,13 +37,19 @@ For the real-model proof, use `watsonx`, `12` respondents, `1` consistency run, 
 Cover these tabs:
 
 - Consultant Summary: adoption index, acceptable fee, top signals, recommendation.
-- Decision Brief: lead concept, decision posture, hypothesis readout, VCA "so what" and next real-research actions.
+- Decision Brief: lead concept, decision posture, Consultant Quality Layer, hypothesis readout, VCA "so what" and next real-research actions.
 - Question Parser: parsed question types, measured constructs and input-source audit.
 - Segment Explorer: which Swiss archetypes fit each concept.
 - Persona Responses: individual responses with rationale and confidence.
 - Validation: benchmark alignment, consistency, coverage, construct coverage and realism rubric.
 - Scorecard: direct mapping to the final grading criteria and KPI evidence.
 - Downloads: polished PDF Report, Consultant Delivery Pack, CSV persona responses, Markdown consultant report and full run JSON for partner-side testing.
+
+In the Consultant Quality Layer, say:
+
+```text
+This is the consulting control layer: it tells us whether the synthetic evidence is strong enough to use directionally, what could be wrong, how the survey should be repaired, and what real-customer validation should happen next.
+```
 
 For Slack partner feedback before the final presentation, attach `demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf` and `demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf`. The second file is a real watsonx/Granite-generated report from the uploaded PDF flow, so it demonstrates the product output without asking the partner to run the app immediately.
 

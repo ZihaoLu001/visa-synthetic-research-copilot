@@ -11,6 +11,7 @@ Evidence:
 - The Question Parser tab shows parsed question type, construct and input-source audit.
 - The app runs a weighted Swiss micro-population and returns persona-level responses.
 - Decision Brief, Consultant Summary, Segment Explorer, Persona Responses, Validation, Scorecard and Architecture tabs are all live.
+- The Decision Brief includes a Consultant Quality Layer: evidence grade, decision risk, lead-margin interpretation, risk flags, survey repair plan and real-customer validation plan.
 - The sidebar exposes the real IBM watsonx.ai / Granite provider and a quota-safe quick proof scope.
 - PDF report, CSV, Markdown report, full JSON and Consultant Delivery Pack downloads make the result testable from the partner side.
 - `demo/partner_examples/` contains a Slack-ready input PDF survey plus a watsonx-generated output PDF report for asynchronous Visa feedback.
@@ -25,6 +26,7 @@ Evidence:
 - `synthetic_researcher/ingestion.py` normalizes survey files into text before agent parsing.
 - `synthetic_researcher/llm.py` isolates model provider choice behind `BaseLLM`.
 - `synthetic_researcher/validation.py` separates benchmark, consistency, coverage and realism validation.
+- `synthetic_researcher/insight_quality.py` converts validation and aggregate signals into evidence quality, decision risk and survey repair actions.
 - `synthetic_researcher/reporting.py` exports consultant-readable Markdown.
 - `synthetic_researcher/pdf_report.py` renders a consultant-style PDF report from the exact run.
 - `synthetic_researcher/delivery.py` exports a partner-review ZIP and readiness gate.
@@ -56,6 +58,7 @@ Evidence:
 - The app positions output as early-stage hypothesis screening.
 - It does not claim to replace final real customer validation.
 - It highlights segment-specific barriers, pricing signals and next tests.
+- It tells consultants when the synthetic evidence is strong enough for prioritization and when the survey needs repair before real customer spend.
 - It helps consultants decide which weak assumptions deserve real customer research.
 
 ## Next Steps - 2 Points

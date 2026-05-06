@@ -328,7 +328,7 @@
                   <div class="metric"><div class="num">12</div><div class="label">Default live Granite proof respondents</div></div>
                   <div class="metric"><div class="num">96</div><div class="label">Full presentation panel available</div></div>
                   <div class="metric"><div class="num">PDF</div><div class="label">Recommended partner upload format</div></div>
-                  <div class="metric"><div class="num">4</div><div class="label">Validation layers in the cockpit</div></div>
+                  <div class="metric"><div class="num">C</div><div class="label">Latest watsonx example evidence grade</div></div>
                 </div>
                 <div class="box green">
                   <h3>Positioning</h3>
@@ -382,13 +382,19 @@
 
             <div class="callout">
               <div class="callout-title">Core algorithm</div>
-              <div>Extract survey text, parse structured questions, sample Swiss micro-personas, run one respondent agent per persona, aggregate weighted results, validate, and synthesize a VCA decision brief.</div>
+              <div>Extract survey text, parse structured questions, normalize key constructs, sample Swiss micro-personas, run one respondent agent per persona, aggregate weighted results, validate, and synthesize a VCA decision brief.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Consultant quality layer</div>
+              <div>The app adds evidence grade, decision risk, lead-margin interpretation, risk flags, survey repair plan and real-customer validation plan so the output is actionable rather than decorative.</div>
             </div>
 
 
             <div class="callout">
               <div class="callout-title">Consultant deliverable</div>
-              <div>Each run exports a polished PDF report and a delivery pack with a decision brief, consultant report, persona CSV, validation JSON, full run JSON, source audit and governance notes.</div>
+              <div>Each run exports a polished PDF report and a delivery pack with a decision brief, quality layer JSON, consultant report, persona CSV, validation JSON, full run JSON, source audit and governance notes.</div>
             </div>
 
 
@@ -765,6 +771,57 @@
     <section class="page ">
       <div class="page-top">
         <div>
+          <div class="eyebrow">Decision Brief tab</div>
+          <h1>Read The Consultant Quality Layer</h1>
+        </div>
+        <div class="brand">VISA</div>
+      </div>
+
+            <div class="grid-2">
+              <div class="callout-stack">
+
+            <div class="callout">
+              <div class="callout-title">Evidence grade</div>
+              <div>Summarizes whether the synthetic run is strong enough for directional prioritization or still needs major repair.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Decision risk</div>
+              <div>Combines validation, lead margin and segment differentiation so consultants do not over-read a narrow synthetic lead.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Risk flags</div>
+              <div>Calls out weak lead, construct gaps, realism issues or price-value mismatch in plain business language.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Survey repair plan</div>
+              <div>Recommends exact modules to add before a real Swiss customer survey, such as choice-based validation, price sensitivity, feature trade-off and barrier/trust questions.</div>
+            </div>
+
+
+            <div class="callout">
+              <div class="callout-title">Real validation plan</div>
+              <div>Turns the output into the next consulting action: interviews, Swiss pulse survey, pricing cell test and calibration loop.</div>
+            </div>
+
+              </div>
+              <div><img class="shot" src="assets/11_consultant_quality_layer.png" alt="Decision Brief tab showing Consultant Quality Layer" /></div>
+            </div>
+
+      <div class="footer">
+        <span>Visa Synthetic Research Copilot - Group 28</span>
+        <span>Public-data demo guide</span>
+      </div>
+    </section>
+
+    <section class="page ">
+      <div class="page-top">
+        <div>
           <div class="eyebrow">Evaluation mapping</div>
           <h1>Use The Scorecard In The Final Presentation</h1>
         </div>
@@ -839,13 +896,13 @@
 
             <div class="callout">
               <div class="callout-title">PDF report</div>
-              <div>The report includes executive answer, decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations.</div>
+              <div>The report includes executive answer, consultant quality layer, decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations.</div>
             </div>
 
 
             <div class="callout">
               <div class="callout-title">Included files</div>
-              <div>The ZIP contains the PDF report, decision brief, consultant report, persona-level CSV, validation JSON, full run JSON, input-source audit, methodology/governance notes and pilot-readiness gate.</div>
+              <div>The ZIP contains the PDF report, decision brief, quality layer JSON, consultant report, persona-level CSV, validation JSON, full run JSON, input-source audit, methodology/governance notes and pilot-readiness gate.</div>
             </div>
 
 
@@ -861,7 +918,7 @@
             </div>
 
               </div>
-              <div><img class="shot" src="assets/11_delivery_pack.png" alt="Decision Brief tab showing PDF Report and Consultant Delivery Pack downloads" /></div>
+              <div><img class="shot" src="assets/12_delivery_pack.png" alt="Decision Brief tab showing PDF Report and Consultant Delivery Pack downloads" /></div>
             </div>
 
       <div class="footer">
@@ -883,12 +940,13 @@
               <div class="box blue">
                 <h2>Message draft</h2>
                 <p>Hi Visa / IBM team,</p>
-                <p>We prepared a short operation manual and a sample input/output pair for the current prototype. It shows a real PDF survey upload, dynamic parsing, IBM watsonx/Granite model path, Swiss synthetic persona responses, aggregated consultant insights, validation checks, and a generated consultant PDF report.</p>
+                <p>We prepared a short operation manual and a sample input/output pair for the current prototype. It shows a real PDF survey upload, dynamic parsing, IBM watsonx/Granite model path, Swiss synthetic persona responses, aggregated consultant insights, a Consultant Quality Layer, validation checks, and a generated consultant PDF report.</p>
                 <p>Attached are the input PDF survey and the generated output PDF report from the same flow.</p>
                 <p>Could you please let us know whether this matches your expected direction for the final Visa use case?</p>
                 <ol class="question-list">
                   <li>Is the flexible PDF survey/interview upload flow aligned with your expectation?</li>
                   <li>Should the final output emphasize aggregate insights, persona-level responses, or both?</li>
+                  <li>Is the evidence grade / decision risk / survey repair layer useful for VCA consultants?</li>
                   <li>Are the benchmark, consistency, coverage and realism validation checks useful enough for VCA consultants?</li>
                   <li>Is there any missing use-case requirement we should address before finals?</li>
                 </ol>
@@ -899,7 +957,7 @@
                 <ul>
                   <li><span class="check">Flexible input:</span> The system is not a fixed Q&A bot.</li>
                   <li><span class="check">Public-data grounding:</span> Personas are used because internal Visa customer data is unavailable.</li>
-                  <li><span class="check">Consultant value:</span> It produces early directional evidence and better real survey design.</li>
+                  <li><span class="check">Consultant value:</span> It produces early directional evidence, a decision posture, evidence quality and better real survey design.</li>
                   <li><span class="check">Validation discipline:</span> The app exposes limitations through benchmark and consistency checks.</li>
                 </ul>
                 <div class="box green" style="margin-top:6mm;">

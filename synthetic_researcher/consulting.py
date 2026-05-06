@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from .insight_quality import build_consultant_quality_layer
 from .schemas import Concept, SurveyRun
 
 
@@ -78,7 +79,7 @@ def build_decision_brief(run: SurveyRun, research_brief: dict[str, str], provide
             "This run uses the deterministic MockLLM fallback; switch to MODEL_PROVIDER=watsonx for a real IBM Granite proof."
         )
 
-    return {
+    decision_payload = {
         "executive_answer": executive_answer,
         "decision_posture": _decision_posture(lead_summary, overall_score, adoption_gap),
         "lead_concept_id": lead_id,
@@ -93,6 +94,8 @@ def build_decision_brief(run: SurveyRun, research_brief: dict[str, str], provide
         "methodology": methodology_snapshot(provider),
         "limitations": limitations,
     }
+    decision_payload["consultant_quality_layer"] = build_consultant_quality_layer(run, decision_payload)
+    return decision_payload
 
 
 def methodology_snapshot(provider: str = "mock") -> list[str]:
@@ -148,6 +151,30 @@ def format_decision_brief_markdown(run: SurveyRun) -> str:
     lines.extend(["", "## Hypothesis Readout", ""])
     for item in brief.get("hypothesis_readout", []):
         lines.append(f"- {item.get('hypothesis')}: {item.get('status')} - {item.get('evidence')}")
+    quality = brief.get("consultant_quality_layer", {})
+    lines.extend(["", "## Consultant Quality Layer", ""])
+    if quality:
+        lines.extend(
+            [
+                f"- Evidence grade: {quality.get('evidence_grade')} ({quality.get('evidence_score')}/100) - {quality.get('evidence_label')}",
+                f"- Decision risk: {quality.get('decision_risk')}",
+                f"- Lead margin: {quality.get('lead_margin_interpretation')}",
+                f"- Segment differentiation: {quality.get('segment_differentiation', {}).get('interpretation')}",
+                "",
+                "### Risk Flags",
+                "",
+            ]
+        )
+        for flag in quality.get("risk_flags", []):
+            lines.append(f"- [{flag.get('severity')}] {flag.get('title')}: {flag.get('detail')}")
+        lines.extend(["", "### Survey Repair Plan", ""])
+        for item in quality.get("survey_repair_plan", []):
+            lines.append(
+                f"- {item.get('module')} ({item.get('priority')}): {item.get('suggested_question')} "
+                f"Reason: {item.get('why')}"
+            )
+        lines.extend(["", "### Real-Customer Validation Plan", ""])
+        lines.extend(f"- {item}" for item in quality.get("recommended_validation_plan", []))
     lines.extend(["", "## Recommended Real Research", ""])
     lines.extend(f"- {item}" for item in brief.get("recommended_real_research", []))
     lines.extend(["", "## Methodology Snapshot", ""])

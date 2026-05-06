@@ -19,7 +19,7 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | In time, not overtime, not undertime | `docs/final_presentation_plan.md` provides a 20-minute structure. |
 | Problem statement and pain points | README, `docs/demo_script.md`, and the app opening screen describe VCA users, slow surveys/interviews, and unvalidated pricing/feature assumptions. |
 | Working demo solving the use case | `app.py` runs paste/upload survey -> parse -> persona agents -> analytics -> validation -> export. |
-| Business value and pain-point fit | Research Brief, Decision Brief, Consultant Summary and PDF/Markdown reports explain early concept screening, time-to-insight, decision posture, caveats and better real survey design. |
+| Business value and pain-point fit | Research Brief, Decision Brief, Consultant Quality Layer, Consultant Summary and PDF/Markdown reports explain early concept screening, time-to-insight, decision posture, caveats, survey repair and better real survey design. |
 | KPIs and how they are met | Runtime, response count, JSON success, benchmark MAE, consistency, coverage, and realism scores appear in the app and generated PDF/Markdown reports. |
 | Architecture with visuals | Architecture tab, `docs/architecture.md`, and componentized Python modules show UI, parser, persona store, LLM provider, orchestrator, analytics, validation, and export. |
 | Next steps and limitations | Scorecard, README guardrails, and `docs/final_presentation_plan.md` explain watsonx Orchestrate, calibration, consultant-report export, and Visa internal validation. |
@@ -36,7 +36,7 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | "No limitation" survey handling from Visa/MS clarification | `demo/external_survey_tests/` contains public-example-inspired concept-test, payment-behavior, and pricing/message surveys; parser tests verify explicit options, ranking-style feature lists, and background-line filtering. |
 | High number of outputs | Slider supports 12-96 synthetic respondents across all questions and concepts. |
 | Aggregated and persona-level results | Consultant Summary, Segment Explorer, Persona Responses, PDF report, CSV export, Markdown report, JSON export, and Consultant Delivery Pack. |
-| Consultant-style decision output | Decision Brief tab links the research objective, hypotheses, adoption/price/segment evidence, validation posture and next real-research actions. |
+| Consultant-style decision output | Decision Brief tab links the research objective, hypotheses, adoption/price/segment evidence, validation posture, evidence grade, decision risk, survey repair and next real-research actions. |
 | Realism, benchmark, and consistency validation | `synthetic_researcher/validation.py` includes benchmark alignment, repeated-run consistency, coverage, question coverage, and realism rubric. |
 | No Visa-internal data required | README and app guardrails state that only public or user-provided data is used. |
 

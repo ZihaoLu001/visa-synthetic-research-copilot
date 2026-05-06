@@ -39,3 +39,19 @@ Useful sources:
 Slide takeaway:
 
 > Synthetic survey simulation is promising, but reliability depends on calibration, transparency and validation. That is why this PoC includes benchmark alignment, repeated-run consistency, construct coverage and a realism rubric.
+
+## Product Design Implications From External Projects
+
+The latest product layer borrows the useful pattern from persona-simulation projects without copying their scope:
+
+- Stanford's Generative Agents paper motivates memory, reflection and consistency as core design patterns for believable agent behavior. In this repo, persona context plus prior answers gives each respondent a stable point of view across the survey.
+- Microsoft's TinyTroupe shows that LLM-powered persona simulation can be useful for business insight work, but also highlights the importance of empirical validation against real survey data. In this repo, that maps to benchmark alignment, realism review and the new real-customer validation plan.
+- OASIS / Open Agentic Survey Interview System is a useful reference for structured survey protocols and searchable transcripts. In this repo, the equivalent product surface is uploaded survey ingestion, parsed question audit, persona-level response tables and exportable evidence.
+- The 2026 reliability paper is the most important caveat: persona-conditioned LLMs can introduce subgroup distortion. That is why the product now includes a Consultant Quality Layer with evidence grade, decision risk, risk flags and survey repair recommendations instead of pretending every synthetic run is decision-ready.
+
+Useful sources:
+
+- Generative Agents, arXiv 2304.03442: <https://arxiv.org/abs/2304.03442>
+- Microsoft TinyTroupe: <https://github.com/microsoft/TinyTroupe>
+- OASIS, Open Agentic Survey Interview System: <https://oasis-surveys.github.io/>
+- Assessing the Reliability of Persona-Conditioned LLMs as Synthetic Survey Respondents, arXiv 2602.18462: <https://arxiv.org/abs/2602.18462>

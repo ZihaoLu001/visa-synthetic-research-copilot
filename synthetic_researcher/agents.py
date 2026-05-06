@@ -20,19 +20,20 @@ class SurveyParserAgent:
         for i, row in enumerate(rows, start=1):
             if not isinstance(row, dict):
                 continue
-            qtype = _normalise_question_type(row.get("type", "open"), row.get("text", ""))
+            text = str(row.get("text") or "").strip()
+            options = row.get("options") or []
+            qtype = _normalise_question_type(row.get("type", "open"), text, options)
             qid = str(row.get("id") or f"Q{i}")
             if qid.isdigit():
                 qid = f"Q{qid}"
-            text = str(row.get("text") or "").strip()
             if not text:
                 continue
             questions.append(SurveyQuestion(
                 id=qid,
                 text=text,
                 type=qtype,
-                options=row.get("options") or [],
-                measures=row.get("measures") or "general feedback",
+                options=options,
+                measures=_normalise_measures(row.get("measures"), text, options, qtype),
             ))
         if not questions and raw_survey.strip():
             questions.append(SurveyQuestion(id="Q1", text=raw_survey.strip(), type="open", measures="general feedback"))
@@ -122,10 +123,13 @@ def _to_float_or_none(value: Any) -> float | None:
         return None
 
 
-def _normalise_question_type(raw_type: Any, text: Any = "") -> str:
+def _normalise_question_type(raw_type: Any, text: Any = "", options: Any = None) -> str:
     qtype = str(raw_type or "open").strip().lower().replace("-", "_")
     question_text = str(text or "").lower()
+    has_options = bool(options)
     if qtype in {"likert", "scale", "rating", "ordinal"}:
+        if has_options and any(token in question_text for token in ["which", "what concern", "main reason", "rank"]):
+            return "choice"
         return "likert"
     if qtype in {"price", "numeric", "number", "currency", "willingness_to_pay"}:
         return "price"
@@ -135,6 +139,45 @@ def _normalise_question_type(raw_type: Any, text: Any = "") -> str:
         return "open"
     if any(token in question_text for token in ["fee", "chf", "price", "willingness to pay", "pay per year"]):
         return "price"
+    if has_options and any(token in question_text for token in ["which", "what", "main reason", "concern", "rank"]):
+        return "choice"
     if any(token in question_text for token in ["likely", "trust", "relevant", "satisfied", "appealing", "rate"]):
         return "likert"
     return "open"
+
+
+def _normalise_measures(raw_measures: Any, text: str, options: Any, qtype: str) -> str:
+    parts: list[str] = []
+    raw = str(raw_measures or "").strip().lower()
+    question_text = " ".join([text.lower(), " ".join(str(option).lower() for option in (options or []))])
+
+    if any(token in raw for token in ["adoption", "trust", "relevance", "appeal", "switching"]):
+        parts.append("adoption")
+    if any(token in raw for token in ["price", "fee", "willingness", "chf"]):
+        parts.append("price")
+    if any(token in raw for token in ["feature", "benefit", "preference", "ranking"]):
+        parts.append("feature preference")
+    if any(token in raw for token in ["barrier", "concern", "objection", "reason not"]):
+        parts.append("barrier")
+
+    if any(token in question_text for token in ["likely", "adopt", "trust", "use this card", "would you use", "switch"]):
+        parts.append("adoption")
+    if any(token in question_text for token in ["annual fee", "chf", "price", "too expensive", "acceptable", "good value", "pay per year"]):
+        parts.append("price sensitivity")
+    if any(token in question_text for token in ["benefit", "feature", "rank", "most valuable", "most relevant", "payment activity", "rewards", "cashback", "insurance", "protection"]):
+        parts.append("feature preference")
+    if any(token in question_text for token in ["barrier", "prevent", "concern", "would not", "not use", "wrong recommendation", "loss of control", "privacy", "setup complexity"]):
+        parts.append("barrier")
+
+    if qtype == "price":
+        parts.append("price sensitivity")
+    if qtype == "choice" and not parts:
+        parts.append("choice preference")
+    if not parts:
+        parts.append(raw or "general feedback")
+
+    deduped: list[str] = []
+    for part in parts:
+        if part not in deduped:
+            deduped.append(part)
+    return "; ".join(deduped)

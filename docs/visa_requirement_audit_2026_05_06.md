@@ -6,6 +6,8 @@ This audit maps the current product against `20260316_IBM_watsonx_kickoff_slides
 
 The current repository is no longer a toy demo. It is a consultant-grade pilot workbench that can be handed to IBM/Visa for testing through Code Engine, with a real IBM watsonx.ai / Granite path configured and a deterministic fallback for rehearsal.
 
+The strongest recent addition is the Consultant Quality Layer. It gives every run an evidence grade, decision-risk rating, lead-margin interpretation, risk flags, survey repair plan and real-customer validation plan. This makes the system more VCA-like because it does not merely generate synthetic answers; it tells consultants how much to trust the evidence and what to test next.
+
 It is still a pilot, not a production Visa system. Production use would require Visa-owned authentication, run storage, internal benchmark calibration, legal review and operating controls.
 
 ## Real Model Status
@@ -16,6 +18,7 @@ It is still a pilot, not a production Visa system. Production use would require 
 | Local watsonx.ai mini synthetic run | Passed on 2026-05-06 with provider `watsonx`, parsed survey questions, persona responses and validation. |
 | Code Engine API health | Passed on 2026-05-06 with `active_provider_if_auto=watsonx` and `watsonx_configured=true`. |
 | Code Engine `/run` proof | Passed on 2026-05-06 with a one-question survey, 6 persona responses and validation output. |
+| Slack-ready watsonx PDF report | Passed on 2026-05-06 with 72 persona-question responses, validation score 89.5, question coverage 100.0 and Consultant Quality evidence grade C because the concept lead is narrow. |
 | CI and regression tests | Mock-backed by design so automated tests do not burn course quota or require secrets. |
 
 ## Requirement Trace
@@ -31,6 +34,7 @@ It is still a pilot, not a production Visa system. Production use would require 
 | Return both aggregated results and individual persona responses | Decision Brief, Consultant Summary, Segment Explorer, Persona Responses table, CSV export and JSON export. | Met |
 | Include price sensitivity, feature preferences, barriers and card proposition outputs | Default research brief and analytics compute adoption, acceptable fee, feature/barrier labels and segment fit. | Met |
 | Validate realism, benchmark alignment and internal consistency | Validation tab includes benchmark MAE, repeated-run Likert variance, coverage, question coverage and realism rubric. | Met |
+| Make the output decision-grade for consultants | Consultant Quality Layer adds evidence grade, decision risk, lead-margin interpretation, survey repair plan and real-customer validation plan. | Met |
 | Demonstrate time, cost and insight advantages | KPI cards and Scorecard tab show time-to-insight, response count, JSON success, benchmark and consistency evidence. | Met |
 | Make it useful for consultants | Research Brief, Decision Brief, VCA "so what", hypothesis readout, recommended real research and Consultant Delivery Pack. | Met |
 

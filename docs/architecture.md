@@ -16,6 +16,7 @@ Consultant UI
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark / Consistency / Coverage / Realism Validator
+  -> Consultant Quality Layer
   -> VCA Decision Brief / PDF Report / Consultant Delivery Pack
 ```
 
@@ -34,7 +35,7 @@ Consultant UI
 : Coordinates survey parsing, persona expansion, repeated synthetic survey runs, aggregation, and validation.
 
 `SurveyParserAgent`
-: Converts arbitrary survey or interview text into structured questions with type and measured construct.
+: Converts arbitrary survey or interview text into structured questions with type and measured construct. A deterministic construct-normalization pass cross-checks model output so adoption, price sensitivity, feature preference and barrier coverage remain stable for unfamiliar survey wording.
 
 `PersonaAgent`
 : Answers each question from one persona's point of view using persona context, concept details, public benchmark context, and prior answers.
@@ -45,11 +46,14 @@ Consultant UI
 `Decision Brief`
 : Sits above the analyst summary. It answers the business question first, then links the recommendation to adoption, price, segment fit, validation score and the user's stated hypotheses. This is the layer that makes the prototype read like a consulting workbench instead of a generic synthetic respondent table.
 
+`insight_quality.py`
+: Adds the consultant evidence lens: evidence grade, decision risk, lead-margin interpretation, segment differentiation, risk flags, survey repair plan, validation plan and calibration thresholds. This makes the output more defensible because VCA sees not only the answer, but also how strong the synthetic evidence is and what must be tested with real customers next.
+
 `delivery.py`
 : Packages the run into a partner-review ZIP containing the decision brief, PDF report, consultant report, persona-level CSV, validation JSON, full run JSON, input audit, methodology/governance notes, and a pilot readiness gate. This gives Visa a portable artifact they can inspect outside Streamlit.
 
 `pdf_report.py`
-: Renders a VCA-style PDF report from the exact run data: executive answer, KPI strip, research brief, concept decision matrix, signal/barrier tables, segment fit, persona-level evidence, validation confidence, methodology and limitations. This turns the demo into a concrete consultant artifact rather than only an on-screen dashboard.
+: Renders a VCA-style PDF report from the exact run data: executive answer, KPI strip, research brief, consultant quality layer, concept decision matrix, signal/barrier tables, segment fit, persona-level evidence, validation confidence, methodology and limitations. This turns the demo into a concrete consultant artifact rather than only an on-screen dashboard.
 
 `validation.py`
 : Runs benchmark alignment, internal consistency, persona coverage, survey construct coverage, judge-style realism checks and an overall validation confidence score.
@@ -87,6 +91,8 @@ Internal consistency repeats the same run and measures Likert standard deviation
 Coverage checks whether the synthetic panel spans the core Visa-requested dimensions: age, income, household, language region, and persona archetype count.
 
 Question coverage checks whether the input survey includes the consultant constructs most relevant for card proposition testing: adoption, price sensitivity, feature preference and barriers.
+
+The Consultant Quality Layer converts validation output into an explicit actionability signal. A strong validation score can still be marked as medium decision risk if the concept lead is narrow, segment spread is weak or the survey lacks a key construct. Conversely, it can recommend a smaller real-customer validation plan when synthetic evidence is directionally strong.
 
 The realism rubric checks for concise survey-style answers, model identity leakage, numeric range validity, rough persona/price alignment and obvious adoption-versus-price contradictions. It is intentionally transparent so a future watsonx judge or human reviewer can use the same rubric.
 

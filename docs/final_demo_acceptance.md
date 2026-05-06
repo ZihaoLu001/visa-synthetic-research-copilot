@@ -28,9 +28,9 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | External survey API stress tests | 3 public-example-inspired surveys returned synthetic responses, validation evidence, and 100.0 JSON parse success |
 | Real watsonx.ai smoke test | `ibm/granite-4-h-small` returned a live response after IBM restored Group 28 quota |
 | Real watsonx.ai mini-run | End-to-end parser/persona/validation flow completed with provider `watsonx` |
-| Local regression tests | `20 passed` |
+| Local regression tests | `21 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
-| Slack-ready PDF report example | Public PDF survey input generated a watsonx/Granite consultant PDF report with 72 persona-question responses and validation score 85.0 |
+| Slack-ready PDF report example | Public PDF survey input generated a watsonx/Granite consultant PDF report with 72 persona-question responses, validation score 89.5, question coverage 100.0 and Consultant Quality evidence grade C because the concept lead is narrow |
 
 ## One-Command Smoke Test
 
@@ -70,13 +70,14 @@ Demo sequence:
 4. For the full-scale presentation run, switch to `Full survey`, move respondents to `96`, and use mock only if quota/time becomes a risk.
 5. Use `Core Visa card survey`, upload the public sample PDF, or paste/upload a different survey if Visa wants to test from their side.
 6. Run the synthetic survey and confirm the KPI cards show parsed questions, runtime, validation and response count.
-7. Show `Consultant Summary`.
-8. Show `Question Parser` to prove flexible survey input.
-9. Show `Segment Explorer` for Swiss archetype differences.
-10. Show `Persona Responses` for individual traceability.
-11. Show `Validation` and `Scorecard` for benchmark, consistency, coverage, realism, pilot readiness, and grading evidence.
-12. Download the PDF Report and Consultant Delivery Pack ZIP to show the partner-review artifact.
-13. Switch the scenario to `Live sensitivity: lower Premium fee to CHF 60`, rerun, and explain directional movement.
+7. Show `Decision Brief`, especially the Consultant Quality Layer: evidence grade, decision risk, risk flags, survey repair plan and real-customer validation plan.
+8. Show `Consultant Summary`.
+9. Show `Question Parser` to prove flexible survey input.
+10. Show `Segment Explorer` for Swiss archetype differences.
+11. Show `Persona Responses` for individual traceability.
+12. Show `Validation` and `Scorecard` for benchmark, consistency, coverage, realism, pilot readiness, and grading evidence.
+13. Download the PDF Report and Consultant Delivery Pack ZIP to show the partner-review artifact.
+14. Switch the scenario to `Live sensitivity: lower Premium fee to CHF 60`, rerun, and explain directional movement.
 
 ## Partner Feedback Attachments
 
@@ -87,7 +88,7 @@ demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf
 demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf
 ```
 
-The first file is the uploaded survey artifact. The second file is the generated consultant report from the same flow with real `watsonx / ibm/granite-4-h-small`, including executive answer, decision matrix, segment fit, persona evidence, validation and governance caveats.
+The first file is the uploaded survey artifact. The second file is the generated consultant report from the same flow with real `watsonx / ibm/granite-4-h-small`, including executive answer, Consultant Quality Layer, decision matrix, segment fit, persona evidence, validation and governance caveats.
 
 ## What To Say
 

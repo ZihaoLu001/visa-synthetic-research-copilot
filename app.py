@@ -881,6 +881,45 @@ def render_decision_brief(run: SurveyRun) -> None:
     else:
         st.info("No hypotheses were provided.")
 
+    quality = decision.get("consultant_quality_layer", {})
+    if quality:
+        st.markdown("#### Consultant Quality Layer")
+        decision_risk = str(quality.get("decision_risk", "-"))
+        lead_margin = str(quality.get("lead_margin_interpretation", "-"))
+        risk_headline = decision_risk.split(":", 1)[0]
+        lead_headline = "Tie" if "narrow" in lead_margin.lower() else ("Moderate" if "moderate" in lead_margin.lower() else "Clear")
+        q1, q2, q3, q4 = st.columns(4)
+        q1.metric("Evidence grade", quality.get("evidence_grade", "-"), f"{quality.get('evidence_score', '-')}/100")
+        q2.metric("Decision risk", risk_headline)
+        q3.metric("Lead margin", lead_headline)
+        segment = quality.get("segment_differentiation", {})
+        segment_interpretation = str(segment.get("interpretation", ""))
+        segment_headline = "Low" if "low" in segment_interpretation.lower() else ("Moderate" if "moderate" in segment_interpretation.lower() else "Strong")
+        q4.metric("Segment spread", segment.get("spread", "-"), segment_headline)
+        st.caption(f"Decision interpretation: {decision_risk} {lead_margin} Segment read: {segment_interpretation}")
+
+        r1, r2 = st.columns([0.48, 0.52], gap="large")
+        with r1:
+            st.markdown("**Evidence risks to mention**")
+            for flag in quality.get("risk_flags", []):
+                st.write(f"- **{flag.get('title')}** ({flag.get('severity')}): {flag.get('detail')}")
+        with r2:
+            st.markdown("**Top consultant actions**")
+            for item in quality.get("top_consultant_actions", []):
+                st.write(f"- {item}")
+
+        repair = pd.DataFrame(quality.get("survey_repair_plan", []))
+        if not repair.empty:
+            st.markdown("**Survey repair plan for the next real customer test**")
+            st.dataframe(repair, width="stretch", hide_index=True)
+
+        with st.expander("Real-customer validation and calibration plan", expanded=False):
+            for item in quality.get("recommended_validation_plan", []):
+                st.write(f"- {item}")
+            st.markdown("**Calibration thresholds**")
+            for item in quality.get("calibration_thresholds", []):
+                st.write(f"- {item}")
+
     st.markdown("#### Methodology and Model Transparency")
     for item in decision.get("methodology", methodology_snapshot(str(aggregate.get("provider", "mock")))):
         st.write(f"- {item}")

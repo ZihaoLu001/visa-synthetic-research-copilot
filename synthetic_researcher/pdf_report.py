@@ -20,6 +20,7 @@ from reportlab.platypus import (
 )
 
 from .consulting import build_decision_brief
+from .insight_quality import build_consultant_quality_layer
 from .schemas import SurveyRun
 
 VISA_BLUE = colors.HexColor("#1a1f71")
@@ -50,6 +51,7 @@ def build_consultant_pdf_report(run: SurveyRun) -> bytes:
     story.extend(_cover(run, styles))
     story.append(PageBreak())
     story.extend(_executive_summary(run, styles))
+    story.extend(_quality_layer(run, styles))
     story.extend(_concept_matrix(run, styles))
     story.extend(_signals_and_segments(run, styles))
     story.append(PageBreak())
@@ -139,6 +141,36 @@ def _concept_matrix(run: SurveyRun, styles: dict[str, ParagraphStyle]) -> list[A
         Paragraph("Concept Decision Matrix", styles["h1"]),
         _table(rows, [42 * mm, 25 * mm, 25 * mm, 48 * mm, 45 * mm]),
     ]
+
+
+def _quality_layer(run: SurveyRun, styles: dict[str, ParagraphStyle]) -> list[Any]:
+    decision = _decision(run)
+    quality = decision.get("consultant_quality_layer") or build_consultant_quality_layer(run, decision)
+    segment = quality.get("segment_differentiation", {})
+    rows = [
+        ["Evidence grade", f"{quality.get('evidence_grade', 'n/a')} ({quality.get('evidence_score', 'n/a')}/100)", _para(quality.get("evidence_label", "n/a"), styles)],
+        ["Decision risk", _clean(quality.get("decision_risk")), _para(quality.get("lead_margin_interpretation", "n/a"), styles)],
+        ["Segment differentiation", _clean(segment.get("spread")), _para(segment.get("interpretation", "n/a"), styles)],
+    ]
+    story: list[Any] = [
+        Spacer(1, 7 * mm),
+        Paragraph("Consultant Quality Layer", styles["h1"]),
+        _table([["Dimension", "Signal", "Interpretation"], *rows], [44 * mm, 42 * mm, 99 * mm], font_size=8),
+        Spacer(1, 5 * mm),
+        Paragraph("Top Consultant Actions", styles["h2"]),
+    ]
+    story.extend(_bullet_list(quality.get("top_consultant_actions", []), styles))
+
+    risk_rows = [["Severity", "Risk flag", "Why it matters"]]
+    for flag in quality.get("risk_flags", [])[:6]:
+        risk_rows.append([flag.get("severity", "n/a"), _para(flag.get("title", "n/a"), styles), _para(flag.get("detail", "n/a"), styles)])
+    story.extend([Spacer(1, 4 * mm), Paragraph("Evidence Risks", styles["h2"]), _table(risk_rows, [25 * mm, 45 * mm, 115 * mm], font_size=7.8)])
+
+    repair_rows = [["Priority", "Survey module", "Suggested next question"]]
+    for item in quality.get("survey_repair_plan", [])[:5]:
+        repair_rows.append([item.get("priority", "n/a"), _para(item.get("module", "n/a"), styles), _para(item.get("suggested_question", "n/a"), styles)])
+    story.extend([Spacer(1, 4 * mm), Paragraph("Survey Repair Plan", styles["h2"]), _table(repair_rows, [24 * mm, 43 * mm, 118 * mm], font_size=7.4)])
+    return story
 
 
 def _signals_and_segments(run: SurveyRun, styles: dict[str, ParagraphStyle]) -> list[Any]:

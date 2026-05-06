@@ -27,6 +27,7 @@ def build_consultant_delivery_pack(run: SurveyRun) -> bytes:
         bundle.writestr("07_methodology_and_governance.md", _methodology_and_governance(run))
         bundle.writestr("08_pilot_readiness_gate.json", _safe_json(build_pilot_readiness_gate(run)))
         bundle.writestr("09_consultant_report.pdf", build_consultant_pdf_report(run))
+        bundle.writestr("10_consultant_quality_layer.json", _safe_json((run.aggregate.get("decision_brief") or {}).get("consultant_quality_layer", {})))
     return buffer.getvalue()
 
 
@@ -89,7 +90,7 @@ def build_pilot_readiness_gate(run: SurveyRun) -> list[dict[str, str]]:
         _gate_row(
             "Consultant export pack and PDF report",
             True,
-            "ZIP pack includes decision brief, PDF report, Markdown report, CSV responses, full JSON, validation and governance notes.",
+            "ZIP pack includes decision brief, PDF report, quality layer, Markdown report, CSV responses, full JSON, validation and governance notes.",
             "No action needed.",
         ),
         _gate_row(
@@ -181,6 +182,7 @@ def _delivery_readme(run: SurveyRun) -> str:
             "- `07_methodology_and_governance.md`: model, algorithm, limitation and human-review notes.",
             "- `08_pilot_readiness_gate.json`: readiness checklist for partner review.",
             "- `09_consultant_report.pdf`: polished PDF report for partner sharing.",
+            "- `10_consultant_quality_layer.json`: evidence grade, decision risk, survey repair plan and calibration thresholds.",
             "",
             "## Guardrail",
             "",

@@ -37,6 +37,7 @@ Survey / concept input
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark + Consistency + Realism Validator
+  -> Consultant Quality Layer
   -> VCA Decision Brief / PDF Report / Consultant Delivery Pack
 ```
 
@@ -55,7 +56,7 @@ IBM platform positioning:
 1. Confirm the sidebar shows `watsonx` and `Real LLM ready: ibm/granite-4-h-small`.
 2. Upload the public sample PDF survey or paste the default card survey.
 3. Run the quick real-model proof with 12 respondents and the first 2 questions.
-4. Open Decision Brief for lead concept, decision posture, hypothesis readout and next real research.
+4. Open Decision Brief for lead concept, decision posture, Consultant Quality Layer, hypothesis readout and next real research.
 5. Open the Question Parser tab to prove the survey is parsed dynamically from the uploaded file.
 6. Open Consultant Summary for adoption index, acceptable fee and signals.
 7. Open Segment Explorer for persona differences.
@@ -73,6 +74,7 @@ Cover:
 - typed schemas and provider-independent `BaseLLM`
 - orchestrator loop across personas, concepts and questions
 - validation layer
+- consultant evidence quality layer
 - PDF Report, Consultant Delivery Pack, CSV and Markdown export
 - FastAPI integration endpoint for Code Engine / watsonx Orchestrate
 - OpenAPI and ADK assets under `orchestrate/`
