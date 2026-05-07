@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from dataclasses import replace
 from pathlib import Path
 
 import pandas as pd
@@ -20,7 +19,7 @@ from synthetic_researcher.delivery import (
 )
 from synthetic_researcher.ingestion import SurveyExtractionError, extract_survey_text, supported_upload_types
 from synthetic_researcher.llm import LLMError, get_llm, watsonx_config_status
-from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator, load_concepts
+from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.pdf_report import build_consultant_pdf_report
 from synthetic_researcher.reporting import build_markdown_report
 from synthetic_researcher.schemas import Concept, SurveyRun
@@ -36,7 +35,7 @@ FEDERAL_RESERVE_SURVEY_SOURCE = (
 )
 
 
-st.set_page_config(page_title="Visa Synthetic Research Copilot", layout="wide", page_icon="V")
+st.set_page_config(page_title="VCA Multi-Agent Synthetic Researcher", layout="wide", page_icon="V")
 
 st.markdown(
     """
@@ -283,14 +282,12 @@ st.markdown(
 
 
 def main() -> None:
-    defaults = load_concepts(DATA / "sample_concepts.yaml")
-
     st.markdown(
         """
         <div class="visa-shell">
           <div class="visa-head">
             <div>
-              <h1 class="visa-title">VCA Synthetic Customer Lab</h1>
+              <h1 class="visa-title">VCA Multi-Agent Synthetic Researcher</h1>
               <div class="visa-subtitle">
                 A consultant-grade copilot for early-stage value proposition screening. Upload a survey,
                 interview guide or proposition test, run Swiss synthetic customer agents, and export
@@ -350,26 +347,17 @@ def main() -> None:
                 "Full survey remains available for the complete synthetic-research run."
             ),
         )
-        scenario = st.selectbox(
-            "Demo scenario",
-            [
-                "Baseline concepts",
-                "Live sensitivity: lower Premium fee to CHF 60",
-                "Live sensitivity: add stronger protection messaging",
-            ],
-        )
         st.divider()
-        st.subheader("Demo Guardrail")
+        st.subheader("Research Guardrail")
         st.write("Directional early-stage research only. Final validation remains with Visa and real customer data.")
 
-    defaults = apply_demo_scenario(defaults, scenario)
     render_model_and_delivery_proof(wx_status, provider, run_scope)
     research_brief = render_research_brief()
 
-    default_survey = """1. How likely would you be to adopt this card if it were offered by your bank?
-2. What annual fee in CHF would feel acceptable for this card?
-3. Which benefit or feature feels most valuable to you, and why?
-4. What is the main barrier that would prevent you from using this card?"""
+    default_survey = """1. How relevant is this value proposition for your everyday payment or banking needs?
+2. What annual fee or monthly price in CHF would feel acceptable, if any?
+3. Which benefit, service or message feels most valuable to you, and why?
+4. What is the main barrier or concern that would stop you from using it?"""
     survey_presets = load_survey_presets(default_survey)
     if "survey_text_value" not in st.session_state:
         st.session_state["survey_text_value"] = default_survey
@@ -377,19 +365,19 @@ def main() -> None:
     render_workflow_step(
         1,
         "Upload a survey file",
-        "PDF is the recommended review format for partner demos. TXT, DOCX, CSV and XLSX also work.",
+        "PDF is the recommended partner-review format. TXT, DOCX, CSV and XLSX also work.",
     )
     upload_col, sample_col = st.columns([0.62, 0.38], gap="large")
     with upload_col:
         uploaded_survey = st.file_uploader(
             "Upload PDF, DOCX, XLSX or text survey",
             type=supported_upload_types(),
-            help="Upload a survey, interview guide or concept test. The system extracts text before running the agents.",
+            help="Upload a survey, interview guide or proposition test. The system extracts text before running the agents.",
             key="survey_file_upload",
         )
     with sample_col:
         st.markdown("**Need a realistic test file?**")
-        st.caption("Use the public mobile-payments survey excerpt for a reviewer-friendly PDF upload demo.")
+        st.caption("Use the public mobile-payments survey excerpt for a reviewer-friendly PDF upload test.")
         sample_pdf = PUBLIC_UPLOADS / "federal_reserve_mobile_payments_excerpt.pdf"
         if sample_pdf.exists():
             st.download_button(
@@ -401,7 +389,7 @@ def main() -> None:
             )
         st.link_button("Open public source", FEDERAL_RESERVE_SURVEY_SOURCE, width="stretch")
 
-    preset_name = "Core Visa card survey"
+    preset_name = "Core Visa synthetic survey"
     input_metadata: dict[str, object] = {
         "source": "preset",
         "file_name": preset_name,
@@ -494,11 +482,11 @@ def main() -> None:
         with right:
             render_workflow_step(
                 3,
-                "Configure concepts",
-                "Use the default Visa card propositions, tune pricing/features, or paste a client proposition.",
+                "Define the value proposition",
+                "Paste the client payment or banking value proposition that the synthetic customers should react to.",
             )
-            st.markdown("#### Product Concepts")
-            concepts = concept_editor(defaults, target_context)
+            st.markdown("#### Client Value Proposition")
+            concepts = concept_editor(default_value_proposition(target_context), target_context)
 
         render_workflow_step(
             4,
@@ -593,8 +581,8 @@ def render_model_and_delivery_proof(wx_status: dict[str, object], provider: str,
             <span>{model_text}</span>
           </div>
           <div class="proof-card">
-            <strong>2. Synthetic Customer Loop</strong>
-            <span>Concept -> survey/interview artifact -> synthetic customers -> validation -> real research plan.</span>
+            <strong>2. Persona Agent Loop</strong>
+            <span>Client proposition -> survey/interview artifact -> synthetic customers -> validation -> real research plan.</span>
           </div>
           <div class="proof-card">
             <strong>3. Run Scope</strong>
@@ -632,24 +620,6 @@ def scoped_survey_for_run(raw_survey: str, metadata: dict[str, object], run_scop
     return scoped
 
 
-def apply_demo_scenario(defaults: list[Concept], scenario: str) -> list[Concept]:
-    concepts = [replace(concept) for concept in defaults]
-    if scenario == "Live sensitivity: lower Premium fee to CHF 60":
-        concepts[0] = replace(
-            concepts[0],
-            annual_fee_chf=60.0,
-            description=concepts[0].description + " The annual fee is reduced for a broader trial positioning.",
-        )
-    elif scenario == "Live sensitivity: add stronger protection messaging":
-        features = list(dict.fromkeys([*concepts[0].features, "strong purchase protection messaging", "transparent claims process"]))
-        concepts[0] = replace(
-            concepts[0],
-            features=features,
-            description=concepts[0].description + " Messaging emphasizes purchase protection, claim simplicity and transparent coverage.",
-        )
-    return concepts
-
-
 def render_workflow_step(number: int, title: str, copy: str) -> None:
     st.markdown(
         f"""
@@ -665,46 +635,69 @@ def render_workflow_step(number: int, title: str, copy: str) -> None:
     )
 
 
-def concept_editor(defaults: list[Concept], target_context: str) -> list[Concept]:
-    concepts: list[Concept] = []
-    for idx, default in enumerate(defaults):
-        with st.expander(f"{default.id}: {default.name}", expanded=True):
-            name = st.text_input("Name", value=default.name, key=f"name_{idx}")
-            annual_fee = st.number_input(
-                "Annual fee CHF",
-                min_value=0,
-                max_value=500,
-                value=int(default.annual_fee_chf),
-                step=5,
-                key=f"fee_{idx}",
-            )
-            description = st.text_area("Description", value=default.description, height=86, key=f"description_{idx}")
-            features_text = st.text_area(
-                "Features",
-                value="\n".join(default.features),
-                height=96,
-                key=f"features_{idx}",
-            )
-            concepts.append(
-                Concept(
-                    id=default.id,
-                    name=name,
-                    description=description,
-                    annual_fee_chf=float(annual_fee),
-                    features=[line.strip() for line in features_text.splitlines() if line.strip()],
-                    target_context=target_context or default.target_context,
-                )
-            )
-    return concepts
+def default_value_proposition(target_context: str) -> Concept:
+    return Concept(
+        id="P1",
+        name="Client value proposition",
+        description=(
+            "Paste the client proposition here. Include the customer promise, product or service context, "
+            "pricing or fee if known, benefits to test, and any message or assumption the consultant wants "
+            "synthetic Swiss customers to react to."
+        ),
+        annual_fee_chf=0.0,
+        features=[
+            "replace with the main customer benefit",
+            "replace with a proof point or service feature",
+            "replace with a message, risk or barrier to test",
+        ],
+        target_context=target_context or "Swiss consumer value proposition",
+    )
+
+
+def concept_editor(default: Concept, target_context: str) -> list[Concept]:
+    name = st.text_input("Proposition name", value=default.name, key="name_primary")
+    annual_fee = st.number_input(
+        "Price or annual fee CHF",
+        min_value=0,
+        max_value=500,
+        value=int(default.annual_fee_chf),
+        step=5,
+        help="Use 0 if no fee or price has been defined yet.",
+        key="fee_primary",
+    )
+    description = st.text_area(
+        "Proposition description",
+        value=default.description,
+        height=132,
+        help="This is sent to each synthetic customer agent as the proposition context.",
+        key="description_primary",
+    )
+    features_text = st.text_area(
+        "Benefits, messages or assumptions to test",
+        value="\n".join(default.features),
+        height=118,
+        help="One item per line. These can be benefits, claims, proof points or barriers to validate.",
+        key="features_primary",
+    )
+    return [
+        Concept(
+            id="P1",
+            name=name,
+            description=description,
+            annual_fee_chf=float(annual_fee),
+            features=[line.strip() for line in features_text.splitlines() if line.strip()],
+            target_context=target_context or default.target_context,
+        )
+    ]
 
 
 def load_survey_presets(default_survey: str) -> dict[str, str]:
-    presets = {"Core Visa card survey": default_survey}
+    presets = {"Core Visa synthetic survey": default_survey}
     if DEMO_SURVEYS.exists():
         label_map = {
-            "concept_test_qualtrics_surveymonkey_style.txt": "External stress test: concept testing",
+            "concept_test_qualtrics_surveymonkey_style.txt": "External stress test: proposition testing",
             "payment_behavior_federal_reserve_style.txt": "External stress test: payment behavior",
-            "card_pricing_message_test.txt": "External stress test: pricing and message",
+            "pricing_message_value_proposition_test.txt": "External stress test: pricing and message",
         }
         for path in sorted(DEMO_SURVEYS.glob("*.txt")):
             label = label_map.get(path.name, f"External stress test: {path.stem.replace('_', ' ')}")
@@ -751,7 +744,7 @@ def run_synthetic_survey(
 
 
 def render_empty_state() -> None:
-    st.markdown("#### Demo Flow")
+    st.markdown("#### Operating Flow")
     c1, c2, c3, c4 = st.columns(4)
     card(c1, "1", "Parse", "Turn arbitrary survey text into structured questions.")
     card(c2, "2", "Simulate", "Run weighted Swiss persona agents independently.")
@@ -801,7 +794,7 @@ def render_kpis(run: SurveyRun) -> None:
     best_id = max(concepts, key=lambda k: concepts[k].get("adoption_index_0_100") or 0) if concepts else "-"
     best_score = concepts.get(best_id, {}).get("adoption_index_0_100", "-")
     c1, c2, c3, c4, c5 = st.columns(5)
-    card(c1, "Lead concept", str(best_id), f"Adoption index {best_score}/100.")
+    card(c1, "Proposition", str(best_id), f"Adoption index {best_score}/100.")
     card(c2, "Panel", str(aggregate.get("respondent_count", "-")), f"{aggregate.get('response_count', 0)} persona-question responses.")
     card(c3, "Validation", str(validation.get("overall", {}).get("score", "-")), "Weighted confidence scorecard.")
     card(c4, "Benchmark", str(benchmark.get("score", "-")), benchmark.get("primary_profile_label", "Public payment mix alignment."))
@@ -828,8 +821,9 @@ def render_decision_brief(run: SurveyRun) -> None:
     )
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Lead concept", decision.get("lead_concept_name") or decision.get("lead_concept_id") or "-")
-    c2.metric("Adoption gap", f"{decision.get('adoption_gap_vs_next', '-')}", "vs next concept")
+    c1.metric("Proposition", decision.get("lead_concept_name") or decision.get("lead_concept_id") or "-")
+    gap = decision.get("adoption_gap_vs_next")
+    c2.metric("Survey evidence", f"{run.aggregate.get('response_count', 0)} responses", "persona-question records")
     c3.metric("Validation", decision.get("validation_score", "-"), decision.get("validation_band", ""))
     c4.metric("Evidence mode", str(aggregate.get("provider", "mock")), str(aggregate.get("model_id", "provider abstraction")))
 
@@ -846,7 +840,7 @@ def render_decision_brief(run: SurveyRun) -> None:
             st.markdown("**Expected output**")
             st.write(research.get("stakeholder_output", "n/a"))
 
-    st.markdown("#### Concept Decision Matrix")
+    st.markdown("#### Proposition Evidence Readout")
     matrix = pd.DataFrame(decision.get("concept_matrix", []))
     if not matrix.empty:
         display_cols = [
@@ -860,9 +854,26 @@ def render_decision_brief(run: SurveyRun) -> None:
             "top_signals",
             "recommended_action",
         ]
+        matrix = matrix.rename(
+            columns={
+                "concept_id": "proposition_id",
+                "concept_name": "proposition_name",
+            }
+        )
+        display_cols = [
+            "proposition_id",
+            "proposition_name",
+            "adoption_index",
+            "mean_likert",
+            "price_signal",
+            "strongest_segments",
+            "weakest_segments",
+            "top_signals",
+            "recommended_action",
+        ]
         st.dataframe(matrix[[col for col in display_cols if col in matrix.columns]], width="stretch", hide_index=True)
     else:
-        st.info("No adoption-style concept matrix is available. Check whether the survey includes a likelihood or appeal question.")
+        st.info("No quantified relevance or adoption signal was parsed. Add a relevance, likelihood or appeal question if a numeric readout is needed.")
 
     s1, s2 = st.columns(2, gap="large")
     with s1:
@@ -883,16 +894,11 @@ def render_decision_brief(run: SurveyRun) -> None:
 
     lens = decision.get("synthetic_customer_lens", {})
     if lens:
-        st.markdown("#### Synthetic Customer Lens")
+        st.markdown("#### Customer Perspective Board")
         st.caption(lens.get("positioning", "Synthetic customers provide directional early-stage customer intuition."))
         st.markdown("**Value proposition questions this run can inform**")
         for item in lens.get("value_proposition_questions", []):
             st.write(f"- {item}")
-        use_case_fit = pd.DataFrame(lens.get("use_case_fit", []))
-        if not use_case_fit.empty:
-            st.markdown("**Bain-style synthetic customer use-case fit**")
-            st.dataframe(use_case_fit, width="stretch", hide_index=True)
-
         r1, r2, r3 = st.columns(3, gap="large")
         with r1:
             st.markdown("**Decision drivers**")
@@ -912,16 +918,6 @@ def render_decision_brief(run: SurveyRun) -> None:
         if not board.empty:
             st.markdown("**Synthetic customer board**")
             st.dataframe(board, width="stretch", hide_index=True)
-
-        scenario_moves = pd.DataFrame(lens.get("scenario_planning_moves", []))
-        if not scenario_moves.empty:
-            st.markdown("**Scenario planning moves for the next iteration**")
-            st.dataframe(scenario_moves, width="stretch", hide_index=True)
-
-        checks = pd.DataFrame(lens.get("scenario_design_check", []))
-        if not checks.empty:
-            with st.expander("Synthetic customer scenario design checks", expanded=False):
-                st.dataframe(checks, width="stretch", hide_index=True)
 
     quality = decision.get("consultant_quality_layer", {})
     if quality:
@@ -1008,7 +1004,7 @@ def render_summary(run: SurveyRun) -> None:
 
     summary_df = pd.DataFrame([
         {
-            "concept": concept_id,
+            "proposition": concept_id,
             "adoption_index": values.get("adoption_index_0_100"),
             "mean_likert": values.get("mean_likert"),
             "respondents": values.get("respondents"),
@@ -1016,7 +1012,7 @@ def render_summary(run: SurveyRun) -> None:
         for concept_id, values in aggregate.get("concept_summary", {}).items()
     ])
     if not summary_df.empty:
-        st.bar_chart(summary_df.set_index("concept")["adoption_index"], color="#1434cb")
+        st.bar_chart(summary_df.set_index("proposition")["adoption_index"], color="#1434cb")
         st.dataframe(summary_df, width="stretch", hide_index=True)
 
     p1, p2 = st.columns(2)
@@ -1024,7 +1020,7 @@ def render_summary(run: SurveyRun) -> None:
         st.markdown("#### Pricing Signal")
         price_df = pd.DataFrame([
             {
-                "concept": concept_id,
+                "proposition": concept_id,
                 "mean_acceptable_fee_chf": values.get("weighted_mean_chf"),
                 "min_chf": values.get("min_chf"),
                 "max_chf": values.get("max_chf"),
@@ -1106,7 +1102,7 @@ def render_question_parser(run: SurveyRun) -> None:
     c2.write("Detected constructs: " + ", ".join(coverage.get("detected_constructs", [])))
     missing = coverage.get("missing_constructs", [])
     if missing:
-        st.warning("Missing constructs for a richer card proposition test: " + ", ".join(missing))
+        st.warning("Missing constructs for a richer value proposition test: " + ", ".join(missing))
     else:
         st.success("Survey covers adoption, pricing, feature preference and barriers.")
 
@@ -1115,20 +1111,20 @@ def render_segment_explorer(run: SurveyRun) -> None:
     rows = []
     for key, value in run.aggregate.get("segment_fit", {}).items():
         concept_id, segment = key.split(":", 1)
-        rows.append({"concept": concept_id, "segment": segment, "mean_likert": value})
+        rows.append({"proposition": concept_id, "segment": segment, "mean_likert": value})
     segment_df = pd.DataFrame(rows)
     if segment_df.empty:
         st.info("No Likert adoption question detected.")
         return
-    pivot = segment_df.pivot(index="segment", columns="concept", values="mean_likert").sort_index()
+    pivot = segment_df.pivot(index="segment", columns="proposition", values="mean_likert").sort_index()
     st.dataframe(pivot, width="stretch")
-    st.bar_chart(segment_df, x="segment", y="mean_likert", color="concept")
+    st.bar_chart(segment_df, x="segment", y="mean_likert", color="proposition")
 
     st.markdown("#### Sample Persona Quotes")
     quote_cols = st.columns(max(1, len(run.aggregate.get("sample_quotes", {}))))
     for idx, (concept_id, quotes) in enumerate(run.aggregate.get("sample_quotes", {}).items()):
         with quote_cols[idx % len(quote_cols)]:
-            st.markdown(f"**Concept {concept_id}**")
+            st.markdown(f"**Proposition {concept_id}**")
             for quote in quotes[:4]:
                 st.write(f"- {quote}")
 
@@ -1140,12 +1136,12 @@ def render_persona_responses(run: SurveyRun) -> None:
     for response in run.responses:
         row = response.asdict()
         row["question"] = question_lookup.get(response.question_id, response.question_id)
-        row["concept"] = concept_lookup.get(response.concept_id, response.concept_id)
+        row["proposition"] = concept_lookup.get(response.concept_id, response.concept_id)
         row["archetype"] = response.persona_id.split("_")[0]
         rows.append(row)
     df = pd.DataFrame(rows)
     c1, c2, c3 = st.columns(3)
-    concept_filter = c1.multiselect("Concept", sorted(df["concept_id"].unique()), default=sorted(df["concept_id"].unique()))
+    concept_filter = c1.multiselect("Proposition", sorted(df["concept_id"].unique()), default=sorted(df["concept_id"].unique()))
     archetype_filter = c2.multiselect("Archetype", sorted(df["archetype"].unique()), default=sorted(df["archetype"].unique()))
     question_filter = c3.multiselect("Question", sorted(df["question_id"].unique()), default=sorted(df["question_id"].unique()))
     filtered = df[
@@ -1158,7 +1154,7 @@ def render_persona_responses(run: SurveyRun) -> None:
             [
                 "persona_id",
                 "persona_name",
-                "concept",
+                "proposition",
                 "question_id",
                 "question",
                 "answer_value",
@@ -1241,7 +1237,7 @@ def render_scorecard(run: SurveyRun) -> None:
     validation = run.validation
     rows = [
         {
-            "rubric area": "Demo (5)",
+            "rubric area": "Live product proof (5)",
             "evidence in product": "Running Streamlit app: paste survey -> run persona agents -> aggregate -> validate -> export.",
             "status": "Ready",
         },
@@ -1257,7 +1253,7 @@ def render_scorecard(run: SurveyRun) -> None:
         },
         {
             "rubric area": "Business value (2)",
-            "evidence in product": "Positions synthetic output as early concept screening and survey design acceleration, not final customer truth.",
+            "evidence in product": "Positions synthetic output as early proposition screening and survey design acceleration, not final customer truth.",
             "status": "Ready",
         },
         {
@@ -1267,7 +1263,7 @@ def render_scorecard(run: SurveyRun) -> None:
         },
         {
             "rubric area": "Presentation quality (3)",
-            "evidence in product": "Visa-style cockpit, demo script, source notes, validation guardrails and traceable persona response table.",
+            "evidence in product": "Visa-style cockpit, presenter runbook, source notes, validation guardrails and traceable persona response table.",
             "status": "Ready",
         },
     ]
@@ -1307,7 +1303,7 @@ UI (Streamlit consultant cockpit)
     st.write("- PDF report and delivery pack: polished PDF report plus ZIP export with decision brief, consultant report, persona CSV, validation JSON, full run JSON, input audit and governance notes.")
     st.markdown("#### KPIs")
     st.write("- Time to first synthetic insight: target under 2 minutes for quick real-model proof or full mock rehearsal.")
-    st.write("- Synthetic responses per run: up to 96 personas across all questions and concepts.")
+    st.write("- Synthetic responses per run: up to 96 personas across uploaded survey/interview questions and the client value proposition.")
     st.write("- JSON parse success rate: target above 95 percent with watsonx structured prompts.")
     st.write("- Internal consistency: repeated-run Likert standard deviation target below 0.5.")
     st.write("- Benchmark alignment: payment-method mix MAE target below 10 percentage points.")

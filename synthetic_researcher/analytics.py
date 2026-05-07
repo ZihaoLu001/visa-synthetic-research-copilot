@@ -38,7 +38,7 @@ def aggregate_responses(responses: list[PersonaResponse]) -> dict[str, Any]:
             adoption_buckets[r.concept_id][_bucket_likert(r.answer_value)] += 1
         if r.answer_value is not None and r.question_type == "price":
             price_values[r.concept_id].append((r.answer_value, r.persona_weight))
-        if r.answer_label:
+        if r.answer_label and not _is_low_signal_label(r.answer_label, r.question_type):
             label = str(r.answer_label)
             answer_labels[label] += 1
             answer_labels_by_concept[r.concept_id][label] += 1
@@ -54,10 +54,10 @@ def aggregate_responses(responses: list[PersonaResponse]) -> dict[str, Any]:
             "trust",
             "privacy",
             "digital",
-            "travel",
-            "premium",
-            "everyday",
-            "cashback",
+            "control",
+            "setup",
+            "no clear need",
+            "wrong recommendation",
             "protection",
             "switching",
         ]:
@@ -120,3 +120,14 @@ def _bucket_likert(value: float) -> str:
     if value >= 3.0:
         return "considerer"
     return "skeptic"
+
+
+def _is_low_signal_label(label: str, question_type: str) -> bool:
+    cleaned = str(label or "").strip().lower()
+    if not cleaned:
+        return True
+    if cleaned in {"yes", "no", "maybe", "neutral", "agree", "disagree"}:
+        return True
+    if cleaned in {"1/5", "2/5", "3/5", "4/5", "5/5", "n/a", "none"}:
+        return True
+    return False

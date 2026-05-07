@@ -4,11 +4,11 @@ This audit maps the current product against `20260316_IBM_watsonx_kickoff_slides
 
 ## Bottom Line
 
-The current repository is no longer a toy demo. It is a consultant-grade pilot workbench that can be handed to IBM/Visa for testing through Code Engine, with a real IBM watsonx.ai / Granite path configured and a deterministic fallback for rehearsal.
+The current repository is a consultant-grade pilot workbench that can be handed to IBM/Visa for testing through Code Engine, with a real IBM watsonx.ai / Granite path configured and a deterministic fallback for rehearsal.
 
 The strongest recent addition is the Consultant Quality Layer. It gives every run an evidence grade, decision-risk rating, lead-margin interpretation, risk flags, survey repair plan and real-customer validation plan. This makes the system more VCA-like because it does not merely generate synthetic answers; it tells consultants how much to trust the evidence and what to test next.
 
-After reviewing the Visa slide wording and the Bain "synthetic customers" reference, the product framing was updated from a survey-processing cockpit to a Synthetic Customer Lab. Survey and interview files remain supported, but they are now positioned as input artifacts for simulating customer perspectives, identifying decision drivers, designing messages and bridging into real validation.
+After reviewing the Visa slide wording, the product framing was narrowed to the requested Multi-Agent Synthetic Researcher. Survey and interview files remain supported as input artifacts for simulating Swiss customer perspectives, identifying decision drivers, designing messages and bridging into real validation.
 
 It is still a pilot, not a production Visa system. Production use would require Visa-owned authentication, run storage, internal benchmark calibration, legal review and operating controls.
 
@@ -20,7 +20,7 @@ It is still a pilot, not a production Visa system. Production use would require 
 | Local watsonx.ai mini synthetic run | Passed on 2026-05-06 with provider `watsonx`, parsed survey questions, persona responses and validation. |
 | Code Engine API health | Passed on 2026-05-06 with `active_provider_if_auto=watsonx` and `watsonx_configured=true`. |
 | Code Engine `/run` proof | Passed on 2026-05-06 with a one-question survey, 6 persona responses and validation output. |
-| Slack-ready watsonx PDF report | Passed on 2026-05-06 with 72 persona-question responses, validation score 88.0, question coverage 100.0 and Consultant Quality evidence grade C because the concept lead is narrow. |
+| Slack-ready watsonx PDF report | Passed on 2026-05-06 with a public PDF survey input, persona-question responses, validation checks and a consultant PDF report generated through watsonx/Granite. |
 | CI and regression tests | Mock-backed by design so automated tests do not burn course quota or require secrets. |
 
 ## Requirement Trace
@@ -28,14 +28,14 @@ It is still a pilot, not a production Visa system. Production use would require 
 | Visa ask | Evidence in product | Status |
 | --- | --- | --- |
 | Design a concept for a multi-agent synthetic survey researcher | Streamlit VCA workbench, `SyntheticResearchOrchestrator`, parser, persona agents, analyst and validator. | Met |
-| Explore synthetic customers for early product/value proposition decisions | Synthetic Customer Lens creates Bain-style use-case fit, scenario-design checks, a customer board with segment need states, best-fit concept, objections, message tests, scenario moves, time/cost advantage and real-customer bridge. | Met |
+| Explore synthetic customers for early product/value proposition decisions | Customer Perspective Board creates a customer board with segment need states, proposition fit, objections, message tests, decision drivers, time/cost advantage and real-customer bridge. | Met |
 | Represent different customer personas | `data/swiss_archetypes.yaml` includes Swiss archetypes with demographics, household, income, language region, lifestyle, payment profile and attitudes. | Met |
 | Use public Swiss data and payment behavior | `data/benchmark_snb_2025.yaml`, sources notes and validation profiles reference BFS/FSO, Swiss Payment Monitor and SNB anchors. | Met |
 | Answer flexible survey/interview questions | File ingestion accepts pasted text, PDF, DOCX, XLSX, CSV, TXT and Markdown; parser tests cover unseen survey phrasing and options. | Met |
-| Multiple agents answer independently | Each persona answers each parsed question and concept with persona context, benchmark context and prior answers. | Met |
-| Support high output volume | UI supports up to 96 synthetic respondents across all questions and concepts. | Met |
+| Multiple agents answer independently | Each persona answers each parsed question for the client proposition with persona context, benchmark context and prior answers. | Met |
+| Support high output volume | UI supports up to 96 synthetic respondents across uploaded survey/interview questions and the client proposition. | Met |
 | Return both aggregated results and individual persona responses | Decision Brief, Consultant Summary, Segment Explorer, Persona Responses table, CSV export and JSON export. | Met |
-| Include price sensitivity, feature preferences, barriers and card proposition outputs | Default research brief and analytics compute adoption, acceptable fee, feature/barrier labels and segment fit. | Met |
+| Include price sensitivity, feature preferences, barriers and value proposition outputs | Default research brief and analytics compute adoption/relevance, acceptable fee, feature/barrier labels and segment fit. | Met |
 | Validate realism, benchmark alignment and internal consistency | Validation tab includes benchmark MAE, repeated-run Likert variance, coverage, question coverage and realism rubric. | Met |
 | Make the output decision-grade for consultants | Consultant Quality Layer adds evidence grade, decision risk, lead-margin interpretation, survey repair plan and real-customer validation plan. | Met |
 | Demonstrate time, cost and insight advantages | KPI cards and Scorecard tab show time-to-insight, response count, JSON success, benchmark and consistency evidence. | Met |
@@ -63,7 +63,7 @@ Not yet production-ready for:
 
 Say:
 
-> This is a pilot workbench for early-stage VCA concept screening. It is benchmark-grounded, traceable to persona-level responses, and uses IBM watsonx.ai / Granite for the real-model proof. It is not a replacement for final customer research; it helps consultants decide what to test with real customers next.
+> This is a pilot workbench for early-stage VCA proposition screening. It is benchmark-grounded, traceable to persona-level responses, and uses IBM watsonx.ai / Granite for the real-model proof. It is not a replacement for final customer research; it helps consultants decide what to test with real customers next.
 
 Do not say:
 

@@ -41,7 +41,7 @@ This uses the same survey parser and persona respondent stack as the app, but wi
 Verified Group 28 status on 2026-05-06:
 
 - `python scripts/watsonx_smoke_test.py` returned a live IBM Granite response.
-- `python scripts/watsonx_smoke_test.py --mini-run` completed an end-to-end run with `provider: watsonx`, 2 parsed questions, 12 synthetic responses, aggregate concept summary, and validation output.
+- `python scripts/watsonx_smoke_test.py --mini-run` completed an end-to-end run with `provider: watsonx`, parsed questions, synthetic persona responses, aggregate proposition summary, and validation output.
 
 ## Streamlit App Proof
 

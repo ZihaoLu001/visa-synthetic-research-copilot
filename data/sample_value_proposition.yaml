@@ -1,0 +1,12 @@
+concepts:
+  - id: P1
+    name: Swiss Payment Assistant Proposition
+    description: "A client-provided payment or banking value proposition for Swiss consumers. The proposition helps customers understand the most suitable payment option at checkout, highlights fees and protections before purchase, supports mobile-wallet usage, and keeps the customer in control of the final choice."
+    annual_fee_chf: 0
+    features:
+      - transparent payment recommendation
+      - fee and FX clarity
+      - purchase protection
+      - mobile wallet
+      - customer control at checkout
+    target_context: "Swiss consumer payment and banking value proposition"

@@ -73,8 +73,8 @@ def build_pilot_readiness_gate(run: SurveyRun) -> list[dict[str, str]]:
         _gate_row(
             "Aggregated consultant insight",
             bool(aggregate.get("concept_summary")) and bool(aggregate.get("decision_brief")),
-            f"{len(aggregate.get('concept_summary', {}))} concept summary block(s) plus VCA decision brief.",
-            "Add at least one adoption/appeal question and one concept before treating output as decision evidence.",
+            f"{len(aggregate.get('concept_summary', {}))} proposition summary block(s) plus VCA decision brief.",
+            "Add at least one adoption/appeal question and one value proposition before treating output as decision evidence.",
         ),
         _gate_row(
             "Validation confidence",
@@ -184,7 +184,7 @@ def _delivery_readme(run: SurveyRun) -> str:
             "- `08_pilot_readiness_gate.json`: readiness checklist for partner review.",
             "- `09_consultant_report.pdf`: polished PDF report for partner sharing.",
             "- `10_consultant_quality_layer.json`: evidence grade, decision risk, survey repair plan and calibration thresholds.",
-            "- `11_synthetic_customer_lens.json`: Bain-style use-case fit, scenario checks, synthetic customer board, scenario moves, decision drivers, time/cost advantage and real-customer bridge.",
+            "- `11_synthetic_customer_lens.json`: Visa-focused customer board, decision drivers, time/cost advantage and real-customer bridge.",
             "",
             "## Guardrail",
             "",
@@ -204,7 +204,7 @@ def _methodology_and_governance(run: SurveyRun) -> str:
         "1. Normalize uploaded or pasted survey text from PDF, DOCX, XLSX, CSV, TXT or Markdown.",
         "2. Parse arbitrary survey/interview questions into structured question types and measured constructs.",
         "3. Expand public-data-grounded Swiss archetypes into a weighted synthetic micro-population.",
-        "4. Run persona-conditioned respondent agents independently across concepts and questions.",
+        "4. Run persona-conditioned respondent agents independently across the value proposition and parsed questions.",
         "5. Aggregate weighted adoption, pricing, feature, barrier and segment-fit signals.",
         "6. Validate with benchmark alignment, repeated-run consistency, coverage and realism checks.",
         "7. Synthesize a VCA-style decision brief with caveats and recommended real research.",

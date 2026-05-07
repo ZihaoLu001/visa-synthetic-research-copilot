@@ -18,7 +18,7 @@ def test_supported_upload_types_cover_visa_testing_formats():
 def test_extract_text_file():
     extracted = extract_survey_text(
         "survey.txt",
-        b"1. How likely are you to adopt this card?\n2. What annual fee would be acceptable?",
+        b"1. How relevant is this value proposition?\n2. What annual fee would be acceptable?",
     )
     assert extracted.file_type == "txt"
     assert "annual fee" in extracted.text
@@ -44,7 +44,7 @@ def test_extract_xlsx_file():
     dataframe = pd.DataFrame(
         {
             "question": [
-                "How likely would you be to adopt this card?",
+                "How relevant is this value proposition?",
                 "What annual fee in CHF would feel acceptable?",
             ],
             "construct": ["adoption", "price"],

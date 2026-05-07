@@ -1,11 +1,11 @@
-# Visa Synthetic Research Copilot
+# VCA Multi-Agent Synthetic Researcher
 
-Running PoC for the IBM watsonx / Visa Consulting & Analytics **Multi-Agent Synthetic Customer Researcher** case study.
+Running PoC for the IBM watsonx / Visa Consulting & Analytics **Multi-Agent Synthetic Researcher** case study.
 
-The app accepts a product concept plus flexible survey, interview, or card value proposition test questions, runs a panel of public-data-grounded Swiss synthetic customers, and returns:
+The app accepts a client payment or banking value proposition plus flexible survey, interview, or proposition-test questions, runs a panel of public-data-grounded Swiss synthetic customers, and returns:
 
 - a consultant research brief with objective, decision rule, hypotheses and expected stakeholder output
-- a Bain-style synthetic customer lens: use-case fit, scenario-design checks, customer board, need states, objections, message tests, scenario moves, time/cost advantage and real-customer bridge
+- a Visa-focused customer perspective board with segment needs, objections, message tests, time/cost advantage and real-customer validation bridge
 - a decision brief that translates synthetic evidence into VCA-style recommendation, action, caveats and next real-research steps
 - persona-level survey responses
 - aggregated adoption, pricing, feature, and barrier signals
@@ -16,7 +16,7 @@ The app accepts a product concept plus flexible survey, interview, or card value
 - file ingestion audit for pasted text, TXT, MD, PDF, DOCX, CSV, and XLSX survey inputs
 - downloadable VCA-style PDF report generated from the exact run evidence
 - downloadable consultant delivery pack with decision brief, PDF report, Markdown report, persona CSV, validation JSON, full run JSON, source audit and governance notes
-- external survey stress-test set inspired by public concept-testing and payment-survey examples
+- external survey stress-test set inspired by public proposition-testing and payment-survey examples
 
 This is an early-stage hypothesis and survey-design tool. It does **not** claim to replace real customer research or Visa's final validation.
 
@@ -25,14 +25,12 @@ This is an early-stage hypothesis and survey-design tool. It does **not** claim 
 The kickoff deck asks for three layers:
 
 1. **Persona design**: Swiss personas grounded in public demographic and payment behavior anchors.
-2. **Multi-agent layer**: one respondent agent per persona, orchestrated across survey questions and card concepts.
+2. **Multi-agent layer**: one respondent agent per persona, orchestrated across survey questions and the client value proposition.
 3. **Validation & insight**: aggregated consultant output plus individual responses, with benchmark and consistency checks.
 
-This repo implements that flow in a small, demo-friendly Streamlit application with a deterministic mock provider and optional watsonx.ai provider.
+This repo implements that flow in a focused Streamlit workbench with a deterministic fallback provider and an IBM watsonx.ai provider.
 
-The product is intentionally framed as a **consultant-grade synthetic customer lab**, not a generic chatbot and not merely a survey parser. A user starts with the business decision and hypotheses, uploads or pastes a survey/interview artifact, then reviews synthetic customer perspectives, decision drivers, evidence quality and the real-customer validation plan.
-
-The Bain article linked in the Visa brief frames synthetic customers as a way to bring companies closer to real customer perspectives faster, while still requiring validation. This repo now follows that framing explicitly: the survey is the input artifact, but the output is a synthetic customer learning loop for value proposition design.
+The product is intentionally framed as a **consultant-grade multi-agent synthetic research workbench**, not a generic chatbot and not a fixed A/B demo. A user starts with the business decision and hypotheses, uploads or pastes a survey/interview artifact, defines the client value proposition, then reviews synthetic customer perspectives, decision drivers, evidence quality and the real-customer validation plan.
 
 ## Algorithm and Model Stack
 
@@ -48,11 +46,11 @@ The main algorithms are transparent and replaceable:
 - Survey parsing turns arbitrary research questions into structured question objects: Likert, choice, price or open text.
 - Deterministic construct normalization cross-checks model output so adoption, price, feature and barrier signals remain stable even when an uploaded survey uses unfamiliar wording.
 - Persona sampling expands Swiss public-data-grounded archetypes into a weighted synthetic micro-population.
-- Persona response generation asks one persona agent at a time, using concept context, public benchmark context and prior answers for consistency.
+- Persona response generation asks one persona agent at a time, using value-proposition context, public benchmark context and prior answers for consistency.
 - Aggregation computes weighted adoption index, acceptable-fee signals, feature/barrier labels, segment fit and persona quotes.
 - Validation computes benchmark alignment MAE, repeated-run Likert variance, persona coverage, question construct coverage and judge-style realism flags.
-- Synthetic customer synthesis builds use-case fit, scenario-design checks, a customer board with need states, likely proposition fit, objections to probe, message tests and scenario-planning moves for each Swiss segment.
-- Consulting synthesis builds a VCA Decision Brief: lead concept, evidence quality, decision posture, hypothesis readout, next tests and governance caveats.
+- Synthetic customer synthesis builds a customer board with need states, proposition fit, objections to probe, message tests, decision drivers, time/cost advantage and real-customer bridge for each Swiss segment.
+- Consulting synthesis builds a VCA Decision Brief: proposition signal, evidence quality, decision posture, hypothesis readout, next tests and governance caveats.
 - Consultant quality scoring adds an explicit evidence grade, decision risk, risk flags, survey repair plan and real-customer validation plan so VCA can decide what is strong enough to use and what still needs real customer proof.
 - PDF reporting renders a consultant-style report with executive answer, decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations.
 - Delivery packaging exports a partner-review ZIP so Visa can inspect the recommendation, PDF report, persona rows, validation evidence and source audit outside the app.
@@ -134,20 +132,20 @@ python scripts/watsonx_smoke_test.py --mini-run
 
 Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and quota issues. In the Streamlit app, select **watsonx** for the final real-model proof. The app defaults to a quota-safe **Quick real-model proof** scope when watsonx credentials are present; switch to **Full survey** and 96 respondents when quota/time allows.
 
-## Demo Flow
+## Operating Flow
 
 1. Edit the Research Brief: objective, client decision, hypotheses, decision rule and desired stakeholder output.
 2. Upload a PDF survey/interview guide, or use TXT, MD, DOCX, CSV, or XLSX when that is what the client has.
 3. Review the extracted survey text and adjust questions if needed.
-4. Set the Swiss target market and tune the two default card concepts and fees.
+4. Set the Swiss target market and paste the client value proposition to test.
 5. Run a quick live watsonx proof with 12 respondents and the first 2 uploaded questions, or switch to a full survey run with up to 96 respondents.
-6. Open Decision Brief for lead concept, Synthetic Customer Lens, Bain-style use-case fit, synthetic customer board, scenario-planning moves, decision posture, Consultant Quality Layer, hypothesis readout, caveats and recommended real research.
+6. Open Decision Brief for the proposition readout, customer perspective board, decision posture, Consultant Quality Layer, hypothesis readout, caveats and recommended real research.
 7. Review adoption index, acceptable fee, feature and barrier signals.
 8. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
 9. Open segment and persona-level tables for traceability.
 10. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
 11. Download the polished PDF Report, Consultant Delivery Pack ZIP, CSV, Markdown Decision Brief, full Markdown report, or JSON outputs for partner review.
-12. Change a fee or feature live, rerun, and compare the directional movement.
+12. Change a price, benefit, or message live, rerun, and compare the directional movement.
 
 The Slack-ready PDF operation manual is in `demo/manuals/visa_synthetic_research_copilot_operation_manual.pdf`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment, the real IBM watsonx.ai / Granite model path, screenshots from a live quick run, and reviewer instructions. The real-run video is retained in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`.
 
@@ -158,14 +156,14 @@ demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf
 demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf
 ```
 
-The output report was generated from the input PDF flow with `MODEL_PROVIDER=watsonx`, `ibm/granite-4-h-small`, 12 Swiss synthetic respondents, payment/card-relevant survey questions, 72 persona-question responses, validation score 88.0/100, question coverage 100.0/100, and Consultant Quality evidence grade C. The grade is intentionally conservative because the lead is narrow; the report recommends using the result as directional evidence and validating both concepts with real Swiss customers.
+The output report was generated from the input PDF flow with `MODEL_PROVIDER=watsonx`, `ibm/granite-4-h-small`, Swiss synthetic respondents, payment/value-proposition survey questions, persona-level responses, validation checks and a generated consultant PDF report. It is intentionally positioned as directional evidence for deciding what to test with real Swiss customers next.
 
 Suggested live stress test:
 
 ```text
-Would you trust a card that automatically suggests the cheapest payment method at checkout?
+Would you trust a payment assistant that suggests the most suitable payment method at checkout?
 What annual fee in CHF would you consider acceptable?
-Which benefit would make you switch from your current card?
+Which benefit would make you try this proposition instead of your current payment habit?
 What is the main barrier that would stop you?
 ```
 
@@ -185,15 +183,17 @@ demo/
 data/
   swiss_archetypes.yaml        Swiss synthetic persona archetypes
   benchmark_snb_2025.yaml      Public benchmark anchors and validation profiles
-  sample_concepts.yaml         Card propositions for the demo
-  sample_survey_card.yaml      Sample survey
+  sample_value_proposition.yaml
+                               Generic client value proposition sample for CLI/tests
+  sample_survey_proposition.yaml
+                               Generic proposition survey sample
 synthetic_researcher/
   agents.py                    Survey parser, persona respondent, analyst
   analytics.py                 Aggregation and scoring
   ingestion.py                 TXT/MD/PDF/DOCX/CSV/XLSX survey extraction
   consulting.py                VCA-style research brief and decision brief synthesis
   delivery.py                  Consultant delivery pack and pilot readiness gate
-  customer_lens.py             Bain-style use-case fit, customer board, scenario moves and real-customer bridge
+  customer_lens.py             Visa-focused customer board, decision drivers and real-customer bridge
   insight_quality.py           Evidence grade, decision risk, survey repair plan and validation plan
   llm.py                       Mock + IBM watsonx providers
   orchestrator.py              End-to-end multi-agent run
@@ -235,10 +235,10 @@ docs/
 
 - Running demo: paste survey -> parse -> simulate -> aggregate -> validate -> export.
 - Flexible input demo: uploaded marketing research survey files can be converted to survey text before parsing.
-- External survey proof: concept-test, payment-behavior, and pricing/message surveys in `demo/external_survey_tests/` run through the same pipeline.
+- External survey proof: proposition-test, payment-behavior, and pricing/message surveys in `demo/external_survey_tests/` run through the same pipeline.
 - Architecture: UI, parser, persona store, orchestrator, respondent agents, validator, analytics/export.
 - KPIs: time to insight, response count, JSON parse success, consistency, benchmark MAE, realism score.
-- Business value: early-stage concept screening and better real survey design, not final market research replacement.
+- Business value: early-stage proposition screening and better real survey design, not final market research replacement.
 - Next steps: watsonx Orchestrate ADK, calibration, human/LLM judge, PPT export, Visa internal validation.
 
 ## Public Data Anchors

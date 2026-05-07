@@ -21,8 +21,8 @@ def test_offline_run_completes():
         benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
     )
     run = orch.run(
-        survey_path=ROOT / "data" / "sample_survey_card.yaml",
-        concepts_path=ROOT / "data" / "sample_concepts.yaml",
+        survey_path=ROOT / "data" / "sample_survey_proposition.yaml",
+        concepts_path=ROOT / "data" / "sample_value_proposition.yaml",
         micro_population_n=12,
         consistency_runs=2,
     )
@@ -36,7 +36,7 @@ def test_offline_run_completes():
     assert run.aggregate["price_summary"]
     assert run.aggregate["runtime"]["json_parse_success_rate"] == 100.0
     report = build_markdown_report(run)
-    assert report.startswith("# Visa Synthetic Customer Lab Report")
+    assert report.startswith("# VCA Multi-Agent Synthetic Researcher Report")
     assert "## Input Source" in report
     assert "## KPI Evidence" in report
 
@@ -53,7 +53,7 @@ def test_parser_handles_new_survey_text():
     llm = MockLLM()
     questions = llm.generate_json(
         "Parse the raw survey into JSON.\nRAW_SURVEY:\n"
-        "1. Would you trust a card that suggests the cheapest payment method at checkout?\n"
+        "1. Would you trust a payment assistant that suggests the most suitable payment method at checkout?\n"
         "2. What annual fee in CHF would you pay?\n"
         "3. What concern would stop you from using it?"
     )
@@ -65,7 +65,7 @@ def test_parser_recognizes_concept_test_rating_language():
     llm = MockLLM()
     questions = llm.generate_json(
         "Parse the raw survey into JSON.\nRAW_SURVEY:\n"
-        "1. How appealing is this card concept overall?\n"
+        "1. How appealing is this value proposition overall?\n"
         "2. How often would you use it for everyday payments?\n"
         "3. How innovative is the product?"
     )
@@ -81,23 +81,23 @@ def test_parser_extracts_external_concept_test_options():
         "Source: Public payment survey example.\n"
         "URL: https://example.com/survey\n"
         "Use in this demo: metadata only.\n"
-        "Scenario: Early-stage Swiss card value proposition concept test.\n"
+        "Scenario: Early-stage Swiss payment value proposition test.\n"
         "1. Which benefit would make you switch first? "
-        "Options: cashback; travel insurance; purchase protection; mobile wallet; none\n"
-        "2. Rank the following features: FX waiver / lounge access / fraud alerts / grocery cashback\n"
+        "Options: fee clarity; purchase protection; mobile wallet; customer control; none\n"
+        "2. Rank the following features: fee transparency / fraud alerts / purchase protection / mobile wallet\n"
         "3. Which of the following would be your biggest concern: privacy, annual fee, setup effort, no clear need"
     )
 
     assert [q["type"] for q in questions] == ["choice", "choice", "choice"]
     assert len(questions) == 3
     assert questions[0]["options"] == [
-        "cashback",
-        "travel insurance",
+        "fee clarity",
         "purchase protection",
         "mobile wallet",
+        "customer control",
         "none",
     ]
-    assert questions[1]["options"] == ["FX waiver", "lounge access", "fraud alerts", "grocery cashback"]
+    assert questions[1]["options"] == ["fee transparency", "fraud alerts", "purchase protection", "mobile wallet"]
     assert questions[2]["measures"] == "barriers"
 
 
@@ -124,23 +124,22 @@ You are not an assistant. You are a synthetic survey respondent.
 PERSONA:
 Persona A4_01 - Geneva Premium Frequent Traveler
 CONCEPT:
-Name: Premium Travel Card
-Description: Travel card for Swiss consumers
-Annual fee CHF: 120
-Features: ['travel insurance', 'FX waiver', 'lounge vouchers', 'purchase protection']
-Target context: Swiss consumer card value proposition
+Name: Swiss Payment Assistant Proposition
+Description: Payment assistant for Swiss consumers
+Annual fee CHF: 0
+Features: ['transparent fees', 'purchase protection', 'mobile wallet', 'customer control']
+Target context: Swiss consumer payment value proposition
 QUESTION:
 ID: Q1
 Type: choice
 Text: Which benefit would make you switch first?
-Options: ['cashback', 'travel insurance', 'purchase protection', 'mobile wallet', 'none']
+Options: ['transparent fees', 'purchase protection', 'mobile wallet', 'customer control', 'none']
 Measures: feature preference
 """
 
     answer = llm.generate_json(prompt)
 
-    assert answer["answer_label"] in {"travel insurance", "purchase protection"}
-    assert answer["answer_label"] not in {"Concept A", "Concept B", "Neither"}
+    assert answer["answer_label"] in {"transparent fees", "purchase protection", "customer control"}
 
 
 def test_generate_json_extracts_payload_from_model_commentary():
@@ -169,6 +168,21 @@ def test_survey_parser_normalises_real_model_type_labels():
     assert [question.type for question in questions] == ["likert", "price"]
 
 
+def test_survey_parser_overrides_open_label_for_relevance_questions():
+    class OpenRelevanceLLM(BaseLLM):
+        def generate_text(self, prompt: str) -> str:
+            return """
+            [
+              {"id": "1", "text": "How relevant is this proposition for your everyday payment needs?", "type": "open", "options": null, "measures": null}
+            ]
+            """
+
+    questions = SurveyParserAgent(OpenRelevanceLLM()).parse("ignored")
+
+    assert questions[0].type == "likert"
+    assert "adoption" in questions[0].measures
+
+
 def test_watsonx_config_status_redacts_secret(monkeypatch):
     monkeypatch.setenv("WATSONX_URL", "https://eu-de.ml.cloud.ibm.com")
     monkeypatch.setenv("WATSONX_PROJECT_ID", "project-123")
@@ -190,8 +204,8 @@ def test_consultant_delivery_pack_contains_partner_artifacts():
         benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
     )
     run = orch.run(
-        survey_path=ROOT / "data" / "sample_survey_card.yaml",
-        concepts_path=ROOT / "data" / "sample_concepts.yaml",
+        survey_path=ROOT / "data" / "sample_survey_proposition.yaml",
+        concepts_path=ROOT / "data" / "sample_value_proposition.yaml",
         micro_population_n=12,
         consistency_runs=1,
     )
@@ -240,8 +254,8 @@ def test_consultant_pdf_report_is_valid_pdf():
         benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
     )
     run = orch.run(
-        survey_path=ROOT / "data" / "sample_survey_card.yaml",
-        concepts_path=ROOT / "data" / "sample_concepts.yaml",
+        survey_path=ROOT / "data" / "sample_survey_proposition.yaml",
+        concepts_path=ROOT / "data" / "sample_value_proposition.yaml",
         micro_population_n=12,
         consistency_runs=1,
     )
@@ -264,8 +278,8 @@ def test_decision_brief_includes_consultant_quality_layer():
         benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
     )
     run = orch.run(
-        survey_path=ROOT / "data" / "sample_survey_card.yaml",
-        concepts_path=ROOT / "data" / "sample_concepts.yaml",
+        survey_path=ROOT / "data" / "sample_survey_proposition.yaml",
+        concepts_path=ROOT / "data" / "sample_value_proposition.yaml",
         micro_population_n=12,
         consistency_runs=1,
     )
@@ -278,7 +292,6 @@ def test_decision_brief_includes_consultant_quality_layer():
     assert quality["survey_repair_plan"]
     assert quality["recommended_validation_plan"]
     assert lens["synthetic_customer_board"]
-    assert lens["use_case_fit"]
-    assert lens["scenario_design_check"]
-    assert lens["scenario_planning_moves"]
+    assert lens["decision_drivers"]
+    assert lens["real_customer_bridge"]
     assert lens["time_cost_advantage"]

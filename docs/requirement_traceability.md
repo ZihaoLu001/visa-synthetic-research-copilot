@@ -19,7 +19,7 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 | In time, not overtime, not undertime | `docs/final_presentation_plan.md` provides a 20-minute structure. |
 | Problem statement and pain points | README, `docs/demo_script.md`, and the app opening screen describe VCA users, slow surveys/interviews, and unvalidated pricing/feature assumptions. |
 | Working demo solving the use case | `app.py` runs paste/upload survey -> parse -> persona agents -> analytics -> validation -> export. |
-| Business value and pain-point fit | Research Brief, Synthetic Customer Lens, Decision Brief, Consultant Quality Layer, Consultant Summary and PDF/Markdown reports explain early concept screening, time-to-insight, decision posture, caveats, survey repair and better real survey design. |
+| Business value and pain-point fit | Research Brief, Customer Perspective Board, Decision Brief, Consultant Quality Layer, Consultant Summary and PDF/Markdown reports explain early proposition screening, time-to-insight, decision posture, caveats, survey repair and better real survey design. |
 | KPIs and how they are met | Runtime, response count, JSON success, benchmark MAE, consistency, coverage, and realism scores appear in the app and generated PDF/Markdown reports. |
 | Architecture with visuals | Architecture tab, `docs/architecture.md`, and componentized Python modules show UI, parser, persona store, LLM provider, orchestrator, analytics, validation, and export. |
 | Next steps and limitations | Scorecard, README guardrails, and `docs/final_presentation_plan.md` explain watsonx Orchestrate, calibration, consultant-report export, and Visa internal validation. |
@@ -29,13 +29,13 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 
 | Visa requirement | Implementation |
 | --- | --- |
-| Multi-agent synthetic survey researcher | `SyntheticResearchOrchestrator` runs independent persona agents across concepts and questions. |
-| Explore how synthetic customers improve early-stage decision-making | Synthetic Customer Lens translates responses into use-case fit, scenario-design checks, segment need states, objections, message tests, scenario moves, time/cost advantage and a real-customer bridge. |
+| Multi-agent synthetic survey researcher | `SyntheticResearchOrchestrator` runs independent persona agents across the client proposition and parsed questions. |
+| Explore how synthetic customers improve early-stage decision-making | Customer Perspective Board translates responses into segment need states, proposition fit, objections, message tests, decision drivers, time/cost advantage and a real-customer bridge. |
 | Swiss persona design | `data/swiss_archetypes.yaml` defines weighted Swiss archetypes with age, region, language, income, household, education, lifestyle, payment profile, attitudes, and source notes. |
 | Public-data grounding | `data/benchmark_snb_2025.yaml` uses public Swiss payment behavior and demographic anchors. |
 | Flexible survey/interview input | `app.py` accepts pasted text and uploaded TXT, MD, PDF, DOCX, CSV, and XLSX files through `synthetic_researcher/ingestion.py`. |
 | "No limitation" survey handling from Visa/MS clarification | `demo/external_survey_tests/` contains public-example-inspired concept-test, payment-behavior, and pricing/message surveys; parser tests verify explicit options, ranking-style feature lists, and background-line filtering. |
-| High number of outputs | Slider supports 12-96 synthetic respondents across all questions and concepts. |
+| High number of outputs | Slider supports 12-96 synthetic respondents across uploaded survey/interview questions and the client proposition. |
 | Aggregated and persona-level results | Consultant Summary, Segment Explorer, Persona Responses, PDF report, CSV export, Markdown report, JSON export, and Consultant Delivery Pack. |
 | Consultant-style decision output | Decision Brief tab links the research objective, hypotheses, synthetic customer board, adoption/price/segment evidence, validation posture, evidence grade, decision risk, survey repair and next real-research actions. |
 | Realism, benchmark, and consistency validation | `synthetic_researcher/validation.py` includes benchmark alignment, repeated-run consistency, coverage, question coverage, and realism rubric. |
@@ -57,11 +57,11 @@ This checklist maps the project to the course emails, labs, final grading PDF, a
 
 | Test | Local result with current code |
 | --- | --- |
-| Concept-test survey inspired by Qualtrics / SurveyMonkey patterns | 8 questions parsed, 384 responses generated at 24 respondents x 2 concepts x 8 questions, validation score 96.8, coverage score 100. |
-| Payment-behavior survey inspired by Federal Reserve payment questionnaire patterns | 8 questions parsed, 384 responses generated, validation score 94.5, coverage score 85. |
-| Card pricing and message test | 8 questions parsed, 384 responses generated, validation score 90.5, coverage score 100. |
+| Proposition-test survey inspired by Qualtrics / SurveyMonkey patterns | 8 questions parsed, persona-level responses generated, validation score 96.8, coverage score 100. |
+| Payment-behavior survey inspired by Federal Reserve payment questionnaire patterns | 8 questions parsed, persona-level responses generated, validation score 94.5, coverage score 85. |
+| Pricing and message test | 8 questions parsed, persona-level responses generated, validation score 90.5, coverage score 100. |
 
-The deployed API was also smoke-tested with the same three files before forcing a Code Engine container restart and returned 432 responses per file, validation score 94.5, coverage score 85, and JSON parse success 100.0. The response count difference is expected because that deployed runtime still counted the leading scenario line as a question; the current code filters those background lines.
+The deployed API was also smoke-tested with the same three file patterns before forcing a Code Engine container restart and returned validation score 94.5, coverage score 85, and JSON parse success 100.0. The current product now defaults to one client proposition so the response count stays tied directly to respondent count and parsed questions.
 
 ## Remaining Optional Enhancements
 

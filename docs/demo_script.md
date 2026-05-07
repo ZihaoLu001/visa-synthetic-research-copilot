@@ -11,22 +11,25 @@ VCA consultants need fast early-stage customer input for value proposition desig
 Paste a short survey:
 
 ```text
-1. How likely would you be to adopt this card if it were offered by your bank?
-2. What annual fee in CHF would feel acceptable for this card?
-3. Which benefit or feature feels most valuable to you, and why?
-4. What is the main barrier that would prevent you from using this card?
+1. How relevant is this value proposition for your everyday payment or banking needs?
+2. What annual fee or monthly price in CHF would feel acceptable, if any?
+3. Which benefit, service or message feels most valuable to you, and why?
+4. What is the main barrier or concern that would stop you from using it?
 ```
 
 Then say the stronger version can also accept a real research artifact from Visa: TXT, MD, PDF, DOCX, CSV, or XLSX. Open the Question Parser tab after a run and show the input-source audit: file name, type, extracted character count, extraction notes, and whether the text was edited before execution.
 
-Explain that the system is not limited to predefined questions. It ingests survey files or pasted survey/interview text, parses the content at runtime, and then routes the parsed questions to persona agents. The stronger framing is: the survey is the input artifact, but the product is a synthetic customer lab for value proposition decisions.
+Explain that the system is not limited to predefined questions. It ingests survey files or pasted survey/interview text, parses the content at runtime, and then routes the parsed questions to persona agents. The stronger framing is: the survey is the input artifact, but the product is a multi-agent synthetic researcher for value proposition decisions.
 
-## 3. Show Concepts
+## 3. Define The Client Proposition
 
-Use the default concepts:
+Paste the proposition Visa/VCA wants to test. The prototype no longer depends on fixed A/B demo options; it is designed for a consultant to bring any payment, banking or value-proposition stimulus.
 
-- Concept A: Premium Travel Card, CHF 120, travel insurance, FX fee reduction, lounge vouchers, purchase protection.
-- Concept B: Everyday Cashback Card, CHF 60, grocery cashback, family offers, simple onboarding, purchase protection.
+For the partner example, use the editable sample proposition:
+
+```text
+Swiss Payment Assistant Proposition: a bank-issued Visa payment assistant that helps Swiss consumers choose a suitable payment method at checkout, highlights fees and protections, supports mobile-wallet usage, and keeps the customer in control of the final payment choice.
+```
 
 ## 4. Run Synthetic Respondents
 
@@ -37,9 +40,9 @@ For the real-model proof, use `watsonx`, `12` respondents, `1` consistency run, 
 Cover these tabs:
 
 - Consultant Summary: adoption index, acceptable fee, top signals, recommendation.
-- Decision Brief: lead concept, Synthetic Customer Lens, Bain-style use-case fit, synthetic customer board, scenario-planning moves, decision posture, Consultant Quality Layer, hypothesis readout, VCA "so what" and next real-research actions.
+- Decision Brief: proposition readout, customer perspective board, decision posture, Consultant Quality Layer, hypothesis readout, VCA "so what" and next real-research actions.
 - Question Parser: parsed question types, measured constructs and input-source audit.
-- Segment Explorer: which Swiss archetypes fit each concept.
+- Segment Explorer: which Swiss archetypes fit or resist the proposition.
 - Persona Responses: individual responses with rationale and confidence.
 - Validation: benchmark alignment, consistency, coverage, construct coverage and realism rubric.
 - Scorecard: direct mapping to the final grading criteria and KPI evidence.
@@ -51,20 +54,20 @@ In the Consultant Quality Layer, say:
 This is the consulting control layer: it tells us whether the synthetic evidence is strong enough to use directionally, what could be wrong, how the survey should be repaired, and what real-customer validation should happen next.
 ```
 
-In the Synthetic Customer Lens, say:
+In the customer perspective board, say:
 
 ```text
-This is the Bain-style part of the prototype: it shows which customer-learning use cases the run supports, which customer perspectives we simulated, what each segment needs, what objections to probe, which message to test, which scenario moves to try next, and how the synthetic run bridges into real customer validation.
+This is the Visa-required customer layer: it shows which Swiss customer perspectives we simulated, what each segment needs, what objections to probe, which message to test, and how the synthetic run bridges into real customer validation.
 ```
 
 For Slack partner feedback before the final presentation, attach `demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf` and `demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf`. The second file is a real watsonx/Granite-generated report from the uploaded PDF flow, so it demonstrates the product output without asking the partner to run the app immediately.
 
 ## 6. Live Sensitivity Test
 
-Change Concept A fee from CHF 120 to CHF 60, or add stronger purchase protection messaging. Rerun and explain the directional movement:
+Change the proposition price, benefit wording, or control/privacy message. Rerun and explain the directional movement:
 
 ```text
-The premium card becomes less niche when price friction drops, but family and student segments still need everyday-value proof.
+The proposition becomes more credible when the value proof and control language are clearer, but real Swiss customer validation is still needed.
 ```
 
 ## 7. Close With Guardrail

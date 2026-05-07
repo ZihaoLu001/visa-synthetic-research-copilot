@@ -13,7 +13,7 @@ class Concept:
     description: str
     annual_fee_chf: float = 0.0
     features: list[str] = field(default_factory=list)
-    target_context: str = "Swiss consumer card value proposition"
+    target_context: str = "Swiss consumer payment or banking value proposition"
 
 
 @dataclass(frozen=True)

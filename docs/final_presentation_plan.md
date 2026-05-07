@@ -11,13 +11,13 @@ Logistics for Team 1 / Group 28:
 
 ## 0:00-1:30 Problem and User
 
-VCA consultants and product teams need early customer input when designing card and payment value propositions. Real surveys and interviews are still needed, but they are slower and more expensive than the early ideation cycle. This leaves assumptions about price sensitivity, benefits, needs and messaging under-tested.
+VCA consultants and product teams need early customer input when designing payment and banking value propositions. Real surveys and interviews are still needed, but they are slower and more expensive than the early ideation cycle. This leaves assumptions about price sensitivity, benefits, needs and messaging under-tested.
 
 ## 1:30-3:00 Use-Case Understanding
 
-The PoC is not a fixed FAQ bot and not merely a survey parser. It is a synthetic customer lab for VCA value proposition decisions:
+The PoC is not a fixed FAQ bot and not merely a survey parser. It is a multi-agent synthetic researcher for VCA value proposition decisions:
 
-- consultant defines a card/product proposition and the decision to support
+- consultant defines a payment or banking value proposition and the decision to support
 - consultant uploads a survey, interview guide or proposition test as the input artifact
 - the system parses the questions at runtime
 - Swiss synthetic persona agents answer independently
@@ -32,13 +32,13 @@ Positioning sentence:
 Show the architecture:
 
 ```text
-Survey / concept input
+Survey / proposition input
   -> Survey Parser Agent
   -> Persona Builder / Weighted Micro-Population
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark + Consistency + Realism Validator
-  -> Synthetic Customer Lens
+  -> Customer Perspective Board
   -> Consultant Quality Layer
   -> VCA Decision Brief / PDF Report / Consultant Delivery Pack
 ```
@@ -56,9 +56,9 @@ IBM platform positioning:
 ## 5:00-11:00 Live Demo
 
 1. Confirm the sidebar shows `watsonx` and `Real LLM ready: ibm/granite-4-h-small`.
-2. Upload the public sample PDF survey or paste the default card survey.
+2. Upload the public sample PDF survey or paste the default proposition-testing survey.
 3. Run the quick real-model proof with 12 respondents and the first 2 questions.
-4. Open Decision Brief for lead concept, Synthetic Customer Lens, Bain-style use-case fit, synthetic customer board, scenario-planning moves, decision posture, Consultant Quality Layer, hypothesis readout and next real research.
+4. Open Decision Brief for the proposition readout, customer perspective board, decision posture, Consultant Quality Layer, hypothesis readout and next real research.
 5. Open the Question Parser tab to prove the survey is parsed dynamically from the uploaded file.
 6. Open Consultant Summary for adoption index, acceptable fee and signals.
 7. Open Segment Explorer for persona differences.
@@ -74,7 +74,7 @@ Cover:
 - Streamlit consultant cockpit
 - data files for Swiss archetypes and benchmarks
 - typed schemas and provider-independent `BaseLLM`
-- orchestrator loop across personas, concepts and questions
+- orchestrator loop across personas, the client proposition and questions
 - validation layer
 - consultant evidence quality layer
 - synthetic customer board and real-customer bridge
@@ -95,7 +95,7 @@ Call out extension points:
 Use the app Scorecard tab:
 
 - Time to first synthetic insight: target under 2 minutes
-- Synthetic responses per run: 96 personas across concepts and questions
+- Synthetic responses per run: 96 personas across uploaded questions and the client proposition
 - JSON parse success rate: target above 95 percent
 - Internal consistency: repeated-run Likert std below 0.5
 - Benchmark alignment: payment-method mix MAE below 10 percentage points

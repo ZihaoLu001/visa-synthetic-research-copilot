@@ -1,6 +1,6 @@
 questions:
   - id: Q1
-    text: "How likely would you be to adopt this card if it were offered by your bank?"
+    text: "How relevant is this value proposition for your everyday payment or banking needs?"
     type: likert
     options: []
     scale_min: 1
@@ -8,19 +8,19 @@ questions:
     measures: "adoption likelihood"
 
   - id: Q2
-    text: "What annual fee in CHF would feel acceptable for this card?"
+    text: "What annual fee or monthly price in CHF would feel acceptable, if any?"
     type: price
     options: []
     measures: "price sensitivity"
 
   - id: Q3
-    text: "Which benefit or feature feels most valuable to you, and why?"
+    text: "Which benefit, service or message feels most valuable to you, and why?"
     type: open
     options: []
     measures: "feature preference"
 
   - id: Q4
-    text: "What is the main barrier that would prevent you from using this card?"
+    text: "What is the main barrier or concern that would stop you from using it?"
     type: open
     options: []
     measures: "barriers"

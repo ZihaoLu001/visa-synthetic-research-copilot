@@ -26,6 +26,7 @@ def build_consultant_quality_layer(
     benchmark_mae = _as_float(validation.get("benchmark_alignment", {}).get("primary_mae_percentage_points"))
     segment_spread = _segment_spread(aggregate.get("segment_fit", {}))
     worst_price_gaps = _price_gap_watchouts(run)
+    proposition_count = len(aggregate.get("concept_summary", {}))
 
     risk_flags = _risk_flags(
         lead_gap=lead_gap,
@@ -34,6 +35,7 @@ def build_consultant_quality_layer(
         realism_score=realism_score,
         segment_spread=segment_spread,
         worst_price_gaps=worst_price_gaps,
+        proposition_count=proposition_count,
     )
     evidence_score = _evidence_strength_score(
         validation_score=validation_score,
@@ -42,6 +44,7 @@ def build_consultant_quality_layer(
         realism_score=realism_score,
         segment_spread=segment_spread,
         benchmark_mae=benchmark_mae,
+        proposition_count=proposition_count,
     )
     grade, grade_label = _evidence_grade(evidence_score)
     missing_constructs = validation.get("question_coverage", {}).get("missing_constructs", [])
@@ -62,7 +65,7 @@ def build_consultant_quality_layer(
         "survey_repair_plan": _survey_repair_plan(missing_constructs, detected_constructs),
         "recommended_validation_plan": _recommended_validation_plan(decision, aggregate),
         "calibration_thresholds": [
-            "Advance a concept only when the adoption lead is at least 5 points or when a real survey confirms the smaller gap.",
+            "Advance a proposition only when synthetic segment fit and validation confidence are strong enough to justify real customer testing.",
             "Recalibrate persona weights if payment benchmark MAE exceeds 10 percentage points.",
             "Treat realism score below 80 as a review trigger for prompt, parser, or survey wording changes.",
             "Treat missing adoption, price, feature, or barrier constructs as a survey-design gap before partner sign-off.",
@@ -78,19 +81,21 @@ def _risk_flags(
     realism_score: float | None,
     segment_spread: float | None,
     worst_price_gaps: list[dict[str, Any]],
+    proposition_count: int,
 ) -> list[dict[str, str]]:
     flags: list[dict[str, str]] = []
     if lead_gap is None:
-        flags.append(_flag("No clear lead concept", "Add a direct adoption/appeal question before using this run for concept selection.", "high"))
+        if proposition_count > 1:
+            flags.append(_flag("No clear lead proposition", "Add a direct adoption/appeal question before using this run for proposition selection.", "high"))
     elif lead_gap < 3:
-        flags.append(_flag("Narrow concept lead", f"Lead is only {lead_gap} points; present the result as a toss-up and keep a challenger in the next real survey.", "medium"))
+        flags.append(_flag("Narrow proposition lead", f"Lead is only {lead_gap} points; present the result as a toss-up in the next real survey.", "medium"))
     elif lead_gap < 5:
-        flags.append(_flag("Moderate concept lead", f"Lead is {lead_gap} points; useful directionally, but not enough for a final go/no-go decision.", "low"))
+        flags.append(_flag("Moderate proposition lead", f"Lead is {lead_gap} points; useful directionally, but not enough for a final go/no-go decision.", "low"))
 
     if validation_score is not None and validation_score < 85:
         flags.append(_flag("Validation below green threshold", f"Overall validation is {validation_score}/100; review caveats before partner sharing.", "medium"))
     if question_score is not None and question_score < 85:
-        flags.append(_flag("Survey construct gap", f"Question coverage is {question_score}/100; add missing card proposition constructs.", "medium"))
+        flags.append(_flag("Survey construct gap", f"Question coverage is {question_score}/100; add missing proposition-testing constructs.", "medium"))
     if realism_score is not None and realism_score < 80:
         flags.append(_flag("Realism review needed", f"Realism score is {realism_score}/100; inspect persona rows for odd price or adoption rationales.", "medium"))
     if segment_spread is not None and segment_spread < 0.35:
@@ -114,26 +119,26 @@ def _survey_repair_plan(missing_constructs: list[str], detected_constructs: list
         {
             "module": "Adoption and current behavior",
             "priority": "High" if "adoption" in missing_constructs else "Medium",
-            "why": "Grounds synthetic adoption in a realistic current-card baseline.",
-            "suggested_question": "How likely would you be to adopt this card if offered by your main bank, and what card or payment method would it replace?",
+            "why": "Grounds synthetic adoption in a realistic current-behavior baseline.",
+            "suggested_question": "How likely would you be to use this proposition if offered by your main bank, and what current payment or banking behavior would it replace?",
         },
         {
             "module": "Price sensitivity",
             "priority": "High" if "price" in missing_constructs else "Medium",
             "why": "Visa explicitly asked for price sensitivity and value proposition testing.",
-            "suggested_question": "At which annual fee in CHF would this card feel too expensive, acceptable, and clearly good value?",
+            "suggested_question": "At which annual fee or monthly price in CHF would this proposition feel too expensive, acceptable, and clearly good value?",
         },
         {
             "module": "Feature trade-off",
             "priority": "High" if "feature" in missing_constructs else "Medium",
             "why": "Ranking or forced choice exposes what benefit actually drives switching.",
-            "suggested_question": "Please rank the top three benefits that would make you switch: cashback, travel insurance, FX fee waiver, fraud alerts, purchase protection, family offers, or cheapest-payment recommendation.",
+            "suggested_question": "Please rank the top three benefits, services or messages that would make this proposition more useful to you.",
         },
         {
             "module": "Barrier and trust",
             "priority": "High" if "barrier" in missing_constructs else "Medium",
             "why": "Identifies what must be fixed before a real launch or real survey.",
-            "suggested_question": "What is the main reason you would not use this card: fee, privacy, loss of control, wrong recommendation, weak rewards, setup complexity, or lack of trust?",
+            "suggested_question": "What is the main reason you would not use this proposition: fee, privacy, loss of control, unclear benefit, setup complexity, or lack of trust?",
         },
         {
             "module": "Segment screener",
@@ -149,21 +154,21 @@ def _survey_repair_plan(missing_constructs: list[str], detected_constructs: list
                 "module": "Choice-based validation",
                 "priority": "High",
                 "why": "The base constructs are present; the next improvement is a sharper preference test.",
-                "suggested_question": "If you had to choose one, which card would you take today and what single change would make you switch to the other option?",
+                "suggested_question": "If you had to decide today, would this proposition advance to real customer testing, and what one change would improve it most?",
             },
         )
     return plan
 
 
 def _top_consultant_actions(risk_flags: list[dict[str, str]], decision: dict[str, Any]) -> list[str]:
-    lead_name = decision.get("lead_concept_name") or decision.get("lead_concept_id") or "the current lead concept"
+    lead_name = decision.get("lead_concept_name") or decision.get("lead_concept_id") or "the current proposition"
     actions = [
-        f"Position {lead_name} as a directional anchor, not a final winner, unless real survey evidence confirms the lead.",
+        f"Position {lead_name} as a directional anchor, not a final decision, unless real survey evidence confirms the signal.",
         "Use the risk flags as the opening slide for partner discussion: what we know, what could be wrong, and what to validate next.",
     ]
     titles = {flag["title"] for flag in risk_flags}
-    if "Narrow concept lead" in titles:
-        actions.append("Run a head-to-head forced-choice question and a fee sensitivity variant before recommending a single proposition.")
+    if "Narrow proposition lead" in titles:
+        actions.append("Run a forced-choice or control-cell question and a fee sensitivity variant before recommending a single proposition.")
     if "Survey construct gap" in titles:
         actions.append("Add the missing survey modules before using the output as a consultant recommendation.")
     if "Low segment differentiation" in titles:
@@ -208,13 +213,14 @@ def _evidence_strength_score(
     realism_score: float | None,
     segment_spread: float | None,
     benchmark_mae: float | None,
+    proposition_count: int,
 ) -> float:
     score = validation_score if validation_score is not None else 60.0
-    if lead_gap is None:
+    if lead_gap is None and proposition_count > 1:
         score -= 18
-    elif lead_gap < 3:
+    elif lead_gap is not None and lead_gap < 3:
         score -= 10
-    elif lead_gap < 5:
+    elif lead_gap is not None and lead_gap < 5:
         score -= 5
     if question_score is not None and question_score < 85:
         score -= 6
@@ -240,7 +246,7 @@ def _evidence_grade(score: float) -> tuple[str, str]:
 def _decision_risk(lead_gap: float | None, validation_score: float | None, risk_flags: list[dict[str, str]]) -> str:
     high_or_medium = [flag for flag in risk_flags if flag.get("severity") in {"high", "medium"}]
     if lead_gap is not None and lead_gap < 3:
-        return "Toss-up: keep both concepts in the next validation round."
+        return "Toss-up: keep the result directional until real respondents confirm the difference."
     if validation_score is not None and validation_score >= 85 and not high_or_medium:
         return "Low: suitable for directional consulting discussion."
     if validation_score is not None and validation_score >= 70:
@@ -250,7 +256,7 @@ def _decision_risk(lead_gap: float | None, validation_score: float | None, risk_
 
 def _lead_margin_interpretation(lead_gap: float | None) -> str:
     if lead_gap is None:
-        return "No adoption lead detected."
+        return "Single proposition read; no head-to-head lead calculated."
     if lead_gap < 3:
         return "Very narrow lead; interpret as a tie unless confirmed by real respondents."
     if lead_gap < 5:

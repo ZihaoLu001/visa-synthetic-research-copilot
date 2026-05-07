@@ -13,8 +13,8 @@ from synthetic_researcher.schemas import Concept
 
 
 class ConceptPayload(BaseModel):
-    id: str = Field(..., examples=["concept_a"])
-    name: str = Field(..., examples=["Everyday Cashback Card"])
+    id: str = Field(..., examples=["P1"])
+    name: str = Field(..., examples=["Client value proposition"])
     description: str
     annual_fee_chf: float = 0.0
     features: list[str] = Field(default_factory=list)
@@ -34,7 +34,7 @@ class ResearchRunRequest(BaseModel):
 
 
 app = FastAPI(
-    title="Visa Synthetic Research Copilot API",
+    title="VCA Multi-Agent Synthetic Researcher API",
     version="0.1.0",
     description=(
         "HTTP interface for running benchmark-grounded Swiss synthetic survey research. "

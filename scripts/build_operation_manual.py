@@ -51,8 +51,8 @@ def page(title: str, eyebrow: str, body: str, classes: str = "") -> str:
       </div>
       {body}
       <div class="footer">
-        <span>Visa Synthetic Research Copilot - Group 28</span>
-        <span>Public-data demo guide</span>
+        <span>VCA Multi-Agent Synthetic Researcher - Group 28</span>
+        <span>Public-data operating guide</span>
       </div>
     </section>
     """
@@ -326,11 +326,11 @@ def manual_html() -> str:
     pages = []
     pages.append(
         page(
-            "VCA Synthetic Customer Lab",
+            "VCA Multi-Agent Synthetic Researcher",
             "PDF operation manual",
             f"""
             <div class="subtitle">
-              How a Visa/VCA reviewer can upload a real survey/interview PDF as the scenario artifact,
+              How a Visa/VCA reviewer can upload a real survey/interview PDF as the input artifact,
               run Swiss synthetic customer agents with IBM watsonx.ai / Granite, and interpret segment
               perspectives, aggregate insights, persona-level responses, validation checks and a consultant
               decision brief.
@@ -342,16 +342,16 @@ def manual_html() -> str:
                   <li>Flexible survey/interview input: no fixed question set.</li>
                   <li>PDF upload and extraction audit for realistic partner testing.</li>
                   <li>Swiss public-data-grounded synthetic customer simulation.</li>
-                  <li>Customer board, use-case fit, scenario moves and individual response traceability.</li>
-                  <li>Benchmark, consistency, coverage, scenario-design and realism validation.</li>
+                  <li>Customer board, aggregate insights and individual response traceability.</li>
+                  <li>Benchmark, consistency, coverage and realism validation.</li>
                   <li>Real-model proof path using IBM watsonx.ai / Granite 4 H Small, configured locally and in Code Engine.</li>
                 </ul>
               </div>
               <div class="cover-card">
-                <h2 style="color:white;">Demo artifacts</h2>
+                <h2 style="color:white;">Review artifacts</h2>
                 <p><strong>Application:</strong><br>{APP_URL}</p>
                 <p><strong>Repository:</strong><br>{REPO_URL}</p>
-                <p><strong>Sample PDF:</strong><br>Federal Reserve mobile-payments survey excerpt adapted for Visa demo use.</p>
+                <p><strong>Sample PDF:</strong><br>Federal Reserve mobile-payments survey excerpt adapted for public-data review use.</p>
                 <p><strong>Live model:</strong><br>IBM watsonx.ai in eu-de, default model ibm/granite-4-h-small. Code Engine health reports watsonx_configured=true.</p>
                 <p class="cover-note">Public-data prototype. No Visa internal or client-sensitive data is used.</p>
               </div>
@@ -372,13 +372,13 @@ def manual_html() -> str:
                 <p>Visa Consulting & Analytics reviewers, IBM mentors, or student evaluators who want to test the prototype with a survey/interview artifact instead of a hardcoded prompt.</p>
                 <div class="metric-row">
                   <div class="metric"><div class="num">12</div><div class="label">Default live Granite proof respondents</div></div>
-                  <div class="metric"><div class="num">96</div><div class="label">Full presentation panel available</div></div>
-                  <div class="metric"><div class="num">PDF</div><div class="label">Recommended partner upload format</div></div>
+                  <div class="metric"><div class="num">96</div><div class="label">Full synthetic panel available</div></div>
+                  <div class="metric"><div class="num">PDF</div><div class="label">Recommended partner-review upload format</div></div>
                   <div class="metric"><div class="num">C</div><div class="label">Latest watsonx example evidence grade</div></div>
                 </div>
                 <div class="box green">
                   <h3>Positioning</h3>
-                  <p>This is an early-stage synthetic customer lab. It helps consultants identify promising propositions, weak assumptions, message risks and real-research priorities before commissioning real customer research.</p>
+                  <p>This is an early-stage multi-agent synthetic research workbench. It helps consultants identify promising propositions, weak assumptions, message risks and real-research priorities before commissioning real customer research.</p>
                 </div>
               </div>
               <div>
@@ -386,7 +386,7 @@ def manual_html() -> str:
                 <div class="step-list">
                   <div class="step"><h3>Upload</h3><p>Attach a PDF survey/interview guide or use the sample public survey.</p></div>
                   <div class="step"><h3>Review</h3><p>Check extracted scenario text and edit questions if needed.</p></div>
-                  <div class="step"><h3>Configure</h3><p>Set target market and adjust card propositions.</p></div>
+                  <div class="step"><h3>Configure</h3><p>Set target market and define the client value proposition.</p></div>
                   <div class="step"><h3>Run</h3><p>Generate synthetic customer lens, insights, persona responses and validation evidence.</p></div>
                 </div>
                 <div class="box blue" style="margin-top:5mm;">
@@ -402,7 +402,7 @@ def manual_html() -> str:
     pages.append(
         page(
             "Model, Algorithm And Delivery Stack",
-            "Not a toy demo",
+            "Delivery architecture",
             f"""
             <div class="grid-2">
               <div class="callout-stack">
@@ -410,10 +410,10 @@ def manual_html() -> str:
                     ("Real LLM path", "IBM watsonx.ai is the primary provider. The app calls Granite through the ibm-watsonx-ai ModelInference abstraction, defaulting to ibm/granite-4-h-small in eu-de."),
                     ("Fallback path", "MockLLM is deterministic and exists only for CI, rehearsal and classroom quota contingency. It is not presented as real customer intelligence."),
                     ("Core algorithm", "Extract survey/interview text, parse structured questions, normalize key constructs, sample Swiss micro-personas, run one synthetic customer agent per persona, aggregate weighted results, validate, and synthesize a VCA decision brief."),
-                    ("Synthetic customer lens", "The survey is the input artifact; the product output is a synthetic customer board with use-case fit, need states, objections, message tests, scenario moves, decision drivers, time/cost advantage and real-customer bridge."),
+                    ("Customer perspective board", "The survey is the input artifact; the product output is a customer board with need states, objections, message tests, decision drivers, time/cost advantage and real-customer bridge."),
                     ("Consultant quality layer", "The app adds evidence grade, decision risk, lead-margin interpretation, risk flags, survey repair plan and real-customer validation plan so the output is actionable rather than decorative."),
-                    ("Consultant deliverable", "Each run exports a polished PDF report and a delivery pack with a decision brief, synthetic customer lens JSON, quality layer JSON, consultant report, persona CSV, validation JSON, full run JSON, source audit and governance notes."),
-                    ("Consulting guardrail", "Synthetic results are directional. They help screen concepts and design better real customer research; they do not replace final Visa validation."),
+                    ("Consultant deliverable", "Each run exports a polished PDF report and a delivery pack with a decision brief, customer perspective JSON, quality layer JSON, consultant report, persona CSV, validation JSON, full run JSON, source audit and governance notes."),
+                    ("Consulting guardrail", "Synthetic results are directional. They help screen propositions and design better real customer research; they do not replace final Visa validation."),
                 ])}
               </div>
               <div>{image("01_start.png", "Workbench start screen showing real-model workflow controls")}</div>
@@ -465,14 +465,14 @@ def manual_html() -> str:
 
     pages.append(
         page(
-            "Step 3 - Configure Concepts And Run",
+            "Step 3 - Define Proposition And Run",
             "Agent workflow",
             f"""
             <div class="grid-2">
               <div class="callout-stack">
                 {callouts([
-                    ("Concept testing", "Use the default Premium Travel Card and Everyday Cashback Card, or paste a new proposition."),
-                    ("Live sensitivity", "Change the annual fee or protection messaging, rerun, and compare movement in segment fit and adoption index."),
+                    ("Proposition testing", "Paste the client value proposition that Visa/VCA wants synthetic customers to react to."),
+                    ("Live sensitivity", "Change the price, benefit or trust message, rerun, and compare movement in segment fit and adoption index."),
                     ("Panel scale", "The quick watsonx proof starts small to conserve quota. The full 96-persona run expands seven Swiss archetypes into a weighted micro-population."),
                     ("Run button", "The button launches survey parsing, persona respondent agents, analytics, validation and decision-brief synthesis in one workflow."),
                 ])}
@@ -491,8 +491,8 @@ def manual_html() -> str:
             <div class="grid-2">
               <div class="callout-stack">
                 {callouts([
-                    ("Recommendation", "The first tab summarizes the leading concept and the reason behind the result."),
-                    ("Adoption index", "The bar chart compares concept fit across the synthetic Swiss panel."),
+                    ("Recommendation", "The first tab summarizes the proposition signal and the reason behind the result."),
+                    ("Adoption index", "The bar chart shows proposition fit across the synthetic Swiss panel."),
                     ("Pricing signal", "Acceptable fee ranges help frame a real customer price-sensitivity test."),
                     ("Feature and barrier signals", "Top labels surface recurring needs, trust drivers and objections."),
                 ])}
@@ -513,7 +513,7 @@ def manual_html() -> str:
                 {callouts([
                     ("Input Source Audit", "Shows Source = uploaded_file, File type = pdf, character count and extraction notes."),
                     ("No hardcoding", "The parsed table lists question id, type, construct and options generated from the uploaded survey."),
-                    ("Demo expectation", "Open this tab during review to prove the app can accept a new survey artifact."),
+                    ("Review expectation", "Open this tab during review to prove the app can accept a new survey artifact."),
                     ("Quality fix", "The parser handles PDF line wrapping so wrapped questions stay together."),
                 ])}
               </div>
@@ -550,8 +550,8 @@ def manual_html() -> str:
             <div class="grid-2">
               <div class="callout-stack">
                 {callouts([
-                    ("Individual responses", "Every row stores persona id, persona name, concept, question, answer, rationale and confidence."),
-                    ("Filter workflow", "Filter by concept, archetype or question to inspect why a segment is driving the aggregate result."),
+                    ("Individual responses", "Every row stores persona id, persona name, proposition, question, answer, rationale and confidence."),
+                    ("Filter workflow", "Filter by proposition, archetype or question to inspect why a segment is driving the aggregate result."),
                     ("Reviewer value", "This satisfies the Visa request for both aggregated insights and persona-level survey responses."),
                     ("Export", "Download the filtered response table as CSV for analysis or appendix material."),
                 ])}
@@ -584,20 +584,20 @@ def manual_html() -> str:
 
     pages.append(
         page(
-            "Read The Synthetic Customer Lens",
+            "Read The Customer Perspective Board",
             "Decision Brief tab",
             f"""
             <div class="grid-2">
               <div class="callout-stack">
                 {callouts([
-                    ("Why this matters", "This is the Bain/Visa framing: the output is not only completed survey rows, but a synthetic customer learning layer for proposition decisions."),
-                    ("Use-case fit", "Shows whether the run supports value proposition design, segmentation, message testing, NPS/sentiment proxy, objection training and pricing sensitivity."),
-                    ("Customer board", "Summarizes each Swiss segment's reality, likely best-fit concept, need state, objections to probe and message to test."),
-                    ("Scenario moves", "Turns the current run into the next experiment: price cells, message cells, segment focus and real research design."),
+                    ("Why this matters", "This is the core Visa output: synthetic customer perspectives for early-stage value proposition decisions."),
+                    ("Customer board", "Summarizes each Swiss segment's reality, proposition fit, need state, objections to probe and message to test."),
+                    ("Decision drivers", "Shows the positive signals and watchouts that explain the aggregate recommendation."),
+                    ("Time and cost advantage", "Shows why the synthetic layer is useful before commissioning real surveys or interviews."),
                     ("Real-customer bridge", "Keeps the governance clear: synthetic learning first, qualitative validation next, quantitative calibration after that."),
                 ])}
               </div>
-              <div>{image("11_synthetic_customer_lens.png", "Decision Brief tab showing Synthetic Customer Lens")}</div>
+              <div>{image("11_synthetic_customer_lens.png", "Decision Brief tab showing Customer Perspective Board")}</div>
             </div>
             """,
         )
@@ -634,10 +634,10 @@ def manual_html() -> str:
                 {callouts([
                     ("Pilot readiness gate", "The top of the Scorecard tab shows which checks are ready for partner review and which need attention."),
                     ("Real model status", "For final proof, Evidence mode should show Real IBM watsonx.ai and ibm/granite-4-h-small."),
-                    ("Demo", "Running app, PDF upload, parser, agents, results and validation are all live."),
+                    ("Live product proof", "Running app, PDF upload, parser, agents, results and validation are all live."),
                     ("Architecture", "UI, ingestion, parser, persona store, orchestrator, respondent agents, analytics and validator are visible."),
                     ("KPIs", "Runtime, response count, parse success, consistency and benchmark scores are quantified."),
-                    ("Business value", "Position the system as early-stage concept screening and better real-survey design."),
+                    ("Business value", "Position the system as early-stage proposition screening and better real-survey design."),
                 ])}
               </div>
               <div>{image("10_scorecard.png", "Scorecard tab mapped to grading criteria")}</div>
@@ -655,8 +655,8 @@ def manual_html() -> str:
               <div class="callout-stack">
                 {callouts([
                     ("Why this matters", "VCA reviewers should not need to trust only the live screen. They can download a consultant-style PDF report and inspect the evidence offline."),
-                    ("PDF report", "The report includes executive answer, Synthetic Customer Lens, use-case fit, scenario checks, customer board, consultant quality layer, decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations."),
-                    ("Included files", "The ZIP contains the PDF report, decision brief, synthetic customer lens JSON, quality layer JSON, consultant report, persona-level CSV, validation JSON, full run JSON, input-source audit, methodology/governance notes and pilot-readiness gate."),
+                    ("PDF report", "The report includes executive answer, Customer Perspective Board, consultant quality layer, proposition decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations."),
+                    ("Included files", "The ZIP contains the PDF report, decision brief, customer perspective JSON, quality layer JSON, consultant report, persona-level CSV, validation JSON, full run JSON, input-source audit, methodology/governance notes and pilot-readiness gate."),
                     ("Review workflow", "Send the input PDF survey plus output PDF report together with the app URL so IBM/Visa can check recommendation logic, persona traceability and validation evidence."),
                     ("No secrets", "The delivery pack contains run evidence, not watsonx API keys or local credentials."),
                 ])}
@@ -676,16 +676,16 @@ def manual_html() -> str:
               <div class="box blue">
                 <h2>Message draft</h2>
                 <p>Hi Visa / IBM team,</p>
-                <p>We prepared a short operation manual and a sample input/output pair for the current prototype. It shows a real PDF survey/interview artifact upload, dynamic parsing, IBM watsonx/Granite model path, Swiss synthetic customer responses, a segment customer board, Bain-style use-case fit, aggregated consultant insights, a Consultant Quality Layer, validation checks, and a generated consultant PDF report.</p>
+                <p>We prepared a short operation manual and a sample input/output pair for the current prototype. It shows a real PDF survey/interview artifact upload, dynamic parsing, IBM watsonx/Granite model path, Swiss synthetic customer responses, a segment customer board, aggregated consultant insights, a Consultant Quality Layer, validation checks, and a generated consultant PDF report.</p>
                 <p>Attached are the input PDF survey and the generated output PDF report from the same flow.</p>
                 <p>Could you please let us know whether this matches your expected direction for the final Visa use case?</p>
                 <ol class="question-list">
-                  <li>Is the Synthetic Customer Lab framing aligned with your intended use case?</li>
+                  <li>Is the Multi-Agent Synthetic Researcher framing aligned with your intended use case?</li>
                   <li>Is the flexible PDF survey/interview upload flow aligned with your expectation as the input artifact?</li>
                   <li>Should the final output emphasize aggregate insights, persona-level responses, synthetic customer segment cards, or all three?</li>
                   <li>Is the evidence grade / decision risk / survey repair layer useful for VCA consultants?</li>
                   <li>Are the benchmark, consistency, coverage and realism validation checks useful enough for VCA consultants?</li>
-                  <li>Is there any missing use-case requirement we should address before finals?</li>
+                  <li>Is there any missing Visa requirement we should address before finals?</li>
                 </ol>
                 <p>Thank you!</p>
               </div>
@@ -711,7 +711,7 @@ def manual_html() -> str:
     <html>
       <head>
         <meta charset="utf-8" />
-        <title>Visa Synthetic Research Copilot Operation Manual</title>
+        <title>VCA Multi-Agent Synthetic Researcher Operation Manual</title>
         <style>{css}</style>
       </head>
       <body>

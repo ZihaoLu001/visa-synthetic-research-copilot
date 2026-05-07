@@ -25,9 +25,9 @@ Options: yes; no
 8. Which mobile payment activity is most relevant to you?
 Options: transfer money to another person; pay in a store; pay for parking or transit; pay bills; text-message payment; loyalty or rewards app; online or in-app purchase
 
-9. Would fraud alerts and purchase protection increase your trust in a payment card linked to mobile payments?
+9. Would fraud alerts and purchase protection increase your trust in a payment proposition linked to mobile payments?
 
-10. What concern would most prevent you from using a card that recommends the cheapest payment method at checkout?
+10. What concern would most prevent you from using a payment assistant that recommends the most suitable payment method at checkout?
 Options: privacy; wrong recommendation; loss of control; no clear savings; weak rewards; setup complexity; none
 
-11. What annual fee in CHF would feel acceptable for a card that combines mobile payment optimization, fraud alerts, and purchase protection?
+11. What annual fee in CHF would feel acceptable for a proposition that combines mobile payment optimization, fraud alerts, and purchase protection?

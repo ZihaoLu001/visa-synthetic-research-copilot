@@ -61,17 +61,17 @@ def _mini_run(llm) -> None:
         benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
     )
     concept = Concept(
-        id="A",
-        name="Everyday Cashback Card",
-        description="A Swiss everyday card with transparent annual fee, grocery cashback and purchase protection.",
-        annual_fee_chf=60,
-        features=["grocery cashback", "purchase protection", "mobile wallet", "transparent fees"],
-        target_context="Swiss consumer card value proposition",
+        id="P1",
+        name="Client value proposition",
+        description="A Swiss payment proposition with transparent fees, customer control and purchase protection.",
+        annual_fee_chf=0,
+        features=["transparent fees", "customer control", "purchase protection", "mobile wallet support"],
+        target_context="Swiss consumer payment value proposition",
     )
     run = orchestrator.run(
         raw_survey=(
-            "1. How likely would you be to adopt this card if it were offered by your bank?\n"
-            "2. What annual fee in CHF would feel acceptable for this card?"
+            "1. How relevant is this proposition for your everyday payment needs?\n"
+            "2. What annual fee or monthly price in CHF would feel acceptable, if any?"
         ),
         concepts=[concept],
         micro_population_n=6,

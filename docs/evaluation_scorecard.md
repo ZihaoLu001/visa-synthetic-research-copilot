@@ -8,7 +8,7 @@ Evidence:
 
 - `streamlit run app.py` launches a working consultant cockpit.
 - Survey input is editable and supports uploaded `.txt`, `.md`, `.pdf`, `.docx`, `.csv`, and `.xlsx` guides.
-- The product is framed as a Synthetic Customer Lab: survey/interview files are the input artifact, while the output is segment-level synthetic customer intelligence for value proposition decisions.
+- The product is framed as a VCA Multi-Agent Synthetic Researcher: survey/interview files are the input artifact, while the output is segment-level synthetic customer intelligence for value proposition decisions.
 - The Question Parser tab shows parsed question type, construct and input-source audit.
 - The app runs a weighted Swiss micro-population and returns persona-level responses.
 - Decision Brief, Consultant Summary, Segment Explorer, Persona Responses, Validation, Scorecard and Architecture tabs are all live.
@@ -26,7 +26,7 @@ Evidence:
 - `synthetic_researcher/orchestrator.py` owns the end-to-end workflow.
 - `synthetic_researcher/ingestion.py` normalizes survey files into text before agent parsing.
 - `synthetic_researcher/llm.py` isolates model provider choice behind `BaseLLM`.
-- `synthetic_researcher/customer_lens.py` creates Bain-style use-case fit, scenario-design checks, the synthetic customer board, need states, objections, message tests, scenario moves, time/cost advantage and real-customer bridge.
+- `synthetic_researcher/customer_lens.py` creates the Visa-focused customer board: segment needs, proposition fit, objections, message tests, decision drivers, time/cost advantage and real-customer bridge.
 - `synthetic_researcher/validation.py` separates benchmark, consistency, coverage and realism validation.
 - `synthetic_researcher/insight_quality.py` converts validation and aggregate signals into evidence quality, decision risk and survey repair actions.
 - `synthetic_researcher/reporting.py` exports consultant-readable Markdown.

@@ -1,10 +1,10 @@
-Scenario: Early-stage Swiss card value proposition concept test.
+Scenario: Early-stage Swiss payment value proposition test.
 
-1. How appealing is this card concept overall?
-2. How likely would you be to adopt this card if it were offered by your primary bank?
-3. Which benefit would make you switch first? Options: grocery cashback; travel insurance; FX fee waiver; purchase protection; mobile wallet onboarding; none
-4. Rank the following features: FX waiver / grocery cashback / lounge vouchers / fraud alerts / subscription controls
-5. What annual fee in CHF would feel acceptable for this card?
-6. Would this card replace your current main card or be an additional card? Options: replace current main card; additional secondary card; would not use; unsure
+1. How appealing is this value proposition overall?
+2. How likely would you be to adopt this proposition if it were offered by your primary bank?
+3. Which benefit would make you consider using it first? Options: fee clarity; customer control; purchase protection; mobile wallet onboarding; none
+4. Rank the following features: fee transparency / purchase protection / fraud alerts / mobile wallet support / subscription controls
+5. What annual fee or monthly price in CHF would feel acceptable for this proposition?
+6. Would this proposition replace something you already use or become an additional service? Options: replace current behavior; additional service; would not use; unsure
 7. What is missing or unclear in the proposition?
-8. What main barrier would prevent you from using this card? Options: annual fee; privacy concern; setup complexity; weak rewards; no clear need; low trust
+8. What main barrier would prevent you from using this proposition? Options: price; privacy concern; setup complexity; no clear need; low trust

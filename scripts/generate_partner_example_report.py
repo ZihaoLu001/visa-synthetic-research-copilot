@@ -13,13 +13,36 @@ if str(ROOT) not in sys.path:
 from synthetic_researcher.consulting import build_decision_brief, default_research_brief
 from synthetic_researcher.ingestion import extract_survey_text
 from synthetic_researcher.llm import get_llm, watsonx_config_status
-from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator, load_concepts
+from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.pdf_report import build_consultant_pdf_report
+from synthetic_researcher.schemas import Concept
 
 OUT_DIR = ROOT / "demo" / "partner_examples"
 SOURCE_INPUT_PDF = ROOT / "demo" / "public_survey_uploads" / "federal_reserve_mobile_payments_excerpt.pdf"
 INPUT_PDF = OUT_DIR / "visa_example_input_public_mobile_payments_survey.pdf"
 OUTPUT_PDF = OUT_DIR / "visa_example_output_consultant_report_watsonx.pdf"
+
+
+def partner_example_proposition() -> list[Concept]:
+    return [
+        Concept(
+            id="P1",
+            name="Swiss Payment Assistant Proposition",
+            description=(
+                "A bank-issued Visa payment assistant that helps Swiss consumers choose a suitable payment "
+                "method at checkout, highlights fees and protections, supports mobile-wallet usage, and "
+                "keeps the customer in control of the final payment choice."
+            ),
+            annual_fee_chf=0.0,
+            features=[
+                "transparent payment-method recommendation",
+                "fee and FX clarity before purchase",
+                "purchase protection and dispute support",
+                "customer keeps final control at checkout",
+            ],
+            target_context="Swiss consumers across age, income, household, language region and payment behavior segments",
+        )
+    ]
 
 
 def prepare_input_pdf(path: Path) -> None:
@@ -31,10 +54,10 @@ def prepare_input_pdf(path: Path) -> None:
 
 
 def select_payment_relevant_questions(raw_survey: str, max_questions: int) -> str:
-    """Keep the survey preamble and the payment/card-relevant tail questions.
+    """Keep the survey preamble and the payment-relevant tail questions.
 
     The input PDF still contains the full public excerpt. The partner example runs a
-    quota-friendly slice focused on payment activities, card trust, barriers and fee
+    quota-friendly slice focused on payment activities, trust, barriers and fee
     sensitivity so the output report reads like a Visa/VCA proposition test.
     """
     if max_questions <= 0:
@@ -94,7 +117,7 @@ def main() -> None:
     )
     run = orchestrator.run(
         raw_survey=raw_survey,
-        concepts=load_concepts(ROOT / "data" / "sample_concepts.yaml"),
+        concepts=partner_example_proposition(),
         micro_population_n=args.respondents,
         consistency_runs=1,
         input_source={

@@ -1,6 +1,6 @@
 # Final Demo Acceptance Report
 
-This is the final readiness checklist for the Visa Synthetic Research Copilot demo. It is written so the team can prove, quickly and calmly, that the project is deployed, testable, and aligned with the final rubric.
+This is the final readiness checklist for the VCA Multi-Agent Synthetic Researcher demo. It is written so the team can prove, quickly and calmly, that the project is deployed, testable, and aligned with the final rubric.
 
 ## Live URLs
 
@@ -22,15 +22,15 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | Streamlit Code Engine app | HTTP 200 |
 | API `/health` | HTTP 200, `status=ok`, `active_provider_if_auto=watsonx`, `watsonx_configured=true` |
 | API `/run` synthetic survey | HTTP 200, parsed 5 flexible questions |
-| API response volume | 24 respondents, 2 concepts, 5 questions, 2 consistency runs = 240 persona-question responses |
+| API response volume | Respondent count x parsed questions x consistency runs; defaults now use one client proposition so the output is easy for Visa reviewers to trace. |
 | Validation evidence | Overall validation score returned by API |
-| Cloud watsonx.ai API proof | `POST /run` with a one-question card survey returned persona responses and validation under `MODEL_PROVIDER=watsonx` |
+| Cloud watsonx.ai API proof | `POST /run` with a one-question proposition survey returned persona responses and validation under `MODEL_PROVIDER=watsonx` |
 | External survey API stress tests | 3 public-example-inspired surveys returned synthetic responses, validation evidence, and 100.0 JSON parse success |
 | Real watsonx.ai smoke test | `ibm/granite-4-h-small` returned a live response after IBM restored Group 28 quota |
 | Real watsonx.ai mini-run | End-to-end parser/persona/validation flow completed with provider `watsonx` |
 | Local regression tests | `21 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
-| Slack-ready PDF report example | Public PDF survey input generated a watsonx/Granite consultant PDF report with 72 persona-question responses, validation score 88.0, question coverage 100.0 and Consultant Quality evidence grade C because the concept lead is narrow |
+| Slack-ready PDF report example | Public PDF survey input generates a watsonx/Granite consultant PDF report with persona-level responses, aggregate insights, validation checks and a real-customer validation plan |
 
 ## One-Command Smoke Test
 
@@ -55,11 +55,11 @@ If the first request takes longer than expected, wait and rerun. The Code Engine
 Use `demo/final_demo_survey.txt` as the live paste input:
 
 ```text
-1. How likely would you be to adopt this card if it were offered by your bank?
-2. What annual fee in CHF would feel acceptable for this card?
+1. How relevant is this value proposition for your everyday payment or banking needs?
+2. What annual fee or monthly price in CHF would feel acceptable, if any?
 3. Which benefit or feature feels most valuable to you, and why?
-4. Would you trust a card that automatically suggests the cheapest payment method at checkout?
-5. What is the main barrier that would prevent you from using this card?
+4. Would you trust a payment assistant that suggests the most suitable payment method at checkout?
+5. What is the main barrier or concern that would stop you from using it?
 ```
 
 Demo sequence:
@@ -68,7 +68,7 @@ Demo sequence:
 2. For the final real-model proof, set model provider to `watsonx` and confirm the sidebar shows `Real LLM ready`. Keep `mock` available only as a fallback for rehearsal or quota issues.
 3. For a real-model proof, keep the default quick setting: `12` respondents, `1` consistency run, and `Quick real-model proof (first 2 questions)`. This conserves watsonx classroom quota while proving the live model path.
 4. For the full-scale presentation run, switch to `Full survey`, move respondents to `96`, and use mock only if quota/time becomes a risk.
-5. Use `Core Visa card survey`, upload the public sample PDF, or paste/upload a different survey if Visa wants to test from their side.
+5. Use `Core Visa synthetic survey`, upload the public sample PDF, or paste/upload a different survey if Visa wants to test from their side.
 6. Run the synthetic survey and confirm the KPI cards show parsed questions, runtime, validation and response count.
 7. Show `Decision Brief`, especially the Consultant Quality Layer: evidence grade, decision risk, risk flags, survey repair plan and real-customer validation plan.
 8. Show `Consultant Summary`.
@@ -77,7 +77,7 @@ Demo sequence:
 11. Show `Persona Responses` for individual traceability.
 12. Show `Validation` and `Scorecard` for benchmark, consistency, coverage, realism, pilot readiness, and grading evidence.
 13. Download the PDF Report and Consultant Delivery Pack ZIP to show the partner-review artifact.
-14. Switch the scenario to `Live sensitivity: lower Premium fee to CHF 60`, rerun, and explain directional movement.
+14. Edit the proposition price, benefit wording or trust/control message, rerun, and explain directional movement.
 
 ## Partner Feedback Attachments
 

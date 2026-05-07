@@ -13,7 +13,7 @@ def build_markdown_report(run: SurveyRun) -> str:
     research = aggregate.get("research_brief", {})
     decision = aggregate.get("decision_brief", {})
     lines = [
-        "# Visa Synthetic Customer Lab Report",
+        "# VCA Multi-Agent Synthetic Researcher Report",
         "",
         f"Run ID: `{run.run_id}`",
         f"Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
@@ -41,21 +41,13 @@ def build_markdown_report(run: SurveyRun) -> str:
         f"Decision posture: {decision.get('decision_posture', 'n/a')}",
         f"Validation posture: {decision.get('validation_band', 'n/a')} ({decision.get('validation_score', 'n/a')}/100)",
         "",
-        "### Synthetic Customer Lens",
+        "### Customer Perspective Board",
         "",
         f"- Positioning: {(decision.get('synthetic_customer_lens') or {}).get('positioning', 'n/a')}",
         *[f"- Value proposition question: {item}" for item in (decision.get("synthetic_customer_lens") or {}).get("value_proposition_questions", [])],
         *[
-            f"- Use-case fit: {item.get('use_case')} = {item.get('fit')} ({item.get('how_this_run_supports_it')})"
-            for item in (decision.get("synthetic_customer_lens") or {}).get("use_case_fit", [])
-        ],
-        *[
             f"- Segment: {item.get('segment')} | best fit: {item.get('likely_best_fit')} | need: {item.get('need_state')} | message: {item.get('message_to_test')}"
             for item in (decision.get("synthetic_customer_lens") or {}).get("synthetic_customer_board", [])
-        ],
-        *[
-            f"- Scenario move: {item.get('move')} | {item.get('what_to_change_next')} | {item.get('why_it_matters')}"
-            for item in (decision.get("synthetic_customer_lens") or {}).get("scenario_planning_moves", [])
         ],
         "",
         "### So What for VCA",
@@ -68,9 +60,9 @@ def build_markdown_report(run: SurveyRun) -> str:
         "",
         analyst.get("why", ""),
         "",
-        "## Concept Summary",
+        "## Proposition Summary",
         "",
-        "| Concept | Adoption index | Mean Likert | Respondents |",
+        "| Proposition | Adoption index | Mean Likert | Respondents |",
         "| --- | ---: | ---: | ---: |",
     ]
     for concept_id, summary in aggregate.get("concept_summary", {}).items():
@@ -83,7 +75,7 @@ def build_markdown_report(run: SurveyRun) -> str:
         "",
         "## Pricing Signals",
         "",
-        "| Concept | Weighted mean acceptable fee | Range |",
+        "| Proposition | Weighted mean acceptable fee | Range |",
         "| --- | ---: | --- |",
     ])
     for concept_id, price in aggregate.get("price_summary", {}).items():
@@ -96,7 +88,7 @@ def build_markdown_report(run: SurveyRun) -> str:
         "",
         "## Segment Fit",
         "",
-        "| Concept:Segment | Mean Likert |",
+        "| Proposition:Segment | Mean Likert |",
         "| --- | ---: |",
     ])
     for key, value in sorted(aggregate.get("segment_fit", {}).items()):

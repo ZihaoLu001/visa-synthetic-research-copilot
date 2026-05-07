@@ -1,12 +1,12 @@
 Hi Visa / IBM team,
 
-We recorded a short real-run demo of our current Visa Synthetic Research Copilot prototype.
+We recorded a short real-run demo of our current VCA Multi-Agent Synthetic Researcher prototype.
 
 In the video, we upload a public Federal Reserve mobile-payments survey excerpt as a PDF attachment, run the end-to-end synthetic research workflow, and show:
 
 - flexible survey parsing from the uploaded file,
 - 96 Swiss synthetic consumer respondents,
-- aggregated consultant insights across concepts and segments,
+- aggregated consultant insights across Swiss segments,
 - persona-level responses with rationale and confidence,
 - validation checks for benchmark alignment, internal consistency, coverage and realism.
 

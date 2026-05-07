@@ -54,7 +54,7 @@ Ask IBM technical questions in `#watsonx-agentic-ai-challenge-2026-general-guest
 
 Ask Visa use-case questions in `#watsonx-agentic-ai-challenge-2026-visa`:
 
-- Can Visa share one representative card/product concept or marketing research survey/interview guide for the final demo?
+- Can Visa share one representative payment/banking value proposition or marketing research survey/interview guide for the final demo?
 - Should the final output emphasize persona-level responses, aggregate insights, or both?
 - Which benchmark or validation evidence would be most convincing for VCA stakeholders?
 

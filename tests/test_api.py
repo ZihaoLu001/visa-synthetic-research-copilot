@@ -16,7 +16,7 @@ def test_run_endpoint_returns_summary_payload():
     response = client.post(
         "/run",
         json={
-            "survey_text": "How likely would you be to adopt this card?\nWhat annual fee in CHF feels acceptable?",
+            "survey_text": "How relevant is this value proposition for your payment needs?\nWhat annual fee in CHF feels acceptable?",
             "micro_population_n": 6,
             "consistency_runs": 1,
         },
@@ -31,6 +31,5 @@ def test_run_endpoint_returns_summary_payload():
     assert payload["aggregate"]["model_id"]
     assert payload["aggregate"]["decision_brief"]["consultant_quality_layer"]["decision_risk"]
     assert payload["aggregate"]["decision_brief"]["synthetic_customer_lens"]["synthetic_customer_board"]
-    assert payload["aggregate"]["decision_brief"]["synthetic_customer_lens"]["use_case_fit"]
-    assert payload["aggregate"]["decision_brief"]["synthetic_customer_lens"]["scenario_planning_moves"]
+    assert payload["aggregate"]["decision_brief"]["synthetic_customer_lens"]["real_customer_bridge"]
     assert "overall" in payload["validation"]

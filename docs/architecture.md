@@ -2,7 +2,7 @@
 
 ## Product Intent
 
-Visa Synthetic Research Copilot helps VCA consultants pressure-test early card, payment, or banking value propositions before commissioning real customer research. The core product is a synthetic customer lab: flexible survey/interview input is one artifact used to simulate customer perspectives, decision drivers and follow-up validation needs.
+VCA Multi-Agent Synthetic Researcher helps VCA consultants pressure-test early payment or banking value propositions before commissioning real customer research. The core product is a multi-agent synthetic research workbench: flexible survey/interview input is the artifact used to simulate customer perspectives, decision drivers and follow-up validation needs.
 
 ## Flow
 
@@ -16,7 +16,7 @@ Consultant UI
   -> Persona Respondent Agents
   -> Analytics Aggregator
   -> Benchmark / Consistency / Coverage / Realism Validator
-  -> Synthetic Customer Lens
+  -> Customer Perspective Board
   -> Consultant Quality Layer
   -> VCA Decision Brief / PDF Report / Consultant Delivery Pack
 ```
@@ -24,10 +24,10 @@ Consultant UI
 ## Components
 
 `app.py`
-: Streamlit cockpit for setting the research brief and decision rule, uploading or pasting survey questions, editing card concepts, selecting respondent count, choosing provider, and setting validation repetitions.
+: Streamlit cockpit for setting the research brief and decision rule, uploading or pasting survey questions, defining the client value proposition, selecting respondent count, choosing provider, and setting validation repetitions.
 
 `consulting.py`
-: Converts raw synthetic evidence into a VCA-style decision brief: executive answer, decision posture, concept matrix, "so what" implications, hypothesis readout, next real-research actions, methodology snapshot and limitations.
+: Converts raw synthetic evidence into a VCA-style decision brief: executive answer, decision posture, proposition decision matrix, "so what" implications, hypothesis readout, next real-research actions, methodology snapshot and limitations.
 
 `ingestion.py`
 : Converts pasted text plus TXT, MD, PDF, DOCX, CSV, and XLSX uploads into normalized survey text with extraction metadata. This lets Visa or IBM test the prototype with a real marketing research survey file instead of retyping every question.
@@ -39,7 +39,7 @@ Consultant UI
 : Converts arbitrary survey or interview text into structured questions with type and measured construct. A deterministic construct-normalization pass cross-checks model output so adoption, price sensitivity, feature preference and barrier coverage remain stable for unfamiliar survey wording.
 
 `PersonaAgent`
-: Answers each question from one persona's point of view using persona context, concept details, public benchmark context, and prior answers.
+: Answers each question from one persona's point of view using persona context, client proposition details, public benchmark context, and prior answers.
 
 `InsightAnalystAgent`
 : Converts aggregate metrics into consultant-facing recommendation, watchouts, and next test suggestions.
@@ -48,7 +48,7 @@ Consultant UI
 : Sits above the analyst summary. It answers the business question first, then links the recommendation to adoption, price, segment fit, validation score and the user's stated hypotheses. This is the layer that makes the prototype read like a consulting workbench instead of a generic synthetic respondent table.
 
 `customer_lens.py`
-: Reframes the run as a synthetic customer learning loop inspired by the Bain "synthetic customers" framing. It generates Bain-style use-case fit, scenario-design checks, the synthetic customer board, segment need states, likely best-fit concept, objections to probe, message tests, scenario-planning moves, decision drivers, time/cost advantage and real-customer bridge.
+: Generates the Visa-focused customer perspective board: segment need states, proposition fit, objections to probe, message tests, decision drivers, time/cost advantage and real-customer bridge.
 
 `insight_quality.py`
 : Adds the consultant evidence lens: evidence grade, decision risk, lead-margin interpretation, segment differentiation, risk flags, survey repair plan, validation plan and calibration thresholds. This makes the output more defensible because VCA sees not only the answer, but also how strong the synthetic evidence is and what must be tested with real customers next.
@@ -57,7 +57,7 @@ Consultant UI
 : Packages the run into a partner-review ZIP containing the decision brief, PDF report, consultant report, persona-level CSV, validation JSON, full run JSON, input audit, methodology/governance notes, and a pilot readiness gate. This gives Visa a portable artifact they can inspect outside Streamlit.
 
 `pdf_report.py`
-: Renders a VCA-style PDF report from the exact run data: executive answer, KPI strip, research brief, consultant quality layer, concept decision matrix, signal/barrier tables, segment fit, persona-level evidence, validation confidence, methodology and limitations. This turns the demo into a concrete consultant artifact rather than only an on-screen dashboard.
+: Renders a VCA-style PDF report from the exact run data: executive answer, KPI strip, research brief, consultant quality layer, proposition decision matrix, signal/barrier tables, segment fit, persona-level evidence, validation confidence, methodology and limitations. This turns the demo into a concrete consultant artifact rather than only an on-screen dashboard.
 
 `validation.py`
 : Runs benchmark alignment, internal consistency, persona coverage, survey construct coverage, judge-style realism checks and an overall validation confidence score.
@@ -90,15 +90,15 @@ Benchmark alignment compares the synthetic panel's weighted payment-method mix t
 - Swiss Payment Monitor 1/2026 all transactions
 - Swiss Payment Monitor 1/2026 in-store transactions
 
-Internal consistency repeats the same run and measures Likert standard deviation per persona, concept, and question.
+Internal consistency repeats the same run and measures Likert standard deviation per persona, proposition, and question.
 
 Coverage checks whether the synthetic panel spans the core Visa-requested dimensions: age, income, household, language region, and persona archetype count.
 
-Question coverage checks whether the input survey includes the consultant constructs most relevant for card proposition testing: adoption, price sensitivity, feature preference and barriers.
+Question coverage checks whether the input survey includes the consultant constructs most relevant for value proposition testing: adoption or relevance, price sensitivity, feature preference and barriers.
 
-The Synthetic Customer Lens answers the Bain-style product question: what customer perspectives did we simulate, what customer-learning use cases does this run support, what decision drivers emerged, what scenario moves should be tried next, where does this create time/cost advantage, and which assumptions still need real customer proof.
+The customer perspective board answers the Visa product question: which customer perspectives did we simulate, what decision drivers emerged, where does this create time/cost advantage, and which assumptions still need real customer proof.
 
-The Consultant Quality Layer converts validation output into an explicit actionability signal. A strong validation score can still be marked as medium decision risk if the concept lead is narrow, segment spread is weak or the survey lacks a key construct. Conversely, it can recommend a smaller real-customer validation plan when synthetic evidence is directionally strong.
+The Consultant Quality Layer converts validation output into an explicit actionability signal. A strong validation score can still be marked as medium decision risk if segment spread is weak or the survey lacks a key construct. Conversely, it can recommend a smaller real-customer validation plan when synthetic evidence is directionally strong.
 
 The realism rubric checks for concise survey-style answers, model identity leakage, numeric range validity, rough persona/price alignment and obvious adoption-versus-price contradictions. It is intentionally transparent so a future watsonx judge or human reviewer can use the same rubric.
 

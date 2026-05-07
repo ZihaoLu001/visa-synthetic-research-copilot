@@ -19,8 +19,12 @@ def main() -> None:
         benchmark_path=ROOT / "data" / "benchmark_snb_2025.yaml",
     )
     run = orchestrator.run(
-        survey_path=ROOT / "data" / "sample_survey_card.yaml",
-        concepts_path=ROOT / "data" / "sample_concepts.yaml",
+        raw_survey=(
+            "1. How relevant is this value proposition for your everyday payment or banking needs?\n"
+            "2. What annual fee or monthly price in CHF would feel acceptable, if any?\n"
+            "3. Which benefit, service or message feels most valuable to you, and why?\n"
+            "4. What is the main barrier or concern that would stop you from using it?"
+        ),
         micro_population_n=48,
         consistency_runs=2,
     )

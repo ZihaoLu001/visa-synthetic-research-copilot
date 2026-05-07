@@ -95,7 +95,7 @@ class InsightAnalystAgent:
             if key.startswith(f"{best_id}:")
         ]
         return {
-            "recommendation": f"Use concept {best_id} as the leading proposition for the next validation round, subject to benchmark and human validation.",
+            "recommendation": f"Use proposition {best_id} as the directional anchor for the next validation round, subject to benchmark and human validation.",
             "why": f"It has the highest weighted adoption index ({best_summary.get('adoption_index_0_100')}/100) in the synthetic panel.",
             "strongest_segments": strongest_segments,
             "pricing_signal": (
@@ -135,14 +135,14 @@ def _normalise_question_type(raw_type: Any, text: Any = "", options: Any = None)
         return "price"
     if qtype in {"choice", "multiple_choice", "single_choice", "select", "categorical"}:
         return "choice"
-    if qtype in {"open", "open_text", "free_text", "text"}:
-        return "open"
     if any(token in question_text for token in ["fee", "chf", "price", "willingness to pay", "pay per year"]):
         return "price"
     if has_options and any(token in question_text for token in ["which", "what", "main reason", "concern", "rank"]):
         return "choice"
-    if any(token in question_text for token in ["likely", "trust", "relevant", "satisfied", "appealing", "rate"]):
+    if any(token in question_text for token in ["likely", "trust", "relevant", "useful", "satisfied", "appealing", "rate"]):
         return "likert"
+    if qtype in {"open", "open_text", "free_text", "text"}:
+        return "open"
     return "open"
 
 
@@ -160,7 +160,7 @@ def _normalise_measures(raw_measures: Any, text: str, options: Any, qtype: str) 
     if any(token in raw for token in ["barrier", "concern", "objection", "reason not"]):
         parts.append("barrier")
 
-    if any(token in question_text for token in ["likely", "adopt", "trust", "use this card", "would you use", "switch"]):
+    if any(token in question_text for token in ["likely", "adopt", "trust", "relevant", "useful", "appealing", "would you use", "switch"]):
         parts.append("adoption")
     if any(token in question_text for token in ["annual fee", "chf", "price", "too expensive", "acceptable", "good value", "pay per year"]):
         parts.append("price sensitivity")

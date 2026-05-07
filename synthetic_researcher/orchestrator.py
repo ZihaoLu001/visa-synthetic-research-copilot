@@ -23,6 +23,22 @@ def load_concepts(path: str | Path) -> list[Concept]:
     return [Concept(**row) for row in load_yaml(path)["concepts"]]
 
 
+def default_value_proposition() -> list[Concept]:
+    return [
+        Concept(
+            id="P1",
+            name="Client value proposition",
+            description=(
+                "Client-provided payment or banking value proposition. Replace this placeholder with "
+                "the actual proposition before using the output for partner discussion."
+            ),
+            annual_fee_chf=0.0,
+            features=["main customer benefit", "proof point or service feature", "message or barrier to test"],
+            target_context="Swiss consumer value proposition",
+        )
+    ]
+
+
 def load_survey(path: str | Path, parser: SurveyParserAgent) -> list[SurveyQuestion]:
     data = load_yaml(path)
     if "questions" in data:
@@ -52,7 +68,7 @@ class SyntheticResearchOrchestrator:
         run_id = str(uuid.uuid4())[:8]
         parser = SurveyParserAgent(self.llm)
         questions = load_survey(survey_path, parser) if survey_path else parser.parse(raw_survey or "")
-        concepts = concepts or load_concepts(concepts_path or "data/sample_concepts.yaml")
+        concepts = concepts or (load_concepts(concepts_path) if concepts_path else default_value_proposition())
         archetypes = load_personas(self.persona_path)
         personas = expand_to_micro_population(archetypes, target_n=micro_population_n, seed=42)
         expected_responses = len(personas) * len(concepts) * len(questions)

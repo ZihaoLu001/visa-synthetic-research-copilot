@@ -40,7 +40,7 @@ class BaseLLM(ABC):
 
 
 class MockLLM(BaseLLM):
-    """Deterministic offline provider for rehearsal and fallback demos."""
+    """Deterministic offline provider for rehearsal and quota-contingency fallback."""
 
     def generate_text(self, prompt: str) -> str:
         if "synthetic survey respondent" in prompt:
@@ -104,7 +104,7 @@ class MockLLM(BaseLLM):
                 "id": f"Q{qid}",
                 "text": text,
                 "type": qtype,
-                "options": options or (["Concept A", "Concept B", "Neither"] if qtype == "choice" else []),
+                "options": options or (["Interested", "Not sure", "Not interested"] if qtype == "choice" else []),
                 "measures": self._measure(lower),
             })
             qid += 1
@@ -279,7 +279,7 @@ class MockLLM(BaseLLM):
             return {
                 "answer_value": None,
                 "answer_label": barrier,
-                "answer_text": f"The main barrier would be {barrier}; I would need proof that this card is better than what I already use.",
+                "answer_text": f"The main barrier would be {barrier}; I would need proof that this proposition is better than what I already use.",
                 "rationale": self._rationale(persona_id, concept, fee, features),
                 "confidence": 0.76,
             }
@@ -319,7 +319,7 @@ class MockLLM(BaseLLM):
             score += 0.8 if any(k in lower for k in ["travel", "lounge", "fx", "premium", "insurance"]) else -0.1
             score -= max(0, fee - 120) / 120
         elif persona_root in everyday_ids:
-            score += 0.8 if any(k in lower for k in ["cashback", "everyday", "budget", "family", "protection"]) else -0.2
+            score += 0.8 if any(k in lower for k in ["savings", "everyday", "budget", "family", "protection", "transparent"]) else -0.2
             score -= max(0, fee - 60) / 80
         else:
             score += 0.3 if "protection" in lower else 0.0
@@ -331,7 +331,7 @@ class MockLLM(BaseLLM):
         persona_root = persona_id.split("_")[0]
         base = {"A1": 25, "A2": 90, "A3": 45, "A4": 150, "A5": 20, "A6": 85, "A7": 55}.get(persona_root, 60)
         lower = features.lower()
-        if "cashback" in lower:
+        if any(k in lower for k in ["savings", "reward", "discount", "everyday value"]):
             base += 10
         if "travel" in lower or "insurance" in lower:
             base += 15
@@ -344,7 +344,7 @@ class MockLLM(BaseLLM):
         if score >= 4.2:
             return f"This feels useful for me. I can see clear occasions where I would use {concept}, and the CHF {int(fee)} fee can be justified if the benefits are easy to understand."
         if score >= 3.2:
-            return f"I see some value in {concept}, but I would compare it with my current card first. The fee and the real monthly benefit need to be very clear."
+            return f"I see some value in {concept}, but I would compare it with my current payment habits first. The fee and the real monthly benefit need to be very clear."
         return f"I am not convinced yet. Some features are interesting, but CHF {int(fee)} feels high for what I would actually use."
 
     @staticmethod
@@ -356,11 +356,11 @@ class MockLLM(BaseLLM):
                 if label.lower() in lower:
                     return label
         if persona_root in {"A1", "A3", "A7"}:
-            for label in ["grocery cashback", "family offers", "mobile wallet", "purchase protection"]:
+            for label in ["everyday savings", "family offers", "mobile wallet", "purchase protection", "transparent fees"]:
                 if label.lower() in lower:
                     return label
         if persona_root == "A5":
-            for label in ["transparent fees", "purchase protection", "simple onboarding", "cashback"]:
+            for label in ["transparent fees", "purchase protection", "simple onboarding", "clear customer control"]:
                 if label.lower() in lower:
                     return label
         for label in re.findall(r"[A-Za-z][A-Za-z /-]+", features):
@@ -372,7 +372,7 @@ class MockLLM(BaseLLM):
     @classmethod
     def _choose_option(cls, persona_id: str, concept: str, features: str, options: list[str], score: float) -> str:
         if not options:
-            return "Concept A" if score >= 4.0 else "Concept B" if score >= 2.8 else "Neither"
+            return "Interested" if score >= 4.0 else "Not sure" if score >= 2.8 else "Not interested"
         persona_root = persona_id.split("_")[0]
         lower_context = (concept + " " + features).lower()
         option_scores: list[tuple[float, str]] = []
@@ -383,7 +383,7 @@ class MockLLM(BaseLLM):
                 option_score += _contains_any(lower, ["travel", "insurance", "fx", "foreign", "lounge", "premium", "cross-border"]) * 3
                 option_score += _contains_any(lower, ["security", "protection", "fraud", "receipt"]) * 1
             elif persona_root in {"A1", "A3", "A7"}:
-                option_score += _contains_any(lower, ["cashback", "grocery", "family", "discount", "mobile", "wallet", "protection"]) * 3
+                option_score += _contains_any(lower, ["savings", "grocery", "family", "discount", "mobile", "wallet", "protection", "transparent"]) * 3
                 option_score += _contains_any(lower, ["simple", "fee", "transparent"]) * 1
             elif persona_root == "A5":
                 option_score += _contains_any(lower, ["cash", "transparent", "control", "privacy", "security", "simple", "fraud"]) * 3
@@ -407,18 +407,18 @@ class MockLLM(BaseLLM):
             return "digital trust and control concerns"
         if persona_root in {"A2", "A4", "A6"} and not any(k in lower for k in ["travel", "fx", "insurance", "lounge"]):
             return "limited travel or premium relevance"
-        if "cashback" not in lower and persona_root in {"A1", "A3", "A7"}:
+        if not any(k in lower for k in ["savings", "reward", "discount", "everyday", "family"]) and persona_root in {"A1", "A3", "A7"}:
             return "unclear everyday value"
-        return "unclear incremental value versus current card"
+        return "unclear incremental value versus current payment habits"
 
     @staticmethod
     def _rationale(persona_id: str, concept: str, fee: float, features: str) -> str:
         lower = features.lower()
         persona_root = persona_id.split("_")[0]
         if persona_root in {"A1", "A3", "A5"}:
-            return "Price-sensitive segment; everyday value, cashback, family usefulness, and trust messaging matter more than premium travel benefits."
+            return "Price-sensitive segment; everyday value, control, practical usefulness, and trust messaging matter more than broad benefit claims."
         if persona_root in {"A2", "A4", "A6"}:
-            return "Travel- or card-oriented segment; insurance, FX savings, convenience, and premium service can justify a higher fee."
+            return "Higher-usage payment segment; insurance, FX clarity, convenience, and service reliability can justify a higher fee."
         if "protection" in lower:
             return "Protection messaging improves trust, but the proposition still needs simple proof points."
         return "Response reflects the persona's payment habits, income band, and stated attitudes."
@@ -426,11 +426,11 @@ class MockLLM(BaseLLM):
     @staticmethod
     def _analyst_summary() -> dict[str, Any]:
         return {
-            "executive_summary": "The synthetic panel indicates which concept is directionally stronger by segment, but the result should be treated as hypothesis support rather than final customer evidence.",
-            "adoption_drivers": ["clear monthly value", "trust and purchase protection", "travel/FX benefits for frequent travelers"],
+            "executive_summary": "The synthetic panel indicates where the proposition is directionally stronger by segment, but the result should be treated as hypothesis support rather than final customer evidence.",
+            "adoption_drivers": ["clear monthly value", "trust and purchase protection", "transparent fees and customer control"],
             "barriers": ["annual fee", "unclear benefit usage", "low relevance for non-travel segments"],
-            "segment_recommendations": ["Use everyday-value positioning for families and students", "Use premium travel positioning for frequent travelers", "Use cash/control reassurance for older or privacy-sensitive customers"],
-            "next_test_questions": ["What annual fee feels acceptable?", "Which benefit would trigger switching?", "Which current card or payment method would this replace?"],
+            "segment_recommendations": ["Make everyday value concrete for families and students", "Show high-usage payment benefits for travel or cross-border segments", "Use control, transparency and reassurance for older or privacy-sensitive customers"],
+            "next_test_questions": ["What annual fee feels acceptable?", "Which benefit would trigger switching?", "Which current payment habit or method would this replace?"],
         }
 
 

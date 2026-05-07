@@ -10,21 +10,21 @@ from .schemas import Concept, SurveyRun
 def default_research_brief() -> dict[str, str]:
     return {
         "project_objective": (
-            "Stress-test two early-stage Visa card value propositions for Swiss consumers before investing "
-            "in a full real-customer survey."
+            "Stress-test an early-stage payment or banking value proposition with synthetic Swiss "
+            "customer feedback before investing in a full real-customer survey or interview program."
         ),
         "client_decision": (
-            "Decide which proposition, price point and benefit message should advance to focused customer "
-            "validation."
+            "Decide whether the proposition, price point and benefit message are strong enough to advance "
+            "to focused customer validation."
         ),
         "hypotheses": (
-            "H1: Premium travel benefits are attractive to frequent travelers but weak for everyday segments.\n"
-            "H2: Annual fee level is the largest barrier for students, families and cash-trusting retirees.\n"
-            "H3: Purchase protection and transparent fee messaging can increase trust outside premium segments."
+            "H1: The proposition should show clear relevance for at least one Swiss consumer segment.\n"
+            "H2: Price, fee transparency or perceived control may be the main adoption barrier.\n"
+            "H3: Trust, protection and clear value messaging can improve perceived usefulness."
         ),
         "decision_rule": (
-            "Advance a concept only if it leads on adoption, has a credible segment fit, and the validation "
-            "score is amber or green."
+            "Advance the proposition only if synthetic responses show credible segment fit, explainable "
+            "decision drivers, and amber or green validation confidence."
         ),
         "stakeholder_output": (
             "A consultant-ready decision brief with directional recommendation, segment differences, key "
@@ -110,7 +110,7 @@ def methodology_snapshot(provider: str = "mock") -> list[str]:
         provider_line,
         "Survey ingestion: PDF/DOCX/XLSX/CSV/TXT extraction, editable text review and structured question parsing.",
         "Persona sampling: public-data-grounded Swiss archetypes expanded into a weighted micro-population with stable seeded variation.",
-        "Persona response layer: one agent answers as one persona, with concept context, public benchmark context and prior answers for consistency.",
+        "Persona response layer: one agent answers as one persona, with client proposition context, public benchmark context and prior answers for consistency.",
         "Analytics: weighted adoption index, acceptable-fee signal, feature/barrier labels, segment fit and traceable persona quotes.",
         "Validation: payment benchmark MAE, repeated-run Likert variance, persona coverage, question construct coverage and realism rubric flags.",
     ]
@@ -137,9 +137,9 @@ def format_decision_brief_markdown(run: SurveyRun) -> str:
         f"Decision posture: **{brief.get('decision_posture', 'n/a')}**",
         f"Validation: **{brief.get('validation_band', 'n/a')}** ({brief.get('validation_score', 'n/a')}/100)",
         "",
-        "## Concept Decision Matrix",
+        "## Proposition Evidence Readout",
         "",
-        "| Concept | Adoption | Price signal | Strongest fit | Primary action |",
+        "| Proposition | Adoption | Price signal | Strongest fit | Primary action |",
         "| --- | ---: | --- | --- | --- |",
     ]
     for row in brief.get("concept_matrix", []):
@@ -155,25 +155,15 @@ def format_decision_brief_markdown(run: SurveyRun) -> str:
         lines.append(f"- {item.get('hypothesis')}: {item.get('status')} - {item.get('evidence')}")
     lens = brief.get("synthetic_customer_lens", {})
     if lens:
-        lines.extend(["", "## Synthetic Customer Lens", ""])
+        lines.extend(["", "## Customer Perspective Board", ""])
         lines.append(f"- Positioning: {lens.get('positioning')}")
         lines.extend(["", "### Value Proposition Questions", ""])
         lines.extend(f"- {item}" for item in lens.get("value_proposition_questions", []))
-        lines.extend(["", "### Synthetic Customer Use-Case Fit", ""])
-        for item in lens.get("use_case_fit", []):
-            lines.append(
-                f"- {item.get('use_case')}: {item.get('fit')} - {item.get('how_this_run_supports_it')}"
-            )
-        lines.extend(["", "### Synthetic Customer Board", ""])
+        lines.extend(["", "### Segment Perspective Board", ""])
         for item in lens.get("synthetic_customer_board", [])[:5]:
             lines.append(
                 f"- {item.get('segment')}: best fit={item.get('likely_best_fit')}; "
                 f"need={item.get('need_state')}; message={item.get('message_to_test')}"
-            )
-        lines.extend(["", "### Scenario Planning Moves", ""])
-        for item in lens.get("scenario_planning_moves", []):
-            lines.append(
-                f"- {item.get('move')}: {item.get('what_to_change_next')} Why it matters: {item.get('why_it_matters')}"
             )
         lines.extend(["", "### Real Customer Bridge", ""])
         for item in lens.get("real_customer_bridge", []):
@@ -278,8 +268,14 @@ def _executive_answer(
     validation_band: str,
 ) -> str:
     if not lead:
-        return "No lead concept could be selected because no adoption-style question was parsed."
-    gap_text = f" by {adoption_gap} points versus the next concept" if adoption_gap is not None else ""
+        return "No proposition signal could be selected because no adoption-style question was parsed."
+    if adoption_gap is None:
+        return (
+            f"{lead.name} reached adoption index {lead_summary.get('adoption_index_0_100')}/100 in this "
+            f"synthetic panel. Treat this as an early-stage proposition read, not a final market decision: "
+            f"the current validation posture is {validation_band}."
+        )
+    gap_text = f" by {adoption_gap} points versus the next proposition"
     return (
         f"{lead.name} is the directional lead in this synthetic panel, with adoption index "
         f"{lead_summary.get('adoption_index_0_100')}/100{gap_text}. Treat this as early-stage evidence: "
@@ -295,8 +291,10 @@ def _decision_posture(
     adoption = lead_summary.get("adoption_index_0_100") or 0
     score = validation_score or 0
     gap = adoption_gap if adoption_gap is not None else 0
+    if adoption_gap is None and adoption >= 65 and score >= 85:
+        return "Advance proposition to focused real-customer validation"
     if adoption >= 65 and score >= 85 and gap >= 5:
-        return "Advance lead concept to focused real-customer validation"
+        return "Advance lead proposition to focused real-customer validation"
     if adoption >= 50 and score >= 70:
         return "Refine proposition and run a targeted validation sprint"
     return "Recalibrate personas/survey or redesign proposition before using for decisions"
@@ -316,11 +314,17 @@ def _recommended_action(adoption_index: float | None, validation_score: float | 
 
 def _so_what(lead_id: str | None, aggregate: dict[str, Any]) -> list[str]:
     if not lead_id:
-        return ["No clear lead concept was identified; first inspect the parsed survey questions."]
+        return ["No clear proposition signal was identified; first inspect the parsed survey questions."]
     matrix_barriers = [label for label, _ in aggregate.get("top_barrier_signals", [])[:4]]
     signals = [label for label, _ in aggregate.get("top_answer_labels_by_concept", {}).get(lead_id, [])[:4]]
+    concept_count = len(aggregate.get("concept_summary", {}))
     items = [
-        f"Use concept {lead_id} as the anchor for the next validation round, but keep at least one challenger concept to test fee and messaging sensitivity.",
+        (
+            f"Use proposition {lead_id} as the anchor for the next validation round; add a real control or "
+            "challenger only if Visa/VCA wants a comparative test."
+            if concept_count <= 1
+            else f"Use proposition {lead_id} as the anchor for the next validation round, then test fee and messaging sensitivity against the other proposition."
+        ),
         "Prioritize segment-specific messaging; the synthetic panel is most useful when it shows which archetypes diverge, not when it averages everyone together.",
     ]
     if signals:
@@ -347,7 +351,7 @@ def _hypothesis_readout(
         lower = hyp.lower()
         if any(term in lower for term in ["price", "fee", "chf"]) and has_price:
             status = "directionally tested"
-            evidence = "Price questions produced acceptable-fee signals by concept."
+            evidence = "Price questions produced acceptable-fee signals by proposition."
         elif any(term in lower for term in ["segment", "traveler", "family", "student", "retiree", "premium"]) and has_segments:
             status = "directionally tested"
             evidence = "Segment Explorer shows archetype-level fit differences."

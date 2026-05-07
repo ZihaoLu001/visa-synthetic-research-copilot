@@ -22,7 +22,7 @@ Rules:
 
 Example output:
 [
-  {{"id": "Q1", "text": "How likely would you be to adopt this card?", "type": "likert", "options": [], "measures": "adoption likelihood"}},
+  {{"id": "Q1", "text": "How relevant is this value proposition for your payment needs?", "type": "likert", "options": [], "measures": "adoption likelihood"}},
   {{"id": "Q2", "text": "What annual fee in CHF would feel acceptable?", "type": "price", "options": [], "measures": "price sensitivity"}}
 ]
 
