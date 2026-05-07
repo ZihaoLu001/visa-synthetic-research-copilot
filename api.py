@@ -18,7 +18,7 @@ class ConceptPayload(BaseModel):
     description: str
     annual_fee_chf: float = 0.0
     features: list[str] = Field(default_factory=list)
-    target_context: str = "Swiss consumer card value proposition"
+    target_context: str = "Swiss consumer value proposition"
 
 
 class ResearchRunRequest(BaseModel):
