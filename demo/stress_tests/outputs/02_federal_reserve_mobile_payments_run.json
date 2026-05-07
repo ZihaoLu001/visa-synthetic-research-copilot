@@ -1,0 +1,1446 @@
+{
+  "run_id": "8ed995c7",
+  "concepts": [
+    {
+      "id": "P1",
+      "name": "Mobile Payment Confidence Proposition",
+      "description": "A Visa-enabled mobile payment support layer that explains security, supports person-to-person and online payments, surfaces fees/protection before checkout, and reduces uncertainty for mobile-first and hesitant customers.",
+      "annual_fee_chf": 0.0,
+      "features": [
+        "mobile payment security explanation",
+        "P2P and online checkout support",
+        "fee and protection transparency",
+        "privacy and fraud-control messaging"
+      ],
+      "target_context": "Swiss consumers with different mobile-payment adoption, security concern and digital-openness profiles"
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q1",
+      "text": "Have you made a mobile payment in the past 12 months?",
+      "type": "choice",
+      "options": [
+        "yes",
+        "no"
+      ],
+      "scale_min": 1,
+      "scale_max": 5,
+      "measures": "adoption"
+    },
+    {
+      "id": "Q2",
+      "text": "Using your mobile phone, which activities have you done in the past 12 months?",
+      "type": "choice",
+      "options": [
+        "transferred money to another person",
+        "sent a remittance",
+        "received money from another person",
+        "paid for a product or service",
+        "paid a bill",
+        "made a charitable donation"
+      ],
+      "scale_min": 1,
+      "scale_max": 5,
+      "measures": "choice preference"
+    },
+    {
+      "id": "Q3",
+      "text": "What is the main reason you started using or would start using mobile payments?",
+      "type": "choice",
+      "options": [
+        "convenience",
+        "bank offered the service",
+        "security confidence",
+        "fraud alerts/control",
+        "no nearby branch or ATM",
+        "other"
+      ],
+      "scale_min": 1,
+      "scale_max": 5,
+      "measures": "adoption"
+    },
+    {
+      "id": "Q4",
+      "text": "What is the main concern that could prevent you from using mobile payments more often?",
+      "type": "choice",
+      "options": [
+        "security of personal information",
+        "privacy",
+        "setup complexity",
+        "lack of merchant acceptance",
+        "no clear need",
+        "fear of errors"
+      ],
+      "scale_min": 1,
+      "scale_max": 5,
+      "measures": "barrier"
+    },
+    {
+      "id": "Q5",
+      "text": "How safe do you believe your personal information is when using mobile banking or mobile payments?",
+      "type": "likert",
+      "options": [],
+      "scale_min": 1,
+      "scale_max": 5,
+      "measures": "adoption"
+    }
+  ],
+  "personas": [
+    {
+      "id": "A1",
+      "name": "Zurich Digital Student",
+      "weight": 13,
+      "age_band": "18-29",
+      "region": "Zurich urban",
+      "language_region": "German-speaking Switzerland",
+      "income_band": "low",
+      "household": "one-person / shared flat",
+      "education": "university / vocational training",
+      "lifestyle": "mobile-first, budget-conscious, frequent online shopping, limited travel budget",
+      "payment_profile": {
+        "cash": 0.14,
+        "debit_card": 0.31,
+        "credit_card": 0.08,
+        "mobile_payment_apps": 0.47
+      },
+      "attitudes": {
+        "price_sensitivity": 0.88,
+        "digital_openness": 0.92,
+        "privacy_concern": 0.45,
+        "travel_orientation": 0.35,
+        "reward_orientation": 0.7
+      },
+      "source_notes": [
+        "Younger Swiss consumers use less cash and more mobile/digital methods than older groups.",
+        "Use FSO demographics plus SNB/SPM payment-method benchmarks."
+      ]
+    },
+    {
+      "id": "A2",
+      "name": "Basel Young Professional Traveler",
+      "weight": 17,
+      "age_band": "25-39",
+      "region": "Basel / Zurich commuter",
+      "language_region": "German-speaking Switzerland",
+      "income_band": "middle",
+      "household": "one-person",
+      "education": "tertiary",
+      "lifestyle": "career-oriented, travels several times per year, compares card benefits",
+      "payment_profile": {
+        "cash": 0.1,
+        "debit_card": 0.25,
+        "credit_card": 0.28,
+        "mobile_payment_apps": 0.37
+      },
+      "attitudes": {
+        "price_sensitivity": 0.48,
+        "digital_openness": 0.85,
+        "privacy_concern": 0.4,
+        "travel_orientation": 0.86,
+        "reward_orientation": 0.75
+      },
+      "source_notes": [
+        "Frequent travelers are a plausible target segment for premium card benefits.",
+        "Payment mix grounded with SNB/SPM public payment-method studies."
+      ]
+    },
+    {
+      "id": "A3",
+      "name": "Bern Family Budget Parent",
+      "weight": 23,
+      "age_band": "30-49",
+      "region": "Bern / mid-sized Swiss cities",
+      "language_region": "German-speaking Switzerland",
+      "income_band": "middle",
+      "household": "family with children",
+      "education": "vocational / tertiary",
+      "lifestyle": "values predictable expenses, family utility, grocery and online purchases",
+      "payment_profile": {
+        "cash": 0.23,
+        "debit_card": 0.36,
+        "credit_card": 0.13,
+        "mobile_payment_apps": 0.28
+      },
+      "attitudes": {
+        "price_sensitivity": 0.72,
+        "digital_openness": 0.68,
+        "privacy_concern": 0.53,
+        "travel_orientation": 0.4,
+        "reward_orientation": 0.82
+      },
+      "source_notes": [
+        "Household composition and income are key persona factors in the Visa kickoff slides."
+      ]
+    },
+    {
+      "id": "A4",
+      "name": "Geneva Premium Frequent Traveler",
+      "weight": 10,
+      "age_band": "30-54",
+      "region": "Geneva / Lake Geneva",
+      "language_region": "French-speaking Switzerland",
+      "income_band": "high",
+      "household": "two-person household",
+      "education": "tertiary",
+      "lifestyle": "international travel, premium service expectations, cross-border spending",
+      "payment_profile": {
+        "cash": 0.08,
+        "debit_card": 0.18,
+        "credit_card": 0.42,
+        "mobile_payment_apps": 0.32
+      },
+      "attitudes": {
+        "price_sensitivity": 0.25,
+        "digital_openness": 0.75,
+        "privacy_concern": 0.35,
+        "travel_orientation": 0.95,
+        "reward_orientation": 0.88
+      },
+      "source_notes": [
+        "High-income and travel-oriented segment used for card value proposition testing."
+      ]
+    },
+    {
+      "id": "A5",
+      "name": "Ticino Cash-Trusting Retiree",
+      "weight": 18,
+      "age_band": "55+",
+      "region": "Ticino / smaller town",
+      "language_region": "Italian-speaking Switzerland",
+      "income_band": "low-to-middle",
+      "household": "one-person / couple",
+      "education": "vocational",
+      "lifestyle": "prefers control and simplicity, local shopping, lower digital enthusiasm",
+      "payment_profile": {
+        "cash": 0.48,
+        "debit_card": 0.34,
+        "credit_card": 0.08,
+        "mobile_payment_apps": 0.1
+      },
+      "attitudes": {
+        "price_sensitivity": 0.8,
+        "digital_openness": 0.32,
+        "privacy_concern": 0.82,
+        "travel_orientation": 0.2,
+        "reward_orientation": 0.35
+      },
+      "source_notes": [
+        "Older consumers use more cash; SNB 2025 charts break down payment methods by age."
+      ]
+    },
+    {
+      "id": "A6",
+      "name": "Swiss SME Owner Cross-Border Purchaser",
+      "weight": 14,
+      "age_band": "40-59",
+      "region": "St. Gallen / eastern Switzerland",
+      "language_region": "German-speaking Switzerland",
+      "income_band": "middle-to-high",
+      "household": "couple / family",
+      "education": "vocational / business",
+      "lifestyle": "values control, business travel, FX clarity, receipts and protection",
+      "payment_profile": {
+        "cash": 0.17,
+        "debit_card": 0.28,
+        "credit_card": 0.31,
+        "mobile_payment_apps": 0.24
+      },
+      "attitudes": {
+        "price_sensitivity": 0.45,
+        "digital_openness": 0.62,
+        "privacy_concern": 0.55,
+        "travel_orientation": 0.72,
+        "reward_orientation": 0.68
+      },
+      "source_notes": [
+        "Business-like behavior is included only as a consumer-style archetype, not Visa internal client data."
+      ]
+    }
+  ],
+  "responses": [
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A1",
+      "persona_name": "Zurich Digital Student",
+      "persona_weight": 13,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": 1.0,
+      "answer_label": "yes",
+      "answer_text": "Yes, I have made mobile payments in the past year.",
+      "rationale": "As a Zurich digital student, I frequently use mobile payment apps for everyday purchases and splitting costs with flatmates. The low cash usage and high mobile payment adoption among my peer group align with the Swiss Payment Monitor data showing 31.4% of all transactions are made via mobile devices.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A1",
+      "persona_name": "Zurich Digital Student",
+      "persona_weight": 13,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 5.0,
+      "answer_label": "paid for a product or service",
+      "answer_text": "Yes, I have used my mobile phone to pay for products or services in the past year.",
+      "rationale": "As a Zurich digital student, I frequently use mobile payment apps for everyday purchases and splitting costs with flatmates. The low cash usage and high mobile payment adoption among my peer group align with the Swiss Payment Monitor data showing 31.4% of all transactions are made via mobile devices.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A1",
+      "persona_name": "Zurich Digital Student",
+      "persona_weight": 13,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "security confidence",
+      "answer_text": "Security confidence",
+      "rationale": "While I appreciate the convenience of mobile payments, my primary motivation is the security features they offer. As a Zurich digital student, I'm aware of the risks of online fraud, so I prioritize services that provide clear security explanations and fraud protection. The Swiss Payment Monitor shows that younger consumers are increasingly concerned about security, which aligns with my focus on this aspect when adopting mobile payments.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A1",
+      "persona_name": "Zurich Digital Student",
+      "persona_weight": 13,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "lack of merchant acceptance",
+      "answer_text": "Lack of merchant acceptance",
+      "rationale": "While I appreciate the convenience of mobile payments, I'm often limited by where I can actually use them. Many smaller shops, local markets, and some of my favorite cafes in Zurich still only accept cash or traditional cards. This restricts how much I can rely on mobile payments for everyday purchases, even though I'd like to use them more often.",
+      "confidence": 0.8
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A1",
+      "persona_name": "Zurich Digital Student",
+      "persona_weight": 13,
+      "concept_id": "P1",
+      "question_id": "Q5",
+      "question_type": "likert",
+      "answer_value": 3.0,
+      "answer_label": null,
+      "answer_text": "Moderately safe",
+      "rationale": "As a Zurich digital student, I'm aware of the security features offered by mobile payment apps and the protections provided by my bank, but I also know that no system is completely foolproof. I frequently use mobile payments for everyday purchases, but I remain cautious about sharing my personal information online. The Swiss Payment Monitor shows that while younger consumers are adopting mobile payments rapidly, many still have concerns about security, which aligns with my moderate confidence level.",
+      "confidence": 0.75
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A2",
+      "persona_name": "Basel Young Professional Traveler",
+      "persona_weight": 17,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": 1.0,
+      "answer_label": "yes",
+      "answer_text": "Yes, I have made mobile payments in the past year.",
+      "rationale": "As a young professional who travels frequently, I rely heavily on mobile payments for convenience and speed, especially when using public transport or paying for small purchases while on the go. The convenience aligns with my high digital openness and travel orientation.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A2",
+      "persona_name": "Basel Young Professional Traveler",
+      "persona_weight": 17,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 5.0,
+      "answer_label": "paid for a product or service",
+      "answer_text": "Yes, I have used my mobile phone to pay for products or services in the past year.",
+      "rationale": "As a frequent traveler and career-oriented professional, I often use mobile payments for quick and convenient purchases while on the go, especially when using public transport or making small purchases at airports or cafes. The convenience aligns with my high digital openness and travel orientation.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A2",
+      "persona_name": "Basel Young Professional Traveler",
+      "persona_weight": 17,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "security confidence",
+      "answer_text": "Security confidence",
+      "rationale": "As a young professional who travels frequently, I prioritize security when using mobile payments. The ability to receive fraud alerts and control over transactions gives me peace of mind, especially when making purchases in unfamiliar locations or using public Wi-Fi networks. This aligns with my moderate privacy concern and high digital openness.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A2",
+      "persona_name": "Basel Young Professional Traveler",
+      "persona_weight": 17,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "choice",
+      "answer_value": 2.0,
+      "answer_label": "setup complexity",
+      "answer_text": "Setup complexity",
+      "rationale": "While I am comfortable with technology and have used mobile payments before, I can see how the initial setup and linking of bank accounts or cards might be a barrier for some users. As someone who travels frequently, I prioritize convenience, but I understand that for less tech-savvy individuals, the setup process could be daunting. This aligns with my moderate digital openness and the fact that I still use cash occasionally for small purchases.",
+      "confidence": 0.7
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A2",
+      "persona_name": "Basel Young Professional Traveler",
+      "persona_weight": 17,
+      "concept_id": "P1",
+      "question_id": "Q5",
+      "question_type": "likert",
+      "answer_value": 3.0,
+      "answer_label": null,
+      "answer_text": "Moderately safe",
+      "rationale": "As a young professional who travels frequently, I am generally comfortable with mobile payments and trust the security measures in place, such as tokenization and fraud alerts. However, I am still somewhat cautious about sharing my personal information online, especially when using public Wi-Fi networks or unfamiliar apps. This cautiousness aligns with my moderate privacy concern and high digital openness. While I appreciate the convenience of mobile payments, I believe that there is always a risk of data breaches or unauthorized transactions, so I remain vigilant and take steps to protect my information, such as using strong passwords and enabling two-factor authentication when available.",
+      "confidence": 0.75
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A3",
+      "persona_name": "Bern Family Budget Parent",
+      "persona_weight": 23,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": null,
+      "answer_label": "no",
+      "answer_text": "No, I have not made a mobile payment in the past 12 months.",
+      "rationale": "While I am open to digital solutions and value rewards, I am somewhat concerned about privacy and prefer predictable expenses. Mobile payments are still relatively new in Switzerland, and I have not yet felt confident using them for my regular purchases.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A3",
+      "persona_name": "Bern Family Budget Parent",
+      "persona_weight": 23,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "paid for a product or service",
+      "answer_text": "I have used my mobile phone to pay for products or services online, especially for groceries and household items. Mobile payments are convenient and I trust the security measures provided by my bank and Visa.",
+      "rationale": "As a middle-income family in Bern, I prioritize predictable expenses and value convenience. Mobile payments align with my digital openness and reward orientation, but I remain cautious about privacy. I have adopted mobile payments for everyday purchases where I can see clear benefits and protections.",
+      "confidence": 0.78
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A3",
+      "persona_name": "Bern Family Budget Parent",
+      "persona_weight": 23,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "security confidence",
+      "answer_text": "Security confidence is the main reason I started using mobile payments. As a family with children, protecting our financial information is a priority. Knowing that Visa and my bank provide strong security measures and fraud alerts gives me the confidence to adopt mobile payments for everyday purchases.",
+      "rationale": "While I am open to digital solutions and value rewards, I am somewhat concerned about privacy and prefer predictable expenses. Mobile payments are still relatively new in Switzerland, and I have not yet felt confident using them for my regular purchases. However, the security features and fraud protection offered by Visa and my bank have made me more comfortable with this payment method.",
+      "confidence": 0.78
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A3",
+      "persona_name": "Bern Family Budget Parent",
+      "persona_weight": 23,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "setup complexity",
+      "answer_text": "Setup complexity",
+      "rationale": "While I appreciate the convenience and security of mobile payments, I find the initial setup process and understanding the various apps confusing. As a busy parent, I prefer straightforward solutions that integrate easily with my existing banking and shopping habits.",
+      "confidence": 0.8
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A3",
+      "persona_name": "Bern Family Budget Parent",
+      "persona_weight": 23,
+      "concept_id": "P1",
+      "question_id": "Q5",
+      "question_type": "likert",
+      "answer_value": 4.0,
+      "answer_label": null,
+      "answer_text": "I feel relatively safe when using mobile banking or mobile payments, but I remain cautious about sharing my personal information. The security features provided by Visa and my bank give me confidence, especially for everyday purchases like groceries and household items. However, I still prefer to limit the amount of sensitive data I share online.",
+      "rationale": "As a middle-income family in Bern, I prioritize predictable expenses and value convenience. Mobile payments align with my digital openness and reward orientation, but I remain cautious about privacy. I have adopted mobile payments for everyday purchases where I can see clear benefits and protections, but I still have some concerns about sharing personal information.",
+      "confidence": 0.78
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A4",
+      "persona_name": "Geneva Premium Frequent Traveler",
+      "persona_weight": 10,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": 1.0,
+      "answer_label": "yes",
+      "answer_text": "Yes, I have made several mobile payments in the past year, especially for travel bookings, dining, and retail purchases while traveling abroad. Mobile payments are very convenient for me.",
+      "rationale": "As a Geneva-based frequent traveler with high digital openness and a strong preference for premium services, I regularly use mobile payment apps for both domestic and international transactions. The convenience and speed of mobile payments align well with my lifestyle and travel orientation.",
+      "confidence": 0.95
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A4",
+      "persona_name": "Geneva Premium Frequent Traveler",
+      "persona_weight": 10,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 5.0,
+      "answer_label": "paid for a product or service",
+      "answer_text": "Yes, I have used my mobile phone to pay for products and services multiple times in the past year, especially for travel bookings, dining, and retail purchases while traveling abroad. Mobile payments are very convenient for me.",
+      "rationale": "As a Geneva-based frequent traveler with high digital openness and a strong preference for premium services, I regularly use mobile payment apps for both domestic and international transactions. The convenience and speed of mobile payments align well with my lifestyle and travel orientation.",
+      "confidence": 0.95
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A4",
+      "persona_name": "Geneva Premium Frequent Traveler",
+      "persona_weight": 10,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "security confidence",
+      "answer_text": "Security confidence is the main reason I started using mobile payments. As a frequent traveler and premium service user, I appreciate the added layers of security and fraud protection that Visa-enabled mobile payments provide. The ability to receive real-time fraud alerts and control over transactions gives me peace of mind when making payments, especially for travel bookings and online purchases.",
+      "rationale": "Given my high digital openness and travel orientation, I am more likely to adopt mobile payments if they offer robust security features. The combination of convenience and enhanced security makes mobile payments an attractive option for my lifestyle and spending habits.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A4",
+      "persona_name": "Geneva Premium Frequent Traveler",
+      "persona_weight": 10,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "choice",
+      "answer_value": 3.0,
+      "answer_label": "setup complexity",
+      "answer_text": "Setup complexity is my main concern. While I appreciate the security benefits of mobile payments, I worry about the time and effort required to set up and manage multiple mobile payment apps, especially when traveling internationally. I prefer payment methods that are quick and easy to use without extensive setup.",
+      "rationale": "As a Geneva-based frequent traveler with high digital openness, I am willing to adopt new technologies, but I value simplicity and ease of use. The perceived complexity of setting up and managing mobile payment solutions could deter me from using them more frequently, despite their security advantages.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A4",
+      "persona_name": "Geneva Premium Frequent Traveler",
+      "persona_weight": 10,
+      "concept_id": "P1",
+      "question_id": "Q5",
+      "question_type": "likert",
+      "answer_value": 4.0,
+      "answer_label": null,
+      "answer_text": "I believe my personal information is fairly safe when using mobile banking or mobile payments, but I remain cautious. As a Geneva-based frequent traveler with high digital openness, I appreciate the security features provided by Visa-enabled mobile payments, such as real-time fraud alerts and transaction controls. However, I am still concerned about potential data breaches and the security of my information across different mobile payment apps. The convenience and speed of mobile payments are appealing, but I prioritize protecting my personal data above all else.",
+      "rationale": "Given my high digital openness and travel orientation, I am more likely to adopt mobile payments if they offer robust security features. While I trust the security measures provided by Visa and my bank, I remain vigilant about protecting my personal information, especially when traveling internationally and using multiple mobile payment apps.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A5",
+      "persona_name": "Ticino Cash-Trusting Retiree",
+      "persona_weight": 18,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": null,
+      "answer_label": "no",
+      "answer_text": "No, I have not made a mobile payment in the past 12 months.",
+      "rationale": "As a retiree in Ticino who prefers cash and local shopping, I am not accustomed to using mobile payment apps. The data shows that older consumers in Switzerland use cash more frequently, and my own payment profile reflects a low usage of mobile payments (only 10%). Additionally, I have concerns about privacy and security when it comes to digital transactions, which further discourages me from adopting mobile payments.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A5",
+      "persona_name": "Ticino Cash-Trusting Retiree",
+      "persona_weight": 18,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 1.0,
+      "answer_label": "transferred money to another person",
+      "answer_text": "I have transferred money to another person using my mobile phone in the past 12 months.",
+      "rationale": "While I am not a frequent user of mobile payment apps, I have occasionally used them to transfer money to family members or friends, especially when we are not in the same location. This aligns with my preference for cash transactions and my concerns about privacy and security, as transferring money through a mobile app allows me to maintain control over the transaction and avoid carrying cash.",
+      "confidence": 0.6
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A5",
+      "persona_name": "Ticino Cash-Trusting Retiree",
+      "persona_weight": 18,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 2.0,
+      "answer_label": "bank offered the service",
+      "answer_text": "I would start using mobile payments if my bank offered the service and provided clear explanations about security and protection.",
+      "rationale": "As a retiree in Ticino who prefers cash and local shopping, I am not accustomed to using mobile payment apps. My low digital openness and high privacy concerns make me hesitant to adopt new technologies. However, if my bank offered the service and provided clear explanations about security and protection, I would be more likely to start using mobile payments. This aligns with my preference for simplicity and control in financial transactions.",
+      "confidence": 0.7
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A5",
+      "persona_name": "Ticino Cash-Trusting Retiree",
+      "persona_weight": 18,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "security of personal information",
+      "answer_text": "The main concern that could prevent me from using mobile payments more often is the security of my personal information. As someone who values privacy and prefers cash transactions, I am hesitant to share my financial data through mobile apps. I worry about the potential for data breaches or unauthorized access to my accounts.",
+      "rationale": "As a retiree in Ticino who prefers cash and local shopping, I am not accustomed to using mobile payment apps. My low digital openness and high privacy concerns make me hesitant to adopt new technologies. The data shows that older consumers in Switzerland use cash more frequently, and my own payment profile reflects a low usage of mobile payments (only 10%). Additionally, I have concerns about privacy and security when it comes to digital transactions, which further discourages me from adopting mobile payments.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A5",
+      "persona_name": "Ticino Cash-Trusting Retiree",
+      "persona_weight": 18,
+      "concept_id": "P1",
+      "question_id": "Q5",
+      "question_type": "likert",
+      "answer_value": 2.0,
+      "answer_label": null,
+      "answer_text": "I believe my personal information is somewhat safe when using mobile banking or mobile payments, but I still have concerns about privacy and security.",
+      "rationale": "As a retiree in Ticino who prefers cash and local shopping, I am not accustomed to using mobile payment apps. My low digital openness and high privacy concerns make me hesitant to adopt new technologies. While I understand that mobile banking and payments can offer convenience, I worry about the potential for data breaches or unauthorized access to my accounts. However, if my bank provided clear explanations about security measures and protection, I would feel more confident in the safety of my personal information.",
+      "confidence": 0.7
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A6",
+      "persona_name": "Swiss SME Owner Cross-Border Purchaser",
+      "persona_weight": 14,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": null,
+      "answer_label": "no",
+      "answer_text": "No, I have not made a mobile payment in the past 12 months.",
+      "rationale": "While I am open to digital solutions and value the convenience of mobile payments, I have not yet made a mobile payment in the past year. I tend to rely more on traditional payment methods like debit cards for my purchases, both in-store and online. The lack of familiarity and the need for clear explanations around security and fees have made me hesitant to adopt mobile payments fully.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A6",
+      "persona_name": "Swiss SME Owner Cross-Border Purchaser",
+      "persona_weight": 14,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "paid for a product or service",
+      "answer_text": "I have used my mobile phone to pay for products or services in the past 12 months.",
+      "rationale": "As a Swiss SME owner who frequently travels for business, I have embraced mobile payments for convenience and speed, especially when traveling abroad. Mobile payments allow me to make purchases quickly without carrying cash or worrying about currency exchange. However, I remain cautious about security and fees, so I prefer using mobile payments for smaller transactions and ensure I understand the associated costs and protections.",
+      "confidence": 0.78
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A6",
+      "persona_name": "Swiss SME Owner Cross-Border Purchaser",
+      "persona_weight": 14,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "security confidence",
+      "answer_text": "Security confidence",
+      "rationale": "As a Swiss SME owner who values control and protection, I prioritize security when considering mobile payments. The ability to understand and control fraud alerts and protection measures is a key driver for me to adopt mobile payment solutions. While convenience is important, I need assurance that my transactions are secure and that I have clear visibility into any associated fees or protections.",
+      "confidence": 0.82
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A6",
+      "persona_name": "Swiss SME Owner Cross-Border Purchaser",
+      "persona_weight": 14,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "choice",
+      "answer_value": 4.0,
+      "answer_label": "lack of merchant acceptance",
+      "answer_text": "Lack of merchant acceptance",
+      "rationale": "While I appreciate the convenience of mobile payments, I am hesitant to use them more often due to concerns about merchant acceptance. Many of the businesses I frequent, especially smaller local shops and international vendors, do not yet support mobile payment options. This limitation makes it difficult for me to rely solely on mobile payments for my transactions, both in Switzerland and abroad. Until mobile payments become more widely accepted, I will continue to use a mix of payment methods, including debit cards and cash, to ensure I can complete my purchases seamlessly.",
+      "confidence": 0.88
+    },
+    {
+      "run_id": "8ed995c7_r1",
+      "persona_id": "A6",
+      "persona_name": "Swiss SME Owner Cross-Border Purchaser",
+      "persona_weight": 14,
+      "concept_id": "P1",
+      "question_id": "Q5",
+      "question_type": "likert",
+      "answer_value": 3.0,
+      "answer_label": null,
+      "answer_text": "I feel moderately safe when using mobile banking or mobile payments, but I have concerns about the security of my personal information.",
+      "rationale": "As a Swiss SME owner who values control and protection, I am cautious about sharing my personal information online. While I appreciate the convenience of mobile payments, I worry about the potential for data breaches and unauthorized access to my financial details. I would feel more secure if there were clearer explanations of the security measures in place and how my data is protected during transactions.",
+      "confidence": 0.75
+    }
+  ],
+  "aggregate": {
+    "respondent_count": 6,
+    "response_count": 30,
+    "avg_confidence": 0.82,
+    "concept_summary": {
+      "P1": {
+        "mean_likert": 3.16,
+        "adoption_index_0_100": 53.9,
+        "respondents": 6,
+        "bucket_counts": {
+          "considerer": 3,
+          "promoter": 2,
+          "skeptic": 1
+        }
+      }
+    },
+    "question_summary": {
+      "P1:Q5": 3.16
+    },
+    "price_summary": {},
+    "choice_summary": {
+      "P1:Q2": [
+        [
+          "paid for a product or service",
+          5
+        ],
+        [
+          "transferred money to another person",
+          1
+        ]
+      ],
+      "P1:Q3": [
+        [
+          "security confidence",
+          5
+        ],
+        [
+          "bank offered the service",
+          1
+        ]
+      ],
+      "P1:Q4": [
+        [
+          "setup complexity",
+          3
+        ],
+        [
+          "lack of merchant acceptance",
+          2
+        ],
+        [
+          "security of personal information",
+          1
+        ]
+      ]
+    },
+    "segment_fit": {
+      "P1:A1": 3.0,
+      "P1:A2": 3.0,
+      "P1:A3": 4.0,
+      "P1:A4": 4.0,
+      "P1:A5": 2.0,
+      "P1:A6": 3.0
+    },
+    "top_barrier_signals": [
+      [
+        "digital",
+        23
+      ],
+      [
+        "privacy",
+        11
+      ],
+      [
+        "protection",
+        10
+      ],
+      [
+        "control",
+        5
+      ],
+      [
+        "fee",
+        5
+      ],
+      [
+        "setup",
+        2
+      ],
+      [
+        "trust",
+        2
+      ]
+    ],
+    "top_answer_labels": [
+      [
+        "paid for a product or service",
+        5
+      ],
+      [
+        "security confidence",
+        5
+      ],
+      [
+        "setup complexity",
+        3
+      ],
+      [
+        "lack of merchant acceptance",
+        2
+      ],
+      [
+        "transferred money to another person",
+        1
+      ],
+      [
+        "bank offered the service",
+        1
+      ],
+      [
+        "security of personal information",
+        1
+      ]
+    ],
+    "top_answer_labels_by_concept": {
+      "P1": [
+        [
+          "paid for a product or service",
+          5
+        ],
+        [
+          "security confidence",
+          5
+        ],
+        [
+          "setup complexity",
+          3
+        ],
+        [
+          "lack of merchant acceptance",
+          2
+        ],
+        [
+          "transferred money to another person",
+          1
+        ],
+        [
+          "bank offered the service",
+          1
+        ],
+        [
+          "security of personal information",
+          1
+        ]
+      ]
+    },
+    "sample_quotes": {
+      "P1": [
+        "Zurich Digital Student: Yes, I have made mobile payments in the past year.",
+        "Zurich Digital Student: Yes, I have used my mobile phone to pay for products or services in the past year.",
+        "Zurich Digital Student: Security confidence",
+        "Zurich Digital Student: Lack of merchant acceptance",
+        "Zurich Digital Student: Moderately safe"
+      ]
+    },
+    "input_source": {
+      "source": "uploaded_file",
+      "file_name": "02_federal_reserve_mobile_payments_input.pdf",
+      "file_type": "pdf",
+      "char_count": 1648,
+      "extraction_notes": [
+        "Extracted text from 1 PDF page(s)."
+      ],
+      "case_id": "02_federal_reserve_mobile_payments",
+      "source_name": "US Federal Reserve, Consumers and Mobile Financial Services, 2014 questionnaire",
+      "source_url": "https://www.federalreserve.gov/consumerscommunities/files/mobilefinancial_2014questionnaire.pdf",
+      "raw_source_file": "demo\\stress_tests\\inputs_raw\\federal_reserve_2014_mobile_financial_services_questionnaire.pdf",
+      "why_vca_might_use_it": "Stress-tests a mobile-payment survey input, especially trust, security, mobile wallet and transaction-use cases that are common in payment proposition design."
+    },
+    "runtime": {
+      "elapsed_seconds": 52.31,
+      "questions_parsed": 5,
+      "concept_count": 1,
+      "respondent_count": 6,
+      "expected_primary_responses": 30,
+      "completed_primary_responses": 30,
+      "synthetic_responses_per_second": 0.6,
+      "json_parse_success_rate": 100.0,
+      "provider_independent": true
+    },
+    "analyst": {
+      "recommendation": "Use proposition P1 as the directional anchor for the next validation round, subject to benchmark and human validation.",
+      "why": "It has the highest weighted adoption index (53.9/100) in the synthetic panel.",
+      "strongest_segments": [
+        "P1:A3",
+        "P1:A4",
+        "P1:A1"
+      ],
+      "pricing_signal": "No price question detected in this run.",
+      "top_signals": [
+        "paid for a product or service",
+        "security confidence",
+        "setup complexity",
+        "lack of merchant acceptance",
+        "transferred money to another person"
+      ],
+      "watchouts": [
+        "digital",
+        "privacy",
+        "protection",
+        "control"
+      ],
+      "next_test": [
+        "Run the same survey with one fee or feature changed to stress-test sensitivity.",
+        "Use the highest-variance questions as candidates for real customer interviews.",
+        "Compare segment-level findings with Visa internal studies once available."
+      ],
+      "do_not_overclaim": "Synthetic responses are directional; they should complement, not replace, real customer evidence for final decisions."
+    },
+    "provider": "watsonx",
+    "model_id": "ibm/granite-4-h-small",
+    "research_brief": {
+      "project_objective": "Stress-test whether the VCA Multi-Agent Synthetic Researcher can process realistic public payment and financial-services survey inputs.",
+      "client_decision": "Identify whether the uploaded input can generate useful synthetic Swiss customer perspectives, segment evidence and validation signals.",
+      "hypotheses": "H1: The proposition should show clear relevance for at least one Swiss consumer segment.\nH2: Price, fee transparency or perceived control may be the main adoption barrier.\nH3: Trust, protection and clear value messaging can improve perceived usefulness.",
+      "decision_rule": "Treat outputs as directional if question coverage, persona coverage and realism checks are acceptable, then use the strongest signals to design real customer validation.",
+      "stakeholder_output": "A consultant-ready decision brief with directional recommendation, segment differences, key barriers, price sensitivity, evidence quality and next real-research actions."
+    },
+    "decision_brief": {
+      "executive_answer": "Mobile Payment Confidence Proposition reached adoption index 53.9/100 in this synthetic panel. Treat this as an early-stage proposition read, not a final market decision: the current validation posture is green - suitable for directional consulting discussion.",
+      "decision_posture": "Refine proposition and run a targeted validation sprint",
+      "lead_concept_id": "P1",
+      "lead_concept_name": "Mobile Payment Confidence Proposition",
+      "adoption_gap_vs_next": null,
+      "validation_band": "green - suitable for directional consulting discussion",
+      "validation_score": 91.5,
+      "concept_matrix": [
+        {
+          "concept_id": "P1",
+          "concept_name": "Mobile Payment Confidence Proposition",
+          "adoption_index": 53.9,
+          "mean_likert": 3.16,
+          "price_signal": "No explicit price question detected",
+          "strongest_segments": [
+            "A3",
+            "A4",
+            "A1"
+          ],
+          "weakest_segments": [
+            "A2",
+            "A6",
+            "A5"
+          ],
+          "top_signals": [
+            "paid for a product or service",
+            "security confidence",
+            "setup complexity",
+            "lack of merchant acceptance",
+            "transferred money to another person"
+          ],
+          "recommended_action": "Refine messaging, then rerun sensitivity test"
+        }
+      ],
+      "so_what": [
+        "Use proposition P1 as the anchor for the next validation round; add a real control or challenger only if Visa/VCA wants a comparative test.",
+        "Prioritize segment-specific messaging; the synthetic panel is most useful when it shows which archetypes diverge, not when it averages everyone together.",
+        "Feature/message signals to carry into the next survey: paid for a product or service, security confidence, setup complexity, lack of merchant acceptance.",
+        "Primary watchouts to resolve before a real survey: digital, privacy, protection, control.",
+        "Use the persona-level table to turn vague averages into interview prompts and recruiter screeners for real validation."
+      ],
+      "hypothesis_readout": [
+        {
+          "hypothesis": "H1: The proposition should show clear relevance for at least one Swiss consumer segment.",
+          "status": "directionally tested",
+          "evidence": "Segment Explorer shows archetype-level fit differences."
+        },
+        {
+          "hypothesis": "H2: Price, fee transparency or perceived control may be the main adoption barrier.",
+          "status": "partially covered",
+          "evidence": "Add a more explicit survey question before treating this as tested."
+        },
+        {
+          "hypothesis": "H3: Trust, protection and clear value messaging can improve perceived usefulness.",
+          "status": "partially covered",
+          "evidence": "Add a more explicit survey question before treating this as tested."
+        }
+      ],
+      "recommended_real_research": [
+        "Run 8-12 qualitative interviews in A3, A4, A1 to validate the main adoption drivers and language.",
+        "Run a short quantitative survey with a real Swiss sample to validate adoption, acceptable fee and feature trade-offs.",
+        "Compare real responses with this synthetic run; use large deviations to recalibrate persona weights, payment profiles and prompts.",
+        "Feed Visa internal customer insight back into the benchmark layer only after confirming data-sharing and confidentiality constraints."
+      ],
+      "methodology": [
+        "LLM provider: IBM watsonx.ai through ibm-watsonx-ai ModelInference, default model ibm/granite-4-h-small.",
+        "Survey ingestion: PDF/DOCX/XLSX/CSV/TXT extraction, editable text review and structured question parsing.",
+        "Persona sampling: public-data-grounded Swiss archetypes expanded into a weighted micro-population with stable seeded variation.",
+        "Persona response layer: one agent answers as one persona, with client proposition context, public benchmark context and prior answers for consistency.",
+        "Analytics: weighted adoption index, acceptable-fee signal, feature/barrier labels, segment fit and traceable persona quotes.",
+        "Validation: payment benchmark MAE, repeated-run Likert variance, persona coverage, question construct coverage and realism rubric flags."
+      ],
+      "limitations": [
+        "Synthetic output is directional and should not be used as final market-size or revenue evidence.",
+        "Public Swiss benchmarks ground population/payment behavior, but Visa internal calibration is still required.",
+        "A human consultant should review the extracted survey text, parsed question types and any unusual persona answers before sharing insights externally.",
+        "This run uses IBM watsonx.ai / Granite, but model output still requires benchmark checks and human review."
+      ],
+      "synthetic_customer_lens": {
+        "positioning": "Synthetic customers are used as an early learning layer for value proposition design: they help teams explore customer reactions, sharpen hypotheses and design better real surveys or interviews. They do not replace final customer validation.",
+        "value_proposition_questions": [
+          "Is the client value proposition relevant enough to take into real validation?",
+          "Which Swiss customer segments show the strongest fit or resistance?",
+          "Which benefit messages and barriers should be tested with real customers?",
+          "Which annual-fee range should be tested in pricing cells?"
+        ],
+        "synthetic_customer_board": [
+          {
+            "segment": "Zurich Digital Student",
+            "customer_reality": "18-29, Zurich urban, one-person / shared flat, low income; mobile-first, budget-conscious, frequent online shopping, limited travel budget",
+            "likely_best_fit": "Mobile Payment Confidence Proposition",
+            "need_state": "Low friction, transparent fees, tangible everyday value and control.",
+            "decision_drivers": [
+              "yes",
+              "paid for a product or service",
+              "security confidence",
+              "protection",
+              "mobile"
+            ],
+            "objections_to_probe": [
+              "digital setup complexity",
+              "annual fee/value proof"
+            ],
+            "message_to_test": "Explain the everyday job-to-be-done and why switching is worth the effort."
+          },
+          {
+            "segment": "Basel Young Professional Traveler",
+            "customer_reality": "25-39, Basel / Zurich commuter, one-person, middle income; career-oriented, travels several times per year, compares card benefits",
+            "likely_best_fit": "Mobile Payment Confidence Proposition",
+            "need_state": "Travel value, insurance confidence, FX clarity and premium service proof.",
+            "decision_drivers": [
+              "yes",
+              "paid for a product or service",
+              "security confidence",
+              "travel",
+              "privacy"
+            ],
+            "objections_to_probe": [
+              "privacy and data use",
+              "loss of control",
+              "limited travel relevance",
+              "digital setup complexity"
+            ],
+            "message_to_test": "Make cross-border, travel, insurance and service benefits tangible against the fee."
+          },
+          {
+            "segment": "Bern Family Budget Parent",
+            "customer_reality": "30-49, Bern / mid-sized Swiss cities, family with children, middle income; values predictable expenses, family utility, grocery and online purchases",
+            "likely_best_fit": "Mobile Payment Confidence Proposition",
+            "need_state": "Balanced everyday value, reliability and clear reason to switch.",
+            "decision_drivers": [
+              "no",
+              "paid for a product or service",
+              "security confidence",
+              "protection",
+              "fee"
+            ],
+            "objections_to_probe": [
+              "annual fee/value proof",
+              "privacy and data use",
+              "digital setup complexity"
+            ],
+            "message_to_test": "Show concrete monthly CHF value, practical savings and protection proof."
+          },
+          {
+            "segment": "Geneva Premium Frequent Traveler",
+            "customer_reality": "30-54, Geneva / Lake Geneva, two-person household, high income; international travel, premium service expectations, cross-border spending",
+            "likely_best_fit": "Mobile Payment Confidence Proposition",
+            "need_state": "Travel value, insurance confidence, FX clarity and premium service proof.",
+            "decision_drivers": [
+              "yes",
+              "paid for a product or service",
+              "security confidence",
+              "travel",
+              "protection"
+            ],
+            "objections_to_probe": [
+              "loss of control",
+              "limited travel relevance",
+              "digital setup complexity"
+            ],
+            "message_to_test": "Show concrete monthly CHF value, practical savings and protection proof."
+          },
+          {
+            "segment": "Ticino Cash-Trusting Retiree",
+            "customer_reality": "55+, Ticino / smaller town, one-person / couple, low-to-middle income; prefers control and simplicity, local shopping, lower digital enthusiasm",
+            "likely_best_fit": "Mobile Payment Confidence Proposition",
+            "need_state": "Low friction, transparent fees, tangible everyday value and control.",
+            "decision_drivers": [
+              "no",
+              "transferred money to another person",
+              "bank offered the service",
+              "protection",
+              "fee"
+            ],
+            "objections_to_probe": [
+              "annual fee/value proof",
+              "privacy and data use",
+              "loss of control",
+              "digital setup complexity"
+            ],
+            "message_to_test": "Emphasize control, opt-out, privacy and clear decision logic."
+          },
+          {
+            "segment": "Swiss SME Owner Cross-Border Purchaser",
+            "customer_reality": "40-59, St. Gallen / eastern Switzerland, couple / family, middle-to-high income; values control, business travel, FX clarity, receipts and protection",
+            "likely_best_fit": "Mobile Payment Confidence Proposition",
+            "need_state": "Balanced everyday value, reliability and clear reason to switch.",
+            "decision_drivers": [
+              "no",
+              "paid for a product or service",
+              "security confidence",
+              "travel",
+              "protection"
+            ],
+            "objections_to_probe": [
+              "annual fee/value proof",
+              "loss of control",
+              "limited travel relevance",
+              "digital setup complexity"
+            ],
+            "message_to_test": "Explain the everyday job-to-be-done and why switching is worth the effort."
+          }
+        ],
+        "decision_drivers": [
+          {
+            "type": "positive signal",
+            "driver": "paid for a product or service",
+            "evidence_count": 5
+          },
+          {
+            "type": "positive signal",
+            "driver": "security confidence",
+            "evidence_count": 5
+          },
+          {
+            "type": "positive signal",
+            "driver": "setup complexity",
+            "evidence_count": 3
+          },
+          {
+            "type": "positive signal",
+            "driver": "lack of merchant acceptance",
+            "evidence_count": 2
+          },
+          {
+            "type": "positive signal",
+            "driver": "transferred money to another person",
+            "evidence_count": 1
+          },
+          {
+            "type": "positive signal",
+            "driver": "bank offered the service",
+            "evidence_count": 1
+          },
+          {
+            "type": "watchout",
+            "driver": "digital",
+            "evidence_count": 23
+          },
+          {
+            "type": "watchout",
+            "driver": "privacy",
+            "evidence_count": 11
+          },
+          {
+            "type": "watchout",
+            "driver": "protection",
+            "evidence_count": 10
+          },
+          {
+            "type": "watchout",
+            "driver": "control",
+            "evidence_count": 5
+          },
+          {
+            "type": "watchout",
+            "driver": "fee",
+            "evidence_count": 5
+          },
+          {
+            "type": "watchout",
+            "driver": "setup",
+            "evidence_count": 2
+          }
+        ],
+        "time_cost_advantage": {
+          "synthetic_run": "30 persona-question responses in 52.31 seconds.",
+          "traditional_research_comparison": "A comparable real survey or interview sprint would usually take days to weeks including recruitment, fielding and synthesis.",
+          "best_use": "Use the synthetic layer to identify weak assumptions early, sharpen survey wording and decide which segments deserve real research spend.",
+          "do_not_use_for": "Do not use synthetic output as a final demand forecast, market-size estimate or replacement for Visa validation."
+        },
+        "real_customer_bridge": [
+          {
+            "stage": "Synthetic learning",
+            "purpose": "Explore broad customer reactions quickly and identify weak assumptions.",
+            "evidence": "Current lead adoption index: 53.9/100; validation: 91.5/100."
+          },
+          {
+            "stage": "Real qualitative validation",
+            "purpose": "Check whether synthetic rationales sound plausible in customer language.",
+            "evidence": "Use the strongest and weakest persona quotes as interview probes."
+          },
+          {
+            "stage": "Real quantitative validation",
+            "purpose": "Confirm adoption, price sensitivity and feature trade-offs with a Swiss sample.",
+            "evidence": "Compare real distributions against synthetic response distributions and recalibrate personas."
+          }
+        ]
+      },
+      "consultant_quality_layer": {
+        "evidence_grade": "B",
+        "evidence_score": 85.5,
+        "evidence_label": "Useful directional evidence; needs targeted real-customer validation before final decision.",
+        "decision_risk": "Medium: usable with explicit caveats and a targeted validation sprint.",
+        "lead_margin_interpretation": "Single proposition read; no head-to-head lead calculated.",
+        "segment_differentiation": {
+          "spread": 2.0,
+          "interpretation": "Strong differentiation; prioritize divergent segments in validation."
+        },
+        "risk_flags": [
+          {
+            "title": "Survey construct gap",
+            "detail": "Question coverage is 70.0/100; add missing proposition-testing constructs.",
+            "severity": "medium"
+          }
+        ],
+        "top_consultant_actions": [
+          "Position Mobile Payment Confidence Proposition as a directional anchor, not a final decision, unless real survey evidence confirms the signal.",
+          "Use the risk flags as the opening slide for partner discussion: what we know, what could be wrong, and what to validate next.",
+          "Add the missing survey modules before using the output as a consultant recommendation.",
+          "Convert the strongest persona rationales into interview prompts for the next real Swiss customer validation sprint."
+        ],
+        "survey_repair_plan": [
+          {
+            "module": "Adoption and current behavior",
+            "priority": "Medium",
+            "why": "Grounds synthetic adoption in a realistic current-behavior baseline.",
+            "suggested_question": "How likely would you be to use this proposition if offered by your main bank, and what current payment or banking behavior would it replace?"
+          },
+          {
+            "module": "Price sensitivity",
+            "priority": "High",
+            "why": "Visa explicitly asked for price sensitivity and value proposition testing.",
+            "suggested_question": "At which annual fee or monthly price in CHF would this proposition feel too expensive, acceptable, and clearly good value?"
+          },
+          {
+            "module": "Feature trade-off",
+            "priority": "High",
+            "why": "Ranking or forced choice exposes what benefit actually drives switching.",
+            "suggested_question": "Please rank the top three benefits, services or messages that would make this proposition more useful to you."
+          },
+          {
+            "module": "Barrier and trust",
+            "priority": "Medium",
+            "why": "Identifies what must be fixed before a real launch or real survey.",
+            "suggested_question": "What is the main reason you would not use this proposition: fee, privacy, loss of control, unclear benefit, setup complexity, or lack of trust?"
+          },
+          {
+            "module": "Segment screener",
+            "priority": "Medium",
+            "why": "Allows Visa to compare synthetic segment signals against real Swiss respondents.",
+            "suggested_question": "Which best describes you: age band, language region, household type, monthly card spend, travel frequency, and mobile wallet usage?"
+          }
+        ],
+        "recommended_validation_plan": [
+          "Qualitative sprint: run 8-12 interviews with A3, A4, A1 to test language, trust, perceived value, and switching barriers.",
+          "Quantitative pulse: run a short real Swiss sample survey with quota controls for language region, age band, household type, travel frequency, and mobile wallet usage.",
+          "Pricing cell test: test at least three annual-fee points and one stronger protection-message variant.",
+          "Calibration loop: compare real adoption, feature ranking, and barrier distributions to the synthetic run; update persona weights and prompts where the gap is large."
+        ],
+        "calibration_thresholds": [
+          "Advance a proposition only when synthetic segment fit and validation confidence are strong enough to justify real customer testing.",
+          "Recalibrate persona weights if payment benchmark MAE exceeds 10 percentage points.",
+          "Treat realism score below 80 as a review trigger for prompt, parser, or survey wording changes.",
+          "Treat missing adoption, price, feature, or barrier constructs as a survey-design gap before partner sign-off."
+        ]
+      }
+    }
+  },
+  "validation": {
+    "benchmark_alignment": {
+      "score": 87.3,
+      "primary_profile_id": "spm_all_transactions_2026_1",
+      "primary_profile_label": "Swiss Payment Monitor 1/2026 all transactions",
+      "primary_mae_percentage_points": 3.18,
+      "best_profile_id": "spm_in_store_2026_1",
+      "best_profile_label": "Swiss Payment Monitor 1/2026 in-store transactions",
+      "best_score": 87.5,
+      "synthetic_mix": {
+        "cash": 21.7,
+        "debit_card": 29.9,
+        "credit_card": 19.8,
+        "mobile_payment_apps": 28.6
+      },
+      "profiles": {
+        "snb_pos_2025": {
+          "label": "SNB 2025 point-of-sale transactions",
+          "context": "in-person payments by private individuals",
+          "source": "Swiss National Bank Payment Methods Survey of Private Individuals 2025",
+          "url": "https://www.snb.ch/dam/jcr%3A66f0422b-7961-45d9-8ce3-3d05a9dc0a06/paytrans_survey_report_2025.en.pdf",
+          "score": 66.2,
+          "mae_percentage_points": 8.44,
+          "benchmark_mix": {
+            "cash": 30.0,
+            "debit_card": 37.0,
+            "credit_card": 13.0,
+            "mobile_payment_apps": 17.0
+          },
+          "diffs_percentage_points": {
+            "cash": 8.3,
+            "debit_card": 7.1,
+            "credit_card": 6.8,
+            "mobile_payment_apps": 11.6
+          }
+        },
+        "spm_all_transactions_2026_1": {
+          "label": "Swiss Payment Monitor 1/2026 all transactions",
+          "context": "all payment transactions reported in the electronic diary",
+          "source": "Swiss Payment Monitor 1/2026, ZHAW and University of St.Gallen",
+          "url": "https://www.zhaw.ch/storage/hochschule/medien/news/2026/Press_Release_Swiss_Payment_Monitor_2026_EN.pdf",
+          "score": 87.3,
+          "mae_percentage_points": 3.18,
+          "benchmark_mix": {
+            "cash": 23.0,
+            "debit_card": 23.8,
+            "credit_card": 17.2,
+            "mobile_payment_apps": 31.4
+          },
+          "diffs_percentage_points": {
+            "cash": 1.3,
+            "debit_card": 6.1,
+            "credit_card": 2.6,
+            "mobile_payment_apps": 2.8
+          }
+        },
+        "spm_in_store_2026_1": {
+          "label": "Swiss Payment Monitor 1/2026 in-store transactions",
+          "context": "in-store transactions only",
+          "source": "Swiss Payment Monitor 1/2026, ZHAW and University of St.Gallen",
+          "url": "https://www.zhaw.ch/storage/hochschule/medien/news/2026/Press_Release_Swiss_Payment_Monitor_2026_EN.pdf",
+          "score": 87.5,
+          "mae_percentage_points": 3.12,
+          "benchmark_mix": {
+            "cash": 26.5,
+            "debit_card": 27.1,
+            "credit_card": 18.7,
+            "mobile_payment_apps": 24.8
+          },
+          "diffs_percentage_points": {
+            "cash": 4.8,
+            "debit_card": 2.8,
+            "credit_card": 1.1,
+            "mobile_payment_apps": 3.8
+          }
+        }
+      },
+      "interpretation": "Green >= 85, Amber 70-85, Red < 70. Use as a grounding check, not as proof of validity."
+    },
+    "internal_consistency": {
+      "score": 100.0,
+      "avg_likert_std": 0.0,
+      "tested_items": 0,
+      "stability_label": "stable",
+      "interpretation": "Low variance suggests persona responses are stable across repeated runs; too-low variance may also indicate insufficient diversity in a deterministic fallback provider."
+    },
+    "coverage": {
+      "archetype_count": 6,
+      "micro_persona_count": 6,
+      "income_bands": [
+        "high",
+        "low",
+        "low-to-middle",
+        "middle",
+        "middle-to-high"
+      ],
+      "age_bands": [
+        "18-29",
+        "25-39",
+        "30-49",
+        "30-54",
+        "40-59",
+        "55+"
+      ],
+      "household_types": [
+        "couple / family",
+        "family with children",
+        "one-person",
+        "one-person / couple",
+        "one-person / shared flat",
+        "two-person household"
+      ],
+      "language_regions": [
+        "French-speaking Switzerland",
+        "German-speaking Switzerland",
+        "Italian-speaking Switzerland"
+      ],
+      "score": 100,
+      "interpretation": "Checks whether the synthetic panel covers the Swiss dimensions requested by Visa: age, income, household, region/language and lifestyle."
+    },
+    "question_coverage": {
+      "score": 70,
+      "question_count": 5,
+      "response_type_count": {
+        "choice": 24,
+        "likert": 6
+      },
+      "detected_constructs": [
+        "adoption",
+        "barrier"
+      ],
+      "missing_constructs": [
+        "price",
+        "feature"
+      ],
+      "interpretation": "Checks whether the survey covers the consultant constructs Visa asked for: adoption, pricing, feature preference and barriers."
+    },
+    "realism_rubric": {
+      "score": 96.7,
+      "sampled_items": 30,
+      "flag_count": 1,
+      "flags_by_category": {
+        "too_long": 1
+      },
+      "sample_flags": [
+        {
+          "category": "too_long",
+          "message": "Answer is too long for survey-style feedback.",
+          "persona_id": "A4",
+          "concept_id": "P1",
+          "question_id": "Q5"
+        }
+      ],
+      "rubric": [
+        "Answer is concise and survey-like.",
+        "No model identity leakage or real-person overclaim.",
+        "Numeric answers respect question type and scale.",
+        "Price sensitivity roughly matches persona income/attitudes.",
+        "Adoption and willingness-to-pay are not obviously contradictory."
+      ],
+      "interpretation": "Judge-style realism check for demo governance. It is a transparent heuristic baseline, not a substitute for Visa's human/customer validation."
+    },
+    "overall": {
+      "score": 91.5,
+      "components": {
+        "benchmark_alignment": 87.3,
+        "internal_consistency": 100.0,
+        "coverage": 100,
+        "question_coverage": 70,
+        "realism_rubric": 96.7
+      },
+      "interpretation": "Weighted validation confidence across benchmark alignment, stability, coverage, survey construct coverage and judge-style realism."
+    }
+  }
+}

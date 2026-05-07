@@ -1,0 +1,1145 @@
+{
+  "run_id": "aeb0a200",
+  "concepts": [
+    {
+      "id": "P1",
+      "name": "Swiss Payment Choice Companion",
+      "description": "A bank-issued Visa payment companion that helps Swiss consumers understand payment-method acceptance, avoid failed checkout moments, compare cash/card/mobile choices, and keep final control over how they pay.",
+      "annual_fee_chf": 0.0,
+      "features": [
+        "payment-method acceptance guidance",
+        "backup method suggestions when cash/card/mobile is not accepted",
+        "technical-issue fallback prompts",
+        "customer keeps final choice"
+      ],
+      "target_context": "Swiss consumers across payment-method preference, age, income and language-region segments"
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q1",
+      "text": "Which of the following do you have?",
+      "type": "choice",
+      "options": [],
+      "scale_min": 1,
+      "scale_max": 5,
+      "measures": "choice preference"
+    },
+    {
+      "id": "Q2",
+      "text": "Think about payments made during the past month at physical locations. Did the merchant or payee always offer the payment method that you wanted to use?",
+      "type": "choice",
+      "options": [],
+      "scale_min": 1,
+      "scale_max": 5,
+      "measures": "choice preference"
+    },
+    {
+      "id": "Q3",
+      "text": "While paying at a physical location in the past month, have you had any technical issues with the payment methods used?",
+      "type": "choice",
+      "options": [],
+      "scale_min": 1,
+      "scale_max": 5,
+      "measures": "choice preference"
+    },
+    {
+      "id": "Q4",
+      "text": "How important is it to you that your preferred payment method is accepted when you shop in physical locations?",
+      "type": "likert",
+      "options": [],
+      "scale_min": 1,
+      "scale_max": 5,
+      "measures": "payment method importance"
+    }
+  ],
+  "personas": [
+    {
+      "id": "A1",
+      "name": "Zurich Digital Student",
+      "weight": 13,
+      "age_band": "18-29",
+      "region": "Zurich urban",
+      "language_region": "German-speaking Switzerland",
+      "income_band": "low",
+      "household": "one-person / shared flat",
+      "education": "university / vocational training",
+      "lifestyle": "mobile-first, budget-conscious, frequent online shopping, limited travel budget",
+      "payment_profile": {
+        "cash": 0.14,
+        "debit_card": 0.31,
+        "credit_card": 0.08,
+        "mobile_payment_apps": 0.47
+      },
+      "attitudes": {
+        "price_sensitivity": 0.88,
+        "digital_openness": 0.92,
+        "privacy_concern": 0.45,
+        "travel_orientation": 0.35,
+        "reward_orientation": 0.7
+      },
+      "source_notes": [
+        "Younger Swiss consumers use less cash and more mobile/digital methods than older groups.",
+        "Use FSO demographics plus SNB/SPM payment-method benchmarks."
+      ]
+    },
+    {
+      "id": "A2",
+      "name": "Basel Young Professional Traveler",
+      "weight": 17,
+      "age_band": "25-39",
+      "region": "Basel / Zurich commuter",
+      "language_region": "German-speaking Switzerland",
+      "income_band": "middle",
+      "household": "one-person",
+      "education": "tertiary",
+      "lifestyle": "career-oriented, travels several times per year, compares card benefits",
+      "payment_profile": {
+        "cash": 0.1,
+        "debit_card": 0.25,
+        "credit_card": 0.28,
+        "mobile_payment_apps": 0.37
+      },
+      "attitudes": {
+        "price_sensitivity": 0.48,
+        "digital_openness": 0.85,
+        "privacy_concern": 0.4,
+        "travel_orientation": 0.86,
+        "reward_orientation": 0.75
+      },
+      "source_notes": [
+        "Frequent travelers are a plausible target segment for premium card benefits.",
+        "Payment mix grounded with SNB/SPM public payment-method studies."
+      ]
+    },
+    {
+      "id": "A3",
+      "name": "Bern Family Budget Parent",
+      "weight": 23,
+      "age_band": "30-49",
+      "region": "Bern / mid-sized Swiss cities",
+      "language_region": "German-speaking Switzerland",
+      "income_band": "middle",
+      "household": "family with children",
+      "education": "vocational / tertiary",
+      "lifestyle": "values predictable expenses, family utility, grocery and online purchases",
+      "payment_profile": {
+        "cash": 0.23,
+        "debit_card": 0.36,
+        "credit_card": 0.13,
+        "mobile_payment_apps": 0.28
+      },
+      "attitudes": {
+        "price_sensitivity": 0.72,
+        "digital_openness": 0.68,
+        "privacy_concern": 0.53,
+        "travel_orientation": 0.4,
+        "reward_orientation": 0.82
+      },
+      "source_notes": [
+        "Household composition and income are key persona factors in the Visa kickoff slides."
+      ]
+    },
+    {
+      "id": "A4",
+      "name": "Geneva Premium Frequent Traveler",
+      "weight": 10,
+      "age_band": "30-54",
+      "region": "Geneva / Lake Geneva",
+      "language_region": "French-speaking Switzerland",
+      "income_band": "high",
+      "household": "two-person household",
+      "education": "tertiary",
+      "lifestyle": "international travel, premium service expectations, cross-border spending",
+      "payment_profile": {
+        "cash": 0.08,
+        "debit_card": 0.18,
+        "credit_card": 0.42,
+        "mobile_payment_apps": 0.32
+      },
+      "attitudes": {
+        "price_sensitivity": 0.25,
+        "digital_openness": 0.75,
+        "privacy_concern": 0.35,
+        "travel_orientation": 0.95,
+        "reward_orientation": 0.88
+      },
+      "source_notes": [
+        "High-income and travel-oriented segment used for card value proposition testing."
+      ]
+    },
+    {
+      "id": "A5",
+      "name": "Ticino Cash-Trusting Retiree",
+      "weight": 18,
+      "age_band": "55+",
+      "region": "Ticino / smaller town",
+      "language_region": "Italian-speaking Switzerland",
+      "income_band": "low-to-middle",
+      "household": "one-person / couple",
+      "education": "vocational",
+      "lifestyle": "prefers control and simplicity, local shopping, lower digital enthusiasm",
+      "payment_profile": {
+        "cash": 0.48,
+        "debit_card": 0.34,
+        "credit_card": 0.08,
+        "mobile_payment_apps": 0.1
+      },
+      "attitudes": {
+        "price_sensitivity": 0.8,
+        "digital_openness": 0.32,
+        "privacy_concern": 0.82,
+        "travel_orientation": 0.2,
+        "reward_orientation": 0.35
+      },
+      "source_notes": [
+        "Older consumers use more cash; SNB 2025 charts break down payment methods by age."
+      ]
+    },
+    {
+      "id": "A6",
+      "name": "Swiss SME Owner Cross-Border Purchaser",
+      "weight": 14,
+      "age_band": "40-59",
+      "region": "St. Gallen / eastern Switzerland",
+      "language_region": "German-speaking Switzerland",
+      "income_band": "middle-to-high",
+      "household": "couple / family",
+      "education": "vocational / business",
+      "lifestyle": "values control, business travel, FX clarity, receipts and protection",
+      "payment_profile": {
+        "cash": 0.17,
+        "debit_card": 0.28,
+        "credit_card": 0.31,
+        "mobile_payment_apps": 0.24
+      },
+      "attitudes": {
+        "price_sensitivity": 0.45,
+        "digital_openness": 0.62,
+        "privacy_concern": 0.55,
+        "travel_orientation": 0.72,
+        "reward_orientation": 0.68
+      },
+      "source_notes": [
+        "Business-like behavior is included only as a consumer-style archetype, not Visa internal client data."
+      ]
+    }
+  ],
+  "responses": [
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A1",
+      "persona_name": "Zurich Digital Student",
+      "persona_weight": 13,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": null,
+      "answer_label": null,
+      "answer_text": "I have a debit card, a credit card, and use mobile payment apps frequently.",
+      "rationale": "Based on the persona description, Zurich Digital Student is budget-conscious and prefers mobile-first solutions. The payment profile indicates low cash usage (14%) and high mobile payment app usage (47%). Debit cards are also commonly used (31%).",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A1",
+      "persona_name": "Zurich Digital Student",
+      "persona_weight": 13,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 3.0,
+      "answer_label": null,
+      "answer_text": "Sometimes the merchant did not accept my preferred payment method, especially when I tried to pay with a mobile payment app. This happened a few times when I was traveling or shopping at smaller local shops.",
+      "rationale": "The persona is a Zurich Digital Student who is budget-conscious and prefers mobile-first solutions. The payment profile shows low cash usage (14%) and high mobile payment app usage (47%). While debit cards are also commonly used (31%), the student may encounter situations where mobile payment apps are not accepted, particularly at smaller merchants or when traveling. This aligns with the Swiss Payment Monitor data showing that mobile payment apps are used for 31.4% of all transactions but may not be accepted everywhere.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A1",
+      "persona_name": "Zurich Digital Student",
+      "persona_weight": 13,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 2.0,
+      "answer_label": null,
+      "answer_text": "Yes, I experienced a few instances where the payment terminal did not accept my mobile payment app or the contactless card payment failed due to connectivity issues.",
+      "rationale": "The Zurich Digital Student persona frequently uses mobile payment apps (47% of transactions) and debit cards (31%). While mobile payments are convenient, they can occasionally face technical issues such as app glitches, connectivity problems, or merchant terminal limitations. The persona's budget-conscious nature and preference for mobile-first solutions make them more likely to encounter and be affected by such issues. This aligns with the Swiss Payment Monitor data showing that mobile payment apps are used for 31.4% of all transactions, indicating their popularity among younger Swiss consumers.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A1",
+      "persona_name": "Zurich Digital Student",
+      "persona_weight": 13,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "likert",
+      "answer_value": 4.0,
+      "answer_label": null,
+      "answer_text": "It is very important to me that my preferred payment method is accepted in physical locations. As a Zurich Digital Student, I frequently use mobile payment apps (47% of my transactions) and debit cards (31%). While I appreciate the convenience of mobile payments, I also rely on debit cards for certain purchases. Having my preferred method accepted ensures a smooth checkout experience, especially when I'm shopping at local shops or traveling. The Swiss Payment Monitor shows that mobile payment apps are used for 31.4% of all transactions, indicating their popularity among younger Swiss consumers like myself.",
+      "rationale": "The Zurich Digital Student persona values having their preferred payment method accepted in physical locations. This is supported by their high usage of mobile payment apps (47%) and debit cards (31%). The importance of accepted payment methods is further emphasized by the need for smooth checkout experiences, particularly in local shops and while traveling. The Swiss Payment Monitor data aligns with this, showing that mobile payment apps are used for 31.4% of all transactions, highlighting their significance among younger Swiss consumers.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A2",
+      "persona_name": "Basel Young Professional Traveler",
+      "persona_weight": 17,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": null,
+      "answer_label": null,
+      "answer_text": "Debit card, credit card, mobile payment apps",
+      "rationale": "Based on the provided payment profile for Persona A2, the respondent has a debit card, credit card, and uses mobile payment apps frequently. The profile indicates cash usage is low (10%), debit card usage is 25%, credit card usage is 28%, and mobile payment apps are used 37% of the time.",
+      "confidence": 0.95
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A2",
+      "persona_name": "Basel Young Professional Traveler",
+      "persona_weight": 17,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 3.0,
+      "answer_label": null,
+      "answer_text": "Sometimes",
+      "rationale": "The payment profile for Persona A2 shows a mix of payment methods, with mobile payment apps being used 37% of the time, debit cards 25%, and credit cards 28%. This suggests that while the respondent has multiple preferred payment methods, there may be instances where a merchant does not accept their preferred choice, particularly for mobile payments which are less universally accepted in physical locations compared to debit and credit cards. The answer 'Sometimes' reflects the likelihood that the respondent encounters situations where their desired payment method is not offered, but not consistently across all transactions.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A2",
+      "persona_name": "Basel Young Professional Traveler",
+      "persona_weight": 17,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 2.0,
+      "answer_label": null,
+      "answer_text": "Yes, occasionally",
+      "rationale": "Based on the provided payment profile for Persona A2, the respondent uses mobile payment apps 37% of the time, debit cards 25% of the time, and credit cards 28% of the time. While mobile payment apps are less universally accepted in physical locations compared to debit and credit cards, the respondent's frequent travel and career orientation suggest they may encounter situations where their preferred payment method is not accepted. However, the relatively balanced usage of multiple payment methods indicates that technical issues are not a frequent occurrence, but happen occasionally.",
+      "confidence": 0.8
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A2",
+      "persona_name": "Basel Young Professional Traveler",
+      "persona_weight": 17,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "likert",
+      "answer_value": 4.0,
+      "answer_label": null,
+      "answer_text": "Very important",
+      "rationale": "Given the persona's high travel orientation (0.86) and digital openness (0.85), having their preferred payment method accepted in physical locations is crucial to avoid disruptions during travel and ensure seamless transactions. The persona's frequent use of mobile payment apps (37%) suggests a strong preference for digital payment methods, which may not always be accepted in physical stores, making acceptance a high priority.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A3",
+      "persona_name": "Bern Family Budget Parent",
+      "persona_weight": 23,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": null,
+      "answer_label": null,
+      "answer_text": "Debit card, credit card, mobile payment apps",
+      "rationale": "Based on the provided payment profile for Persona A3, the respondent has a debit card (36%), credit card (13%), and uses mobile payment apps (28%). Cash is less common (23%).",
+      "confidence": 0.95
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A3",
+      "persona_name": "Bern Family Budget Parent",
+      "persona_weight": 23,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 3.0,
+      "answer_label": null,
+      "answer_text": "Sometimes the merchant did not accept my preferred payment method, especially when I wanted to use mobile payment apps.",
+      "rationale": "The persona's payment profile shows a strong preference for mobile payment apps (28%) and debit cards (36%), but also some use of credit cards (13%). While cash is less common (23%), the respondent likely encounters situations where their preferred digital methods are not accepted, particularly in smaller merchants or specific scenarios like online-to-offline purchases. The answer reflects a realistic balance between the persona's openness to digital payments and the practical limitations they may face.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A3",
+      "persona_name": "Bern Family Budget Parent",
+      "persona_weight": 23,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 2.0,
+      "answer_label": null,
+      "answer_text": "Yes, occasionally the payment terminal did not process my debit card or mobile payment app correctly, requiring me to use cash instead.",
+      "rationale": "The persona's payment profile shows a mix of debit card (36%), mobile payment apps (28%), and cash (23%) usage, with less frequent credit card use (13%). Given the Swiss Payment Monitor data indicating that cash is still widely used (23% of all transactions) and debit cards are common (23.8%), it's realistic that this family occasionally encounters technical issues with their preferred digital payment methods, especially in smaller merchants or during peak times. The answer reflects a balance between the persona's digital openness (0.68) and the practical reality of payment acceptance in Switzerland.",
+      "confidence": 0.88
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A3",
+      "persona_name": "Bern Family Budget Parent",
+      "persona_weight": 23,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "likert",
+      "answer_value": 4.0,
+      "answer_label": null,
+      "answer_text": "Very important",
+      "rationale": "The persona values predictable expenses and family utility, indicating a strong preference for using their preferred payment methods (debit card, mobile payment apps) consistently. With a high reward orientation (0.82) and moderate digital openness (0.68), they would find it frustrating when their chosen method isn't accepted, potentially leading to budgeting disruptions. The Swiss Payment Monitor shows mobile payments are growing (31.4% of all transactions), suggesting this family likely relies on these modern methods for convenience and rewards. Therefore, acceptance is crucial for their shopping experience.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A4",
+      "persona_name": "Geneva Premium Frequent Traveler",
+      "persona_weight": 10,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": null,
+      "answer_label": null,
+      "answer_text": "I have a Visa credit card, a Visa debit card, and use mobile payment apps on my phone.",
+      "rationale": "As a frequent traveler from Geneva with high income, I likely have multiple Visa cards for different purposes and use mobile payments for convenience while traveling internationally.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A4",
+      "persona_name": "Geneva Premium Frequent Traveler",
+      "persona_weight": 10,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 3.0,
+      "answer_label": null,
+      "answer_text": "Sometimes the merchant did not accept my preferred payment method, especially when traveling abroad or using newer mobile payment options.",
+      "rationale": "While I have multiple Visa cards and use mobile payments frequently, I occasionally encounter merchants, particularly smaller businesses or those in foreign countries, that do not accept my preferred payment method. This is especially true for newer mobile payment apps that may not be widely adopted yet.",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A4",
+      "persona_name": "Geneva Premium Frequent Traveler",
+      "persona_weight": 10,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 2.0,
+      "answer_label": null,
+      "answer_text": "Yes, I experienced a few instances where the payment terminal did not accept my contactless Visa card or mobile payment app, particularly at smaller shops and when traveling abroad.",
+      "rationale": "As a Geneva-based frequent traveler with high income and strong digital openness, I regularly use multiple payment methods including Visa cards and mobile payment apps. However, I occasionally encounter technical issues or merchant acceptance problems, especially at smaller businesses or when traveling internationally where newer payment technologies may not be fully supported.",
+      "confidence": 0.8
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A4",
+      "persona_name": "Geneva Premium Frequent Traveler",
+      "persona_weight": 10,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "likert",
+      "answer_value": 4.0,
+      "answer_label": null,
+      "answer_text": "It is very important to me that my preferred payment method is accepted in physical locations, as I frequently travel internationally and rely on seamless payment experiences.",
+      "rationale": "As a Geneva-based frequent traveler with high income and strong digital openness, I prioritize payment method acceptance to avoid disruptions during my travels and daily transactions. I use multiple Visa cards and mobile payment apps, so having my preferred method accepted is crucial for convenience and efficiency.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A5",
+      "persona_name": "Ticino Cash-Trusting Retiree",
+      "persona_weight": 18,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": null,
+      "answer_label": null,
+      "answer_text": "Cash, debit card",
+      "rationale": "The persona is a retiree in Ticino who prefers cash and uses it for 48% of payments, with debit card being the second most common at 34%. Credit cards and mobile payments are less common.",
+      "confidence": 0.95
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A5",
+      "persona_name": "Ticino Cash-Trusting Retiree",
+      "persona_weight": 18,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 2.0,
+      "answer_label": null,
+      "answer_text": "No, sometimes the merchant did not accept my preferred payment method.",
+      "rationale": "The persona is a retiree in Ticino who prefers cash and uses it for 48% of payments, with debit card being the second most common at 34%. Given the lower digital enthusiasm and higher price sensitivity, this persona is more likely to encounter situations where their preferred payment method (cash) is not accepted, especially in smaller local shops.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A5",
+      "persona_name": "Ticino Cash-Trusting Retiree",
+      "persona_weight": 18,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 1.0,
+      "answer_label": null,
+      "answer_text": "No, I have not experienced any technical issues with payment methods in the past month.",
+      "rationale": "As a retiree in Ticino with a strong preference for cash payments (48%) and a lower digital enthusiasm, this persona is less likely to encounter technical issues with payment methods. The persona's primary payment methods are cash and debit card, which are generally reliable and do not rely on complex digital infrastructure. Additionally, the persona's lower price sensitivity and higher privacy concern suggest a preference for simpler, more traditional payment methods that are less prone to technical glitches.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A5",
+      "persona_name": "Ticino Cash-Trusting Retiree",
+      "persona_weight": 18,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "likert",
+      "answer_value": 1.0,
+      "answer_label": null,
+      "answer_text": "Very important",
+      "rationale": "As a retiree in Ticino with a strong preference for cash payments (48%) and a high privacy concern (0.82), having the preferred payment method accepted is very important to avoid failed checkout moments and maintain control over how they pay. The persona's lower digital enthusiasm and higher price sensitivity further emphasize the need for reliable acceptance of cash or debit card.",
+      "confidence": 0.9
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A6",
+      "persona_name": "Swiss SME Owner Cross-Border Purchaser",
+      "persona_weight": 14,
+      "concept_id": "P1",
+      "question_id": "Q1",
+      "question_type": "choice",
+      "answer_value": null,
+      "answer_label": null,
+      "answer_text": "Debit card, credit card, mobile payment apps",
+      "rationale": "Based on the persona's payment profile, they use debit cards (28%), credit cards (31%), and mobile payment apps (24%) regularly for purchases. This aligns with the Swiss Payment Monitor data showing debit cards (23.8%) and credit cards (17.2%) as the most common payment methods, with mobile payments growing (31.4%).",
+      "confidence": 0.85
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A6",
+      "persona_name": "Swiss SME Owner Cross-Border Purchaser",
+      "persona_weight": 14,
+      "concept_id": "P1",
+      "question_id": "Q2",
+      "question_type": "choice",
+      "answer_value": 3.0,
+      "answer_label": null,
+      "answer_text": "Sometimes the merchant did not offer my preferred payment method",
+      "rationale": "The persona values control over their payment choices and prefers using debit cards, credit cards, and mobile payment apps. While these methods are among the most common in Switzerland, there are still situations where a merchant may not accept a specific preferred method, especially for cross-border purchases or in smaller establishments. The Swiss Payment Monitor shows that cash is still widely used (23%), indicating that not all merchants may have adopted newer payment technologies. The persona's business travel and cross-border purchasing habits also suggest they encounter diverse merchant environments where payment acceptance can vary.",
+      "confidence": 0.78
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A6",
+      "persona_name": "Swiss SME Owner Cross-Border Purchaser",
+      "persona_weight": 14,
+      "concept_id": "P1",
+      "question_id": "Q3",
+      "question_type": "choice",
+      "answer_value": 2.0,
+      "answer_label": null,
+      "answer_text": "Yes, occasionally the payment terminal did not process my card or mobile payment correctly",
+      "rationale": "The persona uses debit cards, credit cards, and mobile payment apps regularly, but still values control over their payment choices. Technical issues with payment terminals can disrupt their preferred payment methods, especially during business travel or cross-border purchases where merchant acceptance may vary. While the Swiss Payment Monitor shows high adoption of card and mobile payments, occasional technical failures are realistic for a Swiss consumer.",
+      "confidence": 0.72
+    },
+    {
+      "run_id": "aeb0a200_r1",
+      "persona_id": "A6",
+      "persona_name": "Swiss SME Owner Cross-Border Purchaser",
+      "persona_weight": 14,
+      "concept_id": "P1",
+      "question_id": "Q4",
+      "question_type": "likert",
+      "answer_value": 4.0,
+      "answer_label": null,
+      "answer_text": "Very important",
+      "rationale": "The persona places high value on control over their payment choices and prefers using debit cards, credit cards, and mobile payment apps. Ensuring that their preferred payment method is accepted is crucial for a smooth shopping experience, especially during business travel and cross-border purchases where merchant acceptance can vary. The Swiss Payment Monitor shows that while card and mobile payments are widely adopted, cash is still commonly used (23%), indicating that not all merchants may have adopted newer payment technologies. The persona's business-like behavior and travel orientation suggest they prioritize payment method acceptance to avoid disruptions in their purchasing process.",
+      "confidence": 0.88
+    }
+  ],
+  "aggregate": {
+    "respondent_count": 6,
+    "response_count": 24,
+    "avg_confidence": 0.87,
+    "concept_summary": {
+      "P1": {
+        "mean_likert": 3.43,
+        "adoption_index_0_100": 60.8,
+        "respondents": 6,
+        "bucket_counts": {
+          "promoter": 5,
+          "skeptic": 1
+        }
+      }
+    },
+    "question_summary": {
+      "P1:Q4": 3.43
+    },
+    "price_summary": {},
+    "choice_summary": {},
+    "segment_fit": {
+      "P1:A1": 4.0,
+      "P1:A2": 4.0,
+      "P1:A3": 4.0,
+      "P1:A4": 4.0,
+      "P1:A5": 1.0,
+      "P1:A6": 4.0
+    },
+    "top_barrier_signals": [
+      [
+        "digital",
+        13
+      ],
+      [
+        "control",
+        4
+      ],
+      [
+        "privacy",
+        2
+      ]
+    ],
+    "top_answer_labels": [],
+    "top_answer_labels_by_concept": {},
+    "sample_quotes": {
+      "P1": [
+        "Zurich Digital Student: I have a debit card, a credit card, and use mobile payment apps frequently.",
+        "Zurich Digital Student: Sometimes the merchant did not accept my preferred payment method, especially when I tried to pay with a mobile payment app. This happened a few times when I was traveling or shopping at smaller local shops.",
+        "Zurich Digital Student: Yes, I experienced a few instances where the payment terminal did not accept my mobile payment app or the contactless card payment failed due to connectivity issues.",
+        "Zurich Digital Student: It is very important to me that my preferred payment method is accepted in physical locations. As a Zurich Digital Student, I frequently use mobile payment apps (47% of my transactions) and debit cards (31%). While I appreciate the convenience of mobile payments, I also rely on debit cards for certain purchases. Having my preferred method accepted ensures a smooth checkout experience, especially when I'm shopping at local shops or traveling. The Swiss Payment Monitor shows that mobile payment apps are used for 31.4% of all transactions, indicating their popularity among younger Swiss consumers like myself.",
+        "Basel Young Professional Traveler: Debit card, credit card, mobile payment apps"
+      ]
+    },
+    "input_source": {
+      "source": "uploaded_file",
+      "file_name": "01_ecb_space_payment_attitudes_input.pdf",
+      "file_type": "pdf",
+      "char_count": 1886,
+      "extraction_notes": [
+        "Extracted text from 1 PDF page(s)."
+      ],
+      "case_id": "01_ecb_space_payment_attitudes",
+      "source_name": "European Central Bank, Study on the payment attitudes of consumers in the euro area (SPACE) 2024, Annex A",
+      "source_url": "https://www.ecb.europa.eu/stats/ecb_surveys/space/shared/pdf/ecb.space2024_annex_a.en.pdf",
+      "raw_source_file": "demo\\stress_tests\\inputs_raw\\ecb_space_2024_annex_a_survey_questionnaire.pdf",
+      "why_vca_might_use_it": "Tests whether the app can process a central-bank payment-attitudes questionnaire and convert acceptance, friction and trust questions into segment-level guidance for a payment value proposition."
+    },
+    "runtime": {
+      "elapsed_seconds": 31.99,
+      "questions_parsed": 4,
+      "concept_count": 1,
+      "respondent_count": 6,
+      "expected_primary_responses": 24,
+      "completed_primary_responses": 24,
+      "synthetic_responses_per_second": 0.8,
+      "json_parse_success_rate": 100.0,
+      "provider_independent": true
+    },
+    "analyst": {
+      "recommendation": "Use proposition P1 as the directional anchor for the next validation round, subject to benchmark and human validation.",
+      "why": "It has the highest weighted adoption index (60.8/100) in the synthetic panel.",
+      "strongest_segments": [
+        "P1:A1",
+        "P1:A2",
+        "P1:A3"
+      ],
+      "pricing_signal": "No price question detected in this run.",
+      "top_signals": [],
+      "watchouts": [
+        "digital",
+        "control",
+        "privacy"
+      ],
+      "next_test": [
+        "Run the same survey with one fee or feature changed to stress-test sensitivity.",
+        "Use the highest-variance questions as candidates for real customer interviews.",
+        "Compare segment-level findings with Visa internal studies once available."
+      ],
+      "do_not_overclaim": "Synthetic responses are directional; they should complement, not replace, real customer evidence for final decisions."
+    },
+    "provider": "watsonx",
+    "model_id": "ibm/granite-4-h-small",
+    "research_brief": {
+      "project_objective": "Stress-test whether the VCA Multi-Agent Synthetic Researcher can process realistic public payment and financial-services survey inputs.",
+      "client_decision": "Identify whether the uploaded input can generate useful synthetic Swiss customer perspectives, segment evidence and validation signals.",
+      "hypotheses": "H1: The proposition should show clear relevance for at least one Swiss consumer segment.\nH2: Price, fee transparency or perceived control may be the main adoption barrier.\nH3: Trust, protection and clear value messaging can improve perceived usefulness.",
+      "decision_rule": "Treat outputs as directional if question coverage, persona coverage and realism checks are acceptable, then use the strongest signals to design real customer validation.",
+      "stakeholder_output": "A consultant-ready decision brief with directional recommendation, segment differences, key barriers, price sensitivity, evidence quality and next real-research actions."
+    },
+    "decision_brief": {
+      "executive_answer": "Swiss Payment Choice Companion reached adoption index 60.8/100 in this synthetic panel. Treat this as an early-stage proposition read, not a final market decision: the current validation posture is green - suitable for directional consulting discussion.",
+      "decision_posture": "Refine proposition and run a targeted validation sprint",
+      "lead_concept_id": "P1",
+      "lead_concept_name": "Swiss Payment Choice Companion",
+      "adoption_gap_vs_next": null,
+      "validation_band": "green - suitable for directional consulting discussion",
+      "validation_score": 87.2,
+      "concept_matrix": [
+        {
+          "concept_id": "P1",
+          "concept_name": "Swiss Payment Choice Companion",
+          "adoption_index": 60.8,
+          "mean_likert": 3.43,
+          "price_signal": "No explicit price question detected",
+          "strongest_segments": [
+            "A1",
+            "A2",
+            "A3"
+          ],
+          "weakest_segments": [
+            "A4",
+            "A6",
+            "A5"
+          ],
+          "top_signals": [],
+          "recommended_action": "Refine messaging, then rerun sensitivity test"
+        }
+      ],
+      "so_what": [
+        "Use proposition P1 as the anchor for the next validation round; add a real control or challenger only if Visa/VCA wants a comparative test.",
+        "Prioritize segment-specific messaging; the synthetic panel is most useful when it shows which archetypes diverge, not when it averages everyone together.",
+        "Primary watchouts to resolve before a real survey: digital, control, privacy.",
+        "Use the persona-level table to turn vague averages into interview prompts and recruiter screeners for real validation."
+      ],
+      "hypothesis_readout": [
+        {
+          "hypothesis": "H1: The proposition should show clear relevance for at least one Swiss consumer segment.",
+          "status": "directionally tested",
+          "evidence": "Segment Explorer shows archetype-level fit differences."
+        },
+        {
+          "hypothesis": "H2: Price, fee transparency or perceived control may be the main adoption barrier.",
+          "status": "partially covered",
+          "evidence": "Add a more explicit survey question before treating this as tested."
+        },
+        {
+          "hypothesis": "H3: Trust, protection and clear value messaging can improve perceived usefulness.",
+          "status": "partially covered",
+          "evidence": "Add a more explicit survey question before treating this as tested."
+        }
+      ],
+      "recommended_real_research": [
+        "Run 8-12 qualitative interviews in A1, A2, A3 to validate the main adoption drivers and language.",
+        "Run a short quantitative survey with a real Swiss sample to validate adoption, acceptable fee and feature trade-offs.",
+        "Compare real responses with this synthetic run; use large deviations to recalibrate persona weights, payment profiles and prompts.",
+        "Feed Visa internal customer insight back into the benchmark layer only after confirming data-sharing and confidentiality constraints."
+      ],
+      "methodology": [
+        "LLM provider: IBM watsonx.ai through ibm-watsonx-ai ModelInference, default model ibm/granite-4-h-small.",
+        "Survey ingestion: PDF/DOCX/XLSX/CSV/TXT extraction, editable text review and structured question parsing.",
+        "Persona sampling: public-data-grounded Swiss archetypes expanded into a weighted micro-population with stable seeded variation.",
+        "Persona response layer: one agent answers as one persona, with client proposition context, public benchmark context and prior answers for consistency.",
+        "Analytics: weighted adoption index, acceptable-fee signal, feature/barrier labels, segment fit and traceable persona quotes.",
+        "Validation: payment benchmark MAE, repeated-run Likert variance, persona coverage, question construct coverage and realism rubric flags."
+      ],
+      "limitations": [
+        "Synthetic output is directional and should not be used as final market-size or revenue evidence.",
+        "Public Swiss benchmarks ground population/payment behavior, but Visa internal calibration is still required.",
+        "A human consultant should review the extracted survey text, parsed question types and any unusual persona answers before sharing insights externally.",
+        "This run uses IBM watsonx.ai / Granite, but model output still requires benchmark checks and human review."
+      ],
+      "synthetic_customer_lens": {
+        "positioning": "Synthetic customers are used as an early learning layer for value proposition design: they help teams explore customer reactions, sharpen hypotheses and design better real surveys or interviews. They do not replace final customer validation.",
+        "value_proposition_questions": [
+          "Is the client value proposition relevant enough to take into real validation?",
+          "Which Swiss customer segments show the strongest fit or resistance?",
+          "Which benefit messages and barriers should be tested with real customers?",
+          "Which annual-fee range should be tested in pricing cells?"
+        ],
+        "synthetic_customer_board": [
+          {
+            "segment": "Zurich Digital Student",
+            "customer_reality": "18-29, Zurich urban, one-person / shared flat, low income; mobile-first, budget-conscious, frequent online shopping, limited travel budget",
+            "likely_best_fit": "Swiss Payment Choice Companion",
+            "need_state": "Low friction, transparent fees, tangible everyday value and control.",
+            "decision_drivers": [
+              "travel",
+              "mobile"
+            ],
+            "objections_to_probe": [
+              "limited travel relevance",
+              "digital setup complexity",
+              "annual fee/value proof"
+            ],
+            "message_to_test": "Explain the everyday job-to-be-done and why switching is worth the effort."
+          },
+          {
+            "segment": "Basel Young Professional Traveler",
+            "customer_reality": "25-39, Basel / Zurich commuter, one-person, middle income; career-oriented, travels several times per year, compares card benefits",
+            "likely_best_fit": "Swiss Payment Choice Companion",
+            "need_state": "Travel value, insurance confidence, FX clarity and premium service proof.",
+            "decision_drivers": [
+              "travel",
+              "mobile"
+            ],
+            "objections_to_probe": [
+              "limited travel relevance",
+              "digital setup complexity"
+            ],
+            "message_to_test": "Make cross-border, travel, insurance and service benefits tangible against the fee."
+          },
+          {
+            "segment": "Bern Family Budget Parent",
+            "customer_reality": "30-49, Bern / mid-sized Swiss cities, family with children, middle income; values predictable expenses, family utility, grocery and online purchases",
+            "likely_best_fit": "Swiss Payment Choice Companion",
+            "need_state": "Balanced everyday value, reliability and clear reason to switch.",
+            "decision_drivers": [
+              "mobile",
+              "family"
+            ],
+            "objections_to_probe": [
+              "digital setup complexity",
+              "annual fee/value proof"
+            ],
+            "message_to_test": "Show concrete monthly CHF value, practical savings and protection proof."
+          },
+          {
+            "segment": "Geneva Premium Frequent Traveler",
+            "customer_reality": "30-54, Geneva / Lake Geneva, two-person household, high income; international travel, premium service expectations, cross-border spending",
+            "likely_best_fit": "Swiss Payment Choice Companion",
+            "need_state": "Travel value, insurance confidence, FX clarity and premium service proof.",
+            "decision_drivers": [
+              "travel",
+              "mobile"
+            ],
+            "objections_to_probe": [
+              "limited travel relevance",
+              "digital setup complexity"
+            ],
+            "message_to_test": "Show concrete monthly CHF value, practical savings and protection proof."
+          },
+          {
+            "segment": "Ticino Cash-Trusting Retiree",
+            "customer_reality": "55+, Ticino / smaller town, one-person / couple, low-to-middle income; prefers control and simplicity, local shopping, lower digital enthusiasm",
+            "likely_best_fit": "Swiss Payment Choice Companion",
+            "need_state": "Low friction, transparent fees, tangible everyday value and control.",
+            "decision_drivers": [
+              "privacy",
+              "mobile",
+              "control"
+            ],
+            "objections_to_probe": [
+              "privacy and data use",
+              "loss of control",
+              "digital setup complexity",
+              "annual fee/value proof"
+            ],
+            "message_to_test": "Emphasize control, opt-out, privacy and clear decision logic."
+          },
+          {
+            "segment": "Swiss SME Owner Cross-Border Purchaser",
+            "customer_reality": "40-59, St. Gallen / eastern Switzerland, couple / family, middle-to-high income; values control, business travel, FX clarity, receipts and protection",
+            "likely_best_fit": "Swiss Payment Choice Companion",
+            "need_state": "Balanced everyday value, reliability and clear reason to switch.",
+            "decision_drivers": [
+              "travel",
+              "mobile",
+              "control"
+            ],
+            "objections_to_probe": [
+              "loss of control",
+              "limited travel relevance"
+            ],
+            "message_to_test": "Explain the everyday job-to-be-done and why switching is worth the effort."
+          }
+        ],
+        "decision_drivers": [
+          {
+            "type": "watchout",
+            "driver": "digital",
+            "evidence_count": 13
+          },
+          {
+            "type": "watchout",
+            "driver": "control",
+            "evidence_count": 4
+          },
+          {
+            "type": "watchout",
+            "driver": "privacy",
+            "evidence_count": 2
+          }
+        ],
+        "time_cost_advantage": {
+          "synthetic_run": "24 persona-question responses in 31.99 seconds.",
+          "traditional_research_comparison": "A comparable real survey or interview sprint would usually take days to weeks including recruitment, fielding and synthesis.",
+          "best_use": "Use the synthetic layer to identify weak assumptions early, sharpen survey wording and decide which segments deserve real research spend.",
+          "do_not_use_for": "Do not use synthetic output as a final demand forecast, market-size estimate or replacement for Visa validation."
+        },
+        "real_customer_bridge": [
+          {
+            "stage": "Synthetic learning",
+            "purpose": "Explore broad customer reactions quickly and identify weak assumptions.",
+            "evidence": "Current lead adoption index: 60.8/100; validation: 87.2/100."
+          },
+          {
+            "stage": "Real qualitative validation",
+            "purpose": "Check whether synthetic rationales sound plausible in customer language.",
+            "evidence": "Use the strongest and weakest persona quotes as interview probes."
+          },
+          {
+            "stage": "Real quantitative validation",
+            "purpose": "Confirm adoption, price sensitivity and feature trade-offs with a Swiss sample.",
+            "evidence": "Compare real distributions against synthetic response distributions and recalibrate personas."
+          }
+        ]
+      },
+      "consultant_quality_layer": {
+        "evidence_grade": "B",
+        "evidence_score": 81.2,
+        "evidence_label": "Useful directional evidence; needs targeted real-customer validation before final decision.",
+        "decision_risk": "Medium: usable with explicit caveats and a targeted validation sprint.",
+        "lead_margin_interpretation": "Single proposition read; no head-to-head lead calculated.",
+        "segment_differentiation": {
+          "spread": 3.0,
+          "interpretation": "Strong differentiation; prioritize divergent segments in validation."
+        },
+        "risk_flags": [
+          {
+            "title": "Survey construct gap",
+            "detail": "Question coverage is 50.0/100; add missing proposition-testing constructs.",
+            "severity": "medium"
+          }
+        ],
+        "top_consultant_actions": [
+          "Position Swiss Payment Choice Companion as a directional anchor, not a final decision, unless real survey evidence confirms the signal.",
+          "Use the risk flags as the opening slide for partner discussion: what we know, what could be wrong, and what to validate next.",
+          "Add the missing survey modules before using the output as a consultant recommendation.",
+          "Convert the strongest persona rationales into interview prompts for the next real Swiss customer validation sprint."
+        ],
+        "survey_repair_plan": [
+          {
+            "module": "Adoption and current behavior",
+            "priority": "Medium",
+            "why": "Grounds synthetic adoption in a realistic current-behavior baseline.",
+            "suggested_question": "How likely would you be to use this proposition if offered by your main bank, and what current payment or banking behavior would it replace?"
+          },
+          {
+            "module": "Price sensitivity",
+            "priority": "High",
+            "why": "Visa explicitly asked for price sensitivity and value proposition testing.",
+            "suggested_question": "At which annual fee or monthly price in CHF would this proposition feel too expensive, acceptable, and clearly good value?"
+          },
+          {
+            "module": "Feature trade-off",
+            "priority": "High",
+            "why": "Ranking or forced choice exposes what benefit actually drives switching.",
+            "suggested_question": "Please rank the top three benefits, services or messages that would make this proposition more useful to you."
+          },
+          {
+            "module": "Barrier and trust",
+            "priority": "High",
+            "why": "Identifies what must be fixed before a real launch or real survey.",
+            "suggested_question": "What is the main reason you would not use this proposition: fee, privacy, loss of control, unclear benefit, setup complexity, or lack of trust?"
+          },
+          {
+            "module": "Segment screener",
+            "priority": "Medium",
+            "why": "Allows Visa to compare synthetic segment signals against real Swiss respondents.",
+            "suggested_question": "Which best describes you: age band, language region, household type, monthly card spend, travel frequency, and mobile wallet usage?"
+          }
+        ],
+        "recommended_validation_plan": [
+          "Qualitative sprint: run 8-12 interviews with A1, A2, A3 to test language, trust, perceived value, and switching barriers.",
+          "Quantitative pulse: run a short real Swiss sample survey with quota controls for language region, age band, household type, travel frequency, and mobile wallet usage.",
+          "Pricing cell test: test at least three annual-fee points and one stronger protection-message variant.",
+          "Calibration loop: compare real adoption, feature ranking, and barrier distributions to the synthetic run; update persona weights and prompts where the gap is large."
+        ],
+        "calibration_thresholds": [
+          "Advance a proposition only when synthetic segment fit and validation confidence are strong enough to justify real customer testing.",
+          "Recalibrate persona weights if payment benchmark MAE exceeds 10 percentage points.",
+          "Treat realism score below 80 as a review trigger for prompt, parser, or survey wording changes.",
+          "Treat missing adoption, price, feature, or barrier constructs as a survey-design gap before partner sign-off."
+        ]
+      }
+    }
+  },
+  "validation": {
+    "benchmark_alignment": {
+      "score": 87.3,
+      "primary_profile_id": "spm_all_transactions_2026_1",
+      "primary_profile_label": "Swiss Payment Monitor 1/2026 all transactions",
+      "primary_mae_percentage_points": 3.18,
+      "best_profile_id": "spm_in_store_2026_1",
+      "best_profile_label": "Swiss Payment Monitor 1/2026 in-store transactions",
+      "best_score": 87.5,
+      "synthetic_mix": {
+        "cash": 21.7,
+        "debit_card": 29.9,
+        "credit_card": 19.8,
+        "mobile_payment_apps": 28.6
+      },
+      "profiles": {
+        "snb_pos_2025": {
+          "label": "SNB 2025 point-of-sale transactions",
+          "context": "in-person payments by private individuals",
+          "source": "Swiss National Bank Payment Methods Survey of Private Individuals 2025",
+          "url": "https://www.snb.ch/dam/jcr%3A66f0422b-7961-45d9-8ce3-3d05a9dc0a06/paytrans_survey_report_2025.en.pdf",
+          "score": 66.2,
+          "mae_percentage_points": 8.44,
+          "benchmark_mix": {
+            "cash": 30.0,
+            "debit_card": 37.0,
+            "credit_card": 13.0,
+            "mobile_payment_apps": 17.0
+          },
+          "diffs_percentage_points": {
+            "cash": 8.3,
+            "debit_card": 7.1,
+            "credit_card": 6.8,
+            "mobile_payment_apps": 11.6
+          }
+        },
+        "spm_all_transactions_2026_1": {
+          "label": "Swiss Payment Monitor 1/2026 all transactions",
+          "context": "all payment transactions reported in the electronic diary",
+          "source": "Swiss Payment Monitor 1/2026, ZHAW and University of St.Gallen",
+          "url": "https://www.zhaw.ch/storage/hochschule/medien/news/2026/Press_Release_Swiss_Payment_Monitor_2026_EN.pdf",
+          "score": 87.3,
+          "mae_percentage_points": 3.18,
+          "benchmark_mix": {
+            "cash": 23.0,
+            "debit_card": 23.8,
+            "credit_card": 17.2,
+            "mobile_payment_apps": 31.4
+          },
+          "diffs_percentage_points": {
+            "cash": 1.3,
+            "debit_card": 6.1,
+            "credit_card": 2.6,
+            "mobile_payment_apps": 2.8
+          }
+        },
+        "spm_in_store_2026_1": {
+          "label": "Swiss Payment Monitor 1/2026 in-store transactions",
+          "context": "in-store transactions only",
+          "source": "Swiss Payment Monitor 1/2026, ZHAW and University of St.Gallen",
+          "url": "https://www.zhaw.ch/storage/hochschule/medien/news/2026/Press_Release_Swiss_Payment_Monitor_2026_EN.pdf",
+          "score": 87.5,
+          "mae_percentage_points": 3.12,
+          "benchmark_mix": {
+            "cash": 26.5,
+            "debit_card": 27.1,
+            "credit_card": 18.7,
+            "mobile_payment_apps": 24.8
+          },
+          "diffs_percentage_points": {
+            "cash": 4.8,
+            "debit_card": 2.8,
+            "credit_card": 1.1,
+            "mobile_payment_apps": 3.8
+          }
+        }
+      },
+      "interpretation": "Green >= 85, Amber 70-85, Red < 70. Use as a grounding check, not as proof of validity."
+    },
+    "internal_consistency": {
+      "score": 100.0,
+      "avg_likert_std": 0.0,
+      "tested_items": 0,
+      "stability_label": "stable",
+      "interpretation": "Low variance suggests persona responses are stable across repeated runs; too-low variance may also indicate insufficient diversity in a deterministic fallback provider."
+    },
+    "coverage": {
+      "archetype_count": 6,
+      "micro_persona_count": 6,
+      "income_bands": [
+        "high",
+        "low",
+        "low-to-middle",
+        "middle",
+        "middle-to-high"
+      ],
+      "age_bands": [
+        "18-29",
+        "25-39",
+        "30-49",
+        "30-54",
+        "40-59",
+        "55+"
+      ],
+      "household_types": [
+        "couple / family",
+        "family with children",
+        "one-person",
+        "one-person / couple",
+        "one-person / shared flat",
+        "two-person household"
+      ],
+      "language_regions": [
+        "French-speaking Switzerland",
+        "German-speaking Switzerland",
+        "Italian-speaking Switzerland"
+      ],
+      "score": 100,
+      "interpretation": "Checks whether the synthetic panel covers the Swiss dimensions requested by Visa: age, income, household, region/language and lifestyle."
+    },
+    "question_coverage": {
+      "score": 50,
+      "question_count": 4,
+      "response_type_count": {
+        "choice": 18,
+        "likert": 6
+      },
+      "detected_constructs": [
+        "adoption"
+      ],
+      "missing_constructs": [
+        "price",
+        "feature",
+        "barrier"
+      ],
+      "interpretation": "Checks whether the survey covers the consultant constructs Visa asked for: adoption, pricing, feature preference and barriers."
+    },
+    "realism_rubric": {
+      "score": 91.7,
+      "sampled_items": 24,
+      "flag_count": 2,
+      "flags_by_category": {
+        "empty_or_too_short": 1,
+        "too_long": 1
+      },
+      "sample_flags": [
+        {
+          "category": "too_long",
+          "message": "Answer is too long for survey-style feedback.",
+          "persona_id": "A1",
+          "concept_id": "P1",
+          "question_id": "Q4"
+        },
+        {
+          "category": "empty_or_too_short",
+          "message": "Answer text is too short to be useful.",
+          "persona_id": "A2",
+          "concept_id": "P1",
+          "question_id": "Q2"
+        }
+      ],
+      "rubric": [
+        "Answer is concise and survey-like.",
+        "No model identity leakage or real-person overclaim.",
+        "Numeric answers respect question type and scale.",
+        "Price sensitivity roughly matches persona income/attitudes.",
+        "Adoption and willingness-to-pay are not obviously contradictory."
+      ],
+      "interpretation": "Judge-style realism check for demo governance. It is a transparent heuristic baseline, not a substitute for Visa's human/customer validation."
+    },
+    "overall": {
+      "score": 87.2,
+      "components": {
+        "benchmark_alignment": 87.3,
+        "internal_consistency": 100.0,
+        "coverage": 100,
+        "question_coverage": 50,
+        "realism_rubric": 91.7
+      },
+      "interpretation": "Weighted validation confidence across benchmark alignment, stability, coverage, survey construct coverage and judge-style realism."
+    }
+  }
+}
