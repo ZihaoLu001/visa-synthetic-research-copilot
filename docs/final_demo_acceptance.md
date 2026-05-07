@@ -28,7 +28,7 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | External survey API stress tests | 3 public-example-inspired surveys returned synthetic responses, validation evidence, and 100.0 JSON parse success |
 | Real watsonx.ai smoke test | `ibm/granite-4-h-small` returned a live response after IBM restored Group 28 quota |
 | Real watsonx.ai mini-run | End-to-end parser/persona/validation flow completed with provider `watsonx` |
-| Local regression tests | `22 passed` |
+| Local regression tests | `23 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
 | Slack-ready PDF report example | Public PDF survey input generates a watsonx/Granite consultant PDF report with persona-level responses, aggregate insights, validation checks and a real-customer validation plan |
 

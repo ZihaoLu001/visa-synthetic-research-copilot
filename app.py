@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
 import streamlit as st
 
+from synthetic_researcher.calibration import build_panel_calibration
 from synthetic_researcher.consulting import (
     build_decision_brief,
     default_research_brief,
@@ -22,6 +24,7 @@ from synthetic_researcher.llm import LLMError, get_llm, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.pdf_report import build_consultant_pdf_report
 from synthetic_researcher.reporting import build_markdown_report
+from synthetic_researcher.sampler import load_benchmark_data, load_personas
 from synthetic_researcher.schemas import Concept, SurveyRun
 from synthetic_researcher.survey_scope import limit_survey_questions
 
@@ -29,6 +32,7 @@ ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 DEMO_SURVEYS = ROOT / "demo" / "external_survey_tests"
 PUBLIC_UPLOADS = ROOT / "demo" / "public_survey_uploads"
+LIVE_APP_URL = "https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud/"
 FEDERAL_RESERVE_SURVEY_SOURCE = (
     "https://www.federalreserve.gov/econresdata/mobile-devices/"
     "2015-appendix-2-survey-of-consumers-use-of-mobile-financial-services-2014-questionnaire.htm"
@@ -352,7 +356,9 @@ def main() -> None:
         st.write("Directional early-stage research only. Final validation remains with Visa and real customer data.")
 
     render_model_and_delivery_proof(wx_status, provider, run_scope)
+    render_partner_review_panel()
     research_brief = render_research_brief()
+    render_calibration_preview()
 
     default_survey = """1. How relevant is this value proposition for your everyday payment or banking needs?
 2. What annual fee or monthly price in CHF would feel acceptable, if any?
@@ -464,7 +470,13 @@ def main() -> None:
                 height=260,
                 help="You can keep the extracted PDF text as-is or edit it before running the synthetic respondents.",
             )
+            review_confirmed = st.checkbox(
+                "I reviewed the extracted survey text and removed irrelevant pages, disclaimers or instructions.",
+                value=True,
+                help="This records a lightweight human review step before the agents run.",
+            )
             input_metadata = {**input_metadata, "char_count": len(raw_survey)}
+            input_metadata["human_review_confirmed"] = review_confirmed
             if extracted_text is not None:
                 input_metadata["edited_after_extraction"] = raw_survey.strip() != extracted_text.strip()
                 if input_metadata["edited_after_extraction"]:
@@ -596,6 +608,96 @@ def render_model_and_delivery_proof(wx_status: dict[str, object], provider: str,
         """,
         unsafe_allow_html=True,
     )
+
+
+def render_partner_review_panel() -> None:
+    with st.expander("Partner review checklist and Slack-ready invitation", expanded=False):
+        st.markdown("#### What Visa reviewers can test")
+        st.write("- Upload a real survey, interview guide, or value proposition test as PDF/DOCX/XLSX/CSV/TXT.")
+        st.write("- Replace the value proposition with one from a Visa/VCA engagement scenario.")
+        st.write("- Run a quick watsonx proof first, then switch to full survey/96 respondents if quota allows.")
+        st.write("- Inspect the Decision Brief, persona-level responses, validation checks, and PDF report export.")
+        st.write("- Tell us where the output is useful or not useful for a VCA consultant workflow.")
+
+        st.markdown("#### Suggested Slack message")
+        st.code(build_partner_slack_message(), language="text")
+        st.download_button(
+            "Download Slack message draft",
+            data=build_partner_slack_message().encode("utf-8"),
+            file_name="visa_partner_review_slack_message.txt",
+            mime="text/plain",
+        )
+
+
+def build_partner_slack_message() -> str:
+    return f"""Hi Visa team,
+
+We have a working prototype for the Visa use case: a VCA Multi-Agent Synthetic Researcher.
+
+App link:
+{LIVE_APP_URL}
+
+What it does:
+- Upload or paste a survey, interview guide, or value proposition test.
+- Run Swiss synthetic customer persona agents using the IBM watsonx / Granite path.
+- Review aggregated insights, persona-level responses, validation checks, and a downloadable PDF report.
+
+If you have time, feel free to try it with any survey or value proposition input you think is realistic for VCA. We would especially appreciate feedback on:
+- whether the input flow matches how a VCA consultant would actually test early product/value proposition ideas;
+- whether the persona-level and aggregated outputs are the right level of detail;
+- whether the validation checks are useful and credible enough;
+- what you would remove, add, or change before the final presentation.
+
+This is intended as directional early-stage research support, not a replacement for real customer validation.
+
+Thank you very much!"""
+
+
+def render_calibration_preview() -> None:
+    snapshot = calibration_snapshot()
+    with st.expander("Swiss synthetic customer panel calibration", expanded=False):
+        st.caption(snapshot["interpretation"])
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Swiss archetypes", snapshot["archetype_count"])
+        c2.metric("Synthetic panel size", snapshot["micro_population_count"])
+        c3.metric("Public anchors", len(snapshot["public_anchors"]))
+
+        tab_weights, tab_demographics, tab_payment, tab_sources = st.tabs(
+            ["Persona weights", "Demographics", "Payment benchmarks", "Sources"]
+        )
+        with tab_weights:
+            st.dataframe(pd.DataFrame(snapshot["persona_weights"]), width="stretch", hide_index=True)
+        with tab_demographics:
+            field = st.selectbox(
+                "Calibration dimension",
+                list(snapshot["demographic_distributions"].keys()),
+                format_func=lambda value: value.replace("_", " ").title(),
+            )
+            distribution = pd.DataFrame(snapshot["demographic_distributions"][field])
+            st.dataframe(distribution, width="stretch", hide_index=True)
+            if not distribution.empty:
+                st.bar_chart(distribution, x="segment", y="share_pct", color="#1434cb")
+        with tab_payment:
+            st.dataframe(pd.DataFrame(snapshot["payment_comparison"]), width="stretch", hide_index=True)
+            st.caption("The synthetic panel is calibrated directionally. Visa internal benchmarks should override public anchors in production.")
+        with tab_sources:
+            source_rows = [
+                {
+                    "anchor": anchor.get("name"),
+                    "value": anchor.get("value"),
+                    "source": anchor.get("source"),
+                    "url": anchor.get("url"),
+                }
+                for anchor in snapshot["public_anchors"]
+            ]
+            st.dataframe(pd.DataFrame(source_rows), width="stretch", hide_index=True)
+
+
+@st.cache_data(show_spinner=False)
+def calibration_snapshot() -> dict[str, object]:
+    personas = load_personas(DATA / "swiss_archetypes.yaml")
+    benchmark_data = load_benchmark_data(DATA / "benchmark_snb_2025.yaml")
+    return build_panel_calibration(personas, benchmark_data, target_n=96)
 
 
 def scoped_survey_for_run(raw_survey: str, metadata: dict[str, object], run_scope: str) -> str:
@@ -737,10 +839,29 @@ def run_synthetic_survey(
             run.aggregate["research_brief"] = research_brief
             run.aggregate["decision_brief"] = build_decision_brief(run, research_brief, provider=provider)
             st.session_state["last_run"] = run
+            record_run_history(run)
     except LLMError as exc:
         st.error(str(exc))
     except Exception as exc:
         st.exception(exc)
+
+
+def record_run_history(run: SurveyRun) -> None:
+    validation_score = run.validation.get("overall", {}).get("score")
+    benchmark = run.validation.get("benchmark_alignment", {})
+    history_entry = {
+        "run_id": run.run_id,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "provider": run.aggregate.get("provider", "unknown"),
+        "model": run.aggregate.get("model_id", "unknown"),
+        "questions": len(run.questions),
+        "responses": run.aggregate.get("response_count", len(run.responses)),
+        "validation": validation_score,
+        "benchmark_mae_pp": benchmark.get("primary_mae_percentage_points"),
+        "source": run.aggregate.get("input_source", {}).get("file_name", "text input"),
+    }
+    history = [entry for entry in st.session_state.get("run_history", []) if entry.get("run_id") != run.run_id]
+    st.session_state["run_history"] = [history_entry, *history][:6]
 
 
 def render_empty_state() -> None:
@@ -755,7 +876,17 @@ def render_empty_state() -> None:
 def render_results(run: SurveyRun) -> None:
     st.success(f"Run complete: {run.run_id}")
     render_kpis(run)
-    decision_tab, summary_tab, questions_tab, segment_tab, persona_tab, validation_tab, scorecard_tab, architecture_tab = st.tabs(
+    (
+        decision_tab,
+        summary_tab,
+        questions_tab,
+        segment_tab,
+        persona_tab,
+        validation_tab,
+        partner_tab,
+        scorecard_tab,
+        architecture_tab,
+    ) = st.tabs(
         [
             "Decision Brief",
             "Consultant Summary",
@@ -763,6 +894,7 @@ def render_results(run: SurveyRun) -> None:
             "Segment Explorer",
             "Persona Responses",
             "Validation",
+            "Partner Review",
             "Scorecard",
             "Architecture",
         ]
@@ -779,6 +911,8 @@ def render_results(run: SurveyRun) -> None:
         render_persona_responses(run)
     with validation_tab:
         render_validation(run)
+    with partner_tab:
+        render_partner_review(run)
     with scorecard_tab:
         render_scorecard(run)
     with architecture_tab:
@@ -1218,6 +1352,60 @@ def render_validation(run: SurveyRun) -> None:
 
     with st.expander("Raw validation JSON"):
         st.json(validation)
+
+
+def render_partner_review(run: SurveyRun) -> None:
+    st.markdown("#### Partner Review Pack")
+    st.write(
+        "Use this tab when sharing the prototype with Visa. It keeps the ask focused on product fit, "
+        "output usefulness, and validation credibility rather than asking them to inspect implementation details."
+    )
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Current run", run.run_id)
+    c2.metric("Provider", run.aggregate.get("provider", "unknown"))
+    c3.metric("Responses", run.aggregate.get("response_count", len(run.responses)))
+    c4.metric("Validation", run.validation.get("overall", {}).get("score", "-"))
+
+    st.markdown("#### Suggested Feedback Questions")
+    feedback_rows = [
+        {
+            "area": "Input workflow",
+            "question": "Would a VCA consultant naturally start with this survey/interview/proposition input flow?",
+        },
+        {
+            "area": "Synthetic customer output",
+            "question": "Are persona-level responses and segment summaries detailed enough to be useful?",
+        },
+        {
+            "area": "Consultant insight",
+            "question": "Does the Decision Brief help decide what to validate with real customers next?",
+        },
+        {
+            "area": "Validation",
+            "question": "Are benchmark, consistency, coverage and realism checks credible enough for early-stage use?",
+        },
+        {
+            "area": "Scope",
+            "question": "What should be removed because it is not needed by Visa/VCA?",
+        },
+    ]
+    st.dataframe(pd.DataFrame(feedback_rows), width="stretch", hide_index=True)
+
+    st.markdown("#### Slack Message")
+    st.code(build_partner_slack_message(), language="text")
+    st.download_button(
+        "Download Slack message draft",
+        data=build_partner_slack_message().encode("utf-8"),
+        file_name="visa_partner_review_slack_message.txt",
+        mime="text/plain",
+        key="download_partner_slack_message_after_run",
+    )
+
+    history = st.session_state.get("run_history", [])
+    if history:
+        st.markdown("#### This-session run history")
+        st.dataframe(pd.DataFrame(history), width="stretch", hide_index=True)
+        st.caption("Session history is intentionally lightweight. Production use should persist run history with access control and data-retention rules.")
 
 
 def render_scorecard(run: SurveyRun) -> None:

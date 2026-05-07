@@ -5,11 +5,13 @@ import json
 
 from synthetic_researcher.consulting import build_decision_brief, default_research_brief, format_decision_brief_markdown
 from synthetic_researcher.agents import SurveyParserAgent
+from synthetic_researcher.calibration import build_panel_calibration
 from synthetic_researcher.delivery import build_consultant_delivery_pack, build_pilot_readiness_gate
 from synthetic_researcher.llm import BaseLLM, MockLLM, watsonx_config_status
 from synthetic_researcher.orchestrator import SyntheticResearchOrchestrator
 from synthetic_researcher.pdf_report import build_consultant_pdf_report
 from synthetic_researcher.reporting import build_markdown_report
+from synthetic_researcher.sampler import load_benchmark_data, load_personas
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -295,3 +297,17 @@ def test_decision_brief_includes_consultant_quality_layer():
     assert lens["decision_drivers"]
     assert lens["real_customer_bridge"]
     assert lens["time_cost_advantage"]
+
+
+def test_panel_calibration_exposes_public_anchor_surface():
+    personas = load_personas(ROOT / "data" / "swiss_archetypes.yaml")
+    benchmark_data = load_benchmark_data(ROOT / "data" / "benchmark_snb_2025.yaml")
+
+    calibration = build_panel_calibration(personas, benchmark_data, target_n=96)
+
+    assert calibration["archetype_count"] >= 6
+    assert calibration["micro_population_count"] == 96
+    assert calibration["persona_weights"]
+    assert calibration["payment_comparison"]
+    assert calibration["public_anchors"]
+    assert "age_band" in calibration["demographic_distributions"]

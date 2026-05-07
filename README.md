@@ -11,11 +11,13 @@ The app accepts a client payment or banking value proposition plus flexible surv
 - aggregated adoption, pricing, feature, and barrier signals
 - segment-level fit by Swiss persona archetype
 - benchmark alignment, internal consistency, and coverage checks
+- visible Swiss persona-panel calibration against public demographic and payment anchors
 - judge-style realism rubric and overall validation confidence
 - consultant quality layer with evidence grade, decision risk, lead-margin interpretation, survey repair plan and real-customer validation plan
 - file ingestion audit for pasted text, TXT, MD, PDF, DOCX, CSV, and XLSX survey inputs
 - downloadable VCA-style PDF report generated from the exact run evidence
 - downloadable consultant delivery pack with decision brief, PDF report, Markdown report, persona CSV, validation JSON, full run JSON, source audit and governance notes
+- partner-review tab with a Slack-ready invitation, feedback questions, and lightweight session run history
 - external survey stress-test set inspired by public proposition-testing and payment-survey examples
 
 This is an early-stage hypothesis and survey-design tool. It does **not** claim to replace real customer research or Visa's final validation.
@@ -46,6 +48,7 @@ The main algorithms are transparent and replaceable:
 - Survey parsing turns arbitrary research questions into structured question objects: Likert, choice, price or open text.
 - Deterministic construct normalization cross-checks model output so adoption, price, feature and barrier signals remain stable even when an uploaded survey uses unfamiliar wording.
 - Persona sampling expands Swiss public-data-grounded archetypes into a weighted synthetic micro-population.
+- Calibration preview exposes persona weights, demographic distributions, payment benchmark comparisons and public source anchors before a reviewer runs the agents.
 - Persona response generation asks one persona agent at a time, using value-proposition context, public benchmark context and prior answers for consistency.
 - Aggregation computes weighted adoption index, acceptable-fee signals, feature/barrier labels, segment fit and persona quotes.
 - Validation computes benchmark alignment MAE, repeated-run Likert variance, persona coverage, question construct coverage and judge-style realism flags.
@@ -144,8 +147,9 @@ Keep `MODEL_PROVIDER=mock` available only as a fallback for rehearsal, CI, and q
 8. Open the Question Parser tab to prove the survey is not hardcoded and inspect the PDF extraction audit.
 9. Open segment and persona-level tables for traceability.
 10. Open Validation and Scorecard for benchmark, consistency, coverage, realism and KPI evidence.
-11. Download the polished PDF Report, Consultant Delivery Pack ZIP, CSV, Markdown Decision Brief, full Markdown report, or JSON outputs for partner review.
-12. Change a price, benefit, or message live, rerun, and compare the directional movement.
+11. Open Partner Review for the Slack-ready ask, feedback checklist and this-session run history.
+12. Download the polished PDF Report, Consultant Delivery Pack ZIP, CSV, Markdown Decision Brief, full Markdown report, or JSON outputs for partner review.
+13. Change a price, benefit, or message live, rerun, and compare the directional movement.
 
 The Slack-ready PDF operation manual is in `demo/manuals/visa_synthetic_research_copilot_operation_manual.pdf`. It shows the full workflow with a public Federal Reserve mobile-payments survey excerpt uploaded as a PDF attachment, the real IBM watsonx.ai / Granite model path, screenshots from a live quick run, and reviewer instructions. The real-run video is retained in `demo/videos/visa_synthetic_research_copilot_real_upload_demo.mp4`.
 

@@ -81,7 +81,7 @@ Mock mode remains only as an emergency fallback for classroom quota or network i
 
 | Proof | Result |
 | --- | --- |
-| Unit/regression tests | `22 passed` on 2026-05-07 |
+| Unit/regression tests | `23 passed` on 2026-05-07 |
 | Live app load | Passed desktop and mobile smoke test |
 | Live console health | No browser console errors in the checked load path |
 | Stale off-scope wording | No visible `Premium Travel`, `Everyday Cashback`, `Product Concepts`, `Concept A/B`, or `decision matrix` wording in the checked app/docs paths |
@@ -94,10 +94,10 @@ These are not blockers for the final demo, but they are the next best improvemen
 the team wants to move from pilot to production-grade client tool.
 
 1. Better public-data calibration
-   - Add more explicit BFS/FSO distributions for age, household, language region,
-     income and education.
-   - Show a calibration table in the UI comparing synthetic panel weights to public
-     Swiss population anchors.
+   - The app now shows a transparent calibration preview with persona weights,
+     demographic distributions, payment benchmark comparisons and source anchors.
+   - The next step is to add more granular BFS/FSO distributions for age, household,
+     language region, income and education.
 
 2. Stronger benchmark library
    - Add a benchmark registry for SNB, Swiss Payment Monitor, ECB SPACE and other

@@ -675,19 +675,19 @@ def manual_html() -> str:
             <div class="grid-2 even">
               <div class="box blue">
                 <h2>Message draft</h2>
-                <p>Hi Visa / IBM team,</p>
-                <p>We prepared a short operation manual and a sample input/output pair for the current prototype. It shows a real PDF survey/interview artifact upload, dynamic parsing, IBM watsonx/Granite model path, Swiss synthetic customer responses, a segment customer board, aggregated consultant insights, a Consultant Quality Layer, validation checks, and a generated consultant PDF report.</p>
-                <p>Attached are the input PDF survey and the generated output PDF report from the same flow.</p>
-                <p>Could you please let us know whether this matches your expected direction for the final Visa use case?</p>
+                <p>Hi Visa team,</p>
+                <p>We have a working prototype for the Visa use case: a VCA Multi-Agent Synthetic Researcher.</p>
+                <p>App link:<br/>https://visa-synthetic-research-copilot.27cqtktlikeo.eu-de.codeengine.appdomain.cloud/</p>
+                <p>It lets a reviewer upload or paste a survey, interview guide, or value proposition test; run Swiss synthetic customer persona agents using the IBM watsonx / Granite path; and review aggregated insights, persona-level responses, validation checks, and a downloadable PDF report.</p>
+                <p>If you have time, feel free to try it with any survey or value proposition input you think is realistic for VCA. We would especially appreciate feedback on:</p>
                 <ol class="question-list">
-                  <li>Is the Multi-Agent Synthetic Researcher framing aligned with your intended use case?</li>
-                  <li>Is the flexible PDF survey/interview upload flow aligned with your expectation as the input artifact?</li>
-                  <li>Should the final output emphasize aggregate insights, persona-level responses, synthetic customer segment cards, or all three?</li>
-                  <li>Is the evidence grade / decision risk / survey repair layer useful for VCA consultants?</li>
-                  <li>Are the benchmark, consistency, coverage and realism validation checks useful enough for VCA consultants?</li>
-                  <li>Is there any missing Visa requirement we should address before finals?</li>
+                  <li>whether the input flow matches how a VCA consultant would test early product/value proposition ideas;</li>
+                  <li>whether the persona-level and aggregated outputs are the right level of detail;</li>
+                  <li>whether the validation checks are useful and credible enough;</li>
+                  <li>what you would remove, add, or change before the final presentation.</li>
                 </ol>
-                <p>Thank you!</p>
+                <p>This is intended as directional early-stage research support, not a replacement for real customer validation.</p>
+                <p>Thank you very much!</p>
               </div>
               <div>
                 <h2>What to emphasize verbally</h2>

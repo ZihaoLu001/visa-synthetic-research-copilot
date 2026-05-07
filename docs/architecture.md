@@ -35,6 +35,9 @@ Consultant UI
 `SyntheticResearchOrchestrator`
 : Coordinates survey parsing, persona expansion, repeated synthetic survey runs, aggregation, and validation.
 
+`calibration.py`
+: Builds the transparent Swiss panel calibration surface shown in the app: persona weights, demographic distributions, synthetic payment mix, public benchmark profiles and source anchors. This makes it clear where the synthetic panel is grounded and where Visa internal calibration would improve production use.
+
 `SurveyParserAgent`
 : Converts arbitrary survey or interview text into structured questions with type and measured construct. A deterministic construct-normalization pass cross-checks model output so adoption, price sensitivity, feature preference and barrier coverage remain stable for unfamiliar survey wording.
 
