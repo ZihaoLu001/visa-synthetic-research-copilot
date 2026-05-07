@@ -27,7 +27,7 @@ Consultant UI
 : Streamlit cockpit for setting the research brief and decision rule, uploading or pasting survey questions, defining the client value proposition, selecting respondent count, choosing provider, and setting validation repetitions.
 
 `consulting.py`
-: Converts raw synthetic evidence into a VCA-style decision brief: executive answer, decision posture, proposition decision matrix, "so what" implications, hypothesis readout, next real-research actions, methodology snapshot and limitations.
+: Converts raw synthetic evidence into a VCA-style decision brief: executive answer, decision posture, proposition evidence readout, "so what" implications, hypothesis readout, next real-research actions, methodology snapshot and limitations.
 
 `ingestion.py`
 : Converts pasted text plus TXT, MD, PDF, DOCX, CSV, and XLSX uploads into normalized survey text with extraction metadata. This lets Visa or IBM test the prototype with a real marketing research survey file instead of retyping every question.
@@ -57,7 +57,7 @@ Consultant UI
 : Packages the run into a partner-review ZIP containing the decision brief, PDF report, consultant report, persona-level CSV, validation JSON, full run JSON, input audit, methodology/governance notes, and a pilot readiness gate. This gives Visa a portable artifact they can inspect outside Streamlit.
 
 `pdf_report.py`
-: Renders a VCA-style PDF report from the exact run data: executive answer, KPI strip, research brief, consultant quality layer, proposition decision matrix, signal/barrier tables, segment fit, persona-level evidence, validation confidence, methodology and limitations. This turns the demo into a concrete consultant artifact rather than only an on-screen dashboard.
+: Renders a VCA-style PDF report from the exact run data: executive answer, KPI strip, research brief, consultant quality layer, proposition evidence readout, signal/barrier tables, segment fit, persona-level evidence, validation confidence, methodology and limitations. This turns the demo into a concrete consultant artifact rather than only an on-screen dashboard.
 
 `validation.py`
 : Runs benchmark alignment, internal consistency, persona coverage, survey construct coverage, judge-style realism checks and an overall validation confidence score.

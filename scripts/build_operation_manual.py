@@ -655,7 +655,7 @@ def manual_html() -> str:
               <div class="callout-stack">
                 {callouts([
                     ("Why this matters", "VCA reviewers should not need to trust only the live screen. They can download a consultant-style PDF report and inspect the evidence offline."),
-                    ("PDF report", "The report includes executive answer, Customer Perspective Board, consultant quality layer, proposition decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations."),
+                    ("PDF report", "The report includes executive answer, Customer Perspective Board, consultant quality layer, proposition evidence readout, segment fit, persona evidence, validation confidence, methodology and limitations."),
                     ("Included files", "The ZIP contains the PDF report, decision brief, customer perspective JSON, quality layer JSON, consultant report, persona-level CSV, validation JSON, full run JSON, input-source audit, methodology/governance notes and pilot-readiness gate."),
                     ("Review workflow", "Send the input PDF survey plus output PDF report together with the app URL so IBM/Visa can check recommendation logic, persona traceability and validation evidence."),
                     ("No secrets", "The delivery pack contains run evidence, not watsonx API keys or local credentials."),

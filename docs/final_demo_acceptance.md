@@ -15,7 +15,7 @@ API health:
 https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.cloud/health
 ```
 
-## Verified On 2026-05-06
+## Verified On 2026-05-07
 
 | Check | Result |
 | --- | --- |
@@ -28,7 +28,7 @@ https://visa-synthetic-research-api.27cqtktlikeo.eu-de.codeengine.appdomain.clou
 | External survey API stress tests | 3 public-example-inspired surveys returned synthetic responses, validation evidence, and 100.0 JSON parse success |
 | Real watsonx.ai smoke test | `ibm/granite-4-h-small` returned a live response after IBM restored Group 28 quota |
 | Real watsonx.ai mini-run | End-to-end parser/persona/validation flow completed with provider `watsonx` |
-| Local regression tests | `21 passed` |
+| Local regression tests | `22 passed` |
 | GitHub Actions | CI and Docker publish workflows succeeded for latest pushed commit |
 | Slack-ready PDF report example | Public PDF survey input generates a watsonx/Granite consultant PDF report with persona-level responses, aggregate insights, validation checks and a real-customer validation plan |
 
@@ -67,7 +67,7 @@ Demo sequence:
 1. Open the Streamlit URL.
 2. For the final real-model proof, set model provider to `watsonx` and confirm the sidebar shows `Real LLM ready`. Keep `mock` available only as a fallback for rehearsal or quota issues.
 3. For a real-model proof, keep the default quick setting: `12` respondents, `1` consistency run, and `Quick real-model proof (first 2 questions)`. This conserves watsonx classroom quota while proving the live model path.
-4. For the full-scale presentation run, switch to `Full survey`, move respondents to `96`, and use mock only if quota/time becomes a risk.
+4. For the full-scale presentation run, switch to `Full survey`, move respondents to `96`, and keep mock only as an emergency fallback if IBM quota/time becomes a risk.
 5. Use `Core Visa synthetic survey`, upload the public sample PDF, or paste/upload a different survey if Visa wants to test from their side.
 6. Run the synthetic survey and confirm the KPI cards show parsed questions, runtime, validation and response count.
 7. Show `Decision Brief`, especially the Consultant Quality Layer: evidence grade, decision risk, risk flags, survey repair plan and real-customer validation plan.
@@ -88,7 +88,7 @@ demo/partner_examples/visa_example_input_public_mobile_payments_survey.pdf
 demo/partner_examples/visa_example_output_consultant_report_watsonx.pdf
 ```
 
-The first file is the uploaded survey artifact. The second file is the generated consultant report from the same flow with real `watsonx / ibm/granite-4-h-small`, including executive answer, Consultant Quality Layer, decision matrix, segment fit, persona evidence, validation and governance caveats.
+The first file is the uploaded survey artifact. The second file is the generated consultant report from the same flow with real `watsonx / ibm/granite-4-h-small`, including executive answer, Consultant Quality Layer, proposition evidence readout, segment fit, persona evidence, validation and governance caveats.
 
 ## What To Say
 

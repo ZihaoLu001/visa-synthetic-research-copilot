@@ -52,7 +52,7 @@ The main algorithms are transparent and replaceable:
 - Synthetic customer synthesis builds a customer board with need states, proposition fit, objections to probe, message tests, decision drivers, time/cost advantage and real-customer bridge for each Swiss segment.
 - Consulting synthesis builds a VCA Decision Brief: proposition signal, evidence quality, decision posture, hypothesis readout, next tests and governance caveats.
 - Consultant quality scoring adds an explicit evidence grade, decision risk, risk flags, survey repair plan and real-customer validation plan so VCA can decide what is strong enough to use and what still needs real customer proof.
-- PDF reporting renders a consultant-style report with executive answer, decision matrix, segment fit, persona evidence, validation confidence, methodology and limitations.
+- PDF reporting renders a consultant-style report with executive answer, proposition evidence readout, segment fit, persona evidence, validation confidence, methodology and limitations.
 - Delivery packaging exports a partner-review ZIP so Visa can inspect the recommendation, PDF report, persona rows, validation evidence and source audit outside the app.
 
 The `mock` provider is not presented as a real customer model. It is a reliability fallback. The final partner proof should run the same workflow with watsonx credentials and then calibrate persona weights/prompts against Visa internal research.

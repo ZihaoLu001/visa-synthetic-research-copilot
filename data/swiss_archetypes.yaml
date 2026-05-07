@@ -95,7 +95,7 @@ personas:
       travel_orientation: 0.95
       reward_orientation: 0.88
     source_notes:
-      - "High-income and travel-oriented segment used for card value proposition testing."
+      - "High-income and travel-oriented segment used for payment and banking value proposition testing."
 
   - id: A5
     name: Ticino Cash-Trusting Retiree
